@@ -17,7 +17,7 @@ import mockHabitatComplexityCollectRecords from '../../../../testUtilities/mockC
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Habitat Complexity validation: user can reset ignored observation warnings ', async () => {
+test('Habitat Complexity validation: user can un-ignore observation warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -128,8 +128,8 @@ test('Habitat Complexity validation: user can reset ignored observation warnings
   await waitFor(() =>
     expect(within(observationsTable).queryByText('Ignored')).not.toBeInTheDocument(),
   )
-  expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(observationsTable).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
+  expect(observationsTable.querySelectorAll('li.warning-indicator')).toHaveLength(2)
   expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
     2,
   )

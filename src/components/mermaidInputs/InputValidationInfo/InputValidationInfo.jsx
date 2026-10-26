@@ -21,7 +21,7 @@ const ValidationWrapper = styled('div').attrs({
 
 const InputValidationInfo = ({
   ignoreNonObservationFieldValidations = () => {},
-  resetNonObservationFieldValidations = () => {},
+  unignoreNonObservationFieldValidations = () => {},
   validationMessages = [],
   validationType = undefined,
   currentSelectValue = undefined,
@@ -44,7 +44,7 @@ const InputValidationInfo = ({
       ignoreNonObservationFieldValidations()
     }
     if (!isIgnoreChecked) {
-      resetNonObservationFieldValidations()
+      unignoreNonObservationFieldValidations()
     }
   }
 
@@ -112,7 +112,7 @@ const InputValidationInfo = ({
 
 InputValidationInfo.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   currentSelectValue: PropTypes.string,

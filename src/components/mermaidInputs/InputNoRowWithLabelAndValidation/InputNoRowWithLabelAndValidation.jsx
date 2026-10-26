@@ -22,7 +22,7 @@ const InputNoRowWithLabelAndValidation = ({
   id,
   ignoreNonObservationFieldValidations = () => {},
   label,
-  resetNonObservationFieldValidations = () => {},
+  unignoreNonObservationFieldValidations = () => {},
   unit = undefined,
   validationMessages = [],
   validationType = undefined,
@@ -50,27 +50,27 @@ const InputNoRowWithLabelAndValidation = ({
     event.stopPropagation()
   }
 
-  const inputTestId = testId ? `${testId}-input` : undefined
-
-  const ariaProps = {
+  const inputProps = {
+    id,
     'aria-labelledby': `aria-label${id}`,
     'aria-describedby': `aria-descp${id}`,
+    'data-testid': testId ? `${testId}-input` : undefined,
   }
 
   const defaultInput = unit ? (
     <InputNumberNoScrollWithUnit
-      {...ariaProps}
-      id={id}
-      data-testid={inputTestId}
+      {...inputProps}
       unit={unit}
       disabled={isInputDisabled}
       {...restOfProps}
     />
   ) : (
-    <Input {...ariaProps} id={id} data-testid={inputTestId} {...restOfProps} ref={textFieldRef} />
+    <Input {...inputProps} {...restOfProps} ref={textFieldRef} />
   )
 
-  const inputType = renderInput ?? defaultInput
+  const inputType = renderInput
+    ? renderInput({ ...inputProps, unit, disabled: isInputDisabled })
+    : defaultInput
 
   return (
     <>
@@ -106,7 +106,7 @@ const InputNoRowWithLabelAndValidation = ({
         validationType={validationType}
         validationMessages={validationMessages}
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
         testId={testId ? `${testId}-validation` : undefined}
       />
     </>
@@ -121,10 +121,10 @@ InputNoRowWithLabelAndValidation.propTypes = {
   isInputDisabled: PropTypes.bool,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
-  renderInput: PropTypes.node,
+  renderInput: PropTypes.func,
   renderItemAboveInput: PropTypes.node,
   renderItemWithinInput: PropTypes.node,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,

@@ -5,16 +5,16 @@ import {
   fireEvent,
   renderUnauthenticatedOffline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import GfcrNumberInput from './GfcrNumberInput'
+import LocaleNumberInput from './LocaleNumberInput'
 
 interface ControlledInputProps {
   initialValue?: number | null
   onChangeSpy?: (v: number | null) => void
   decimalPlaces?: number
-  min?: number
   max?: number
   allowNegatives?: boolean
   disabled?: boolean
+  'data-testid'?: string
 }
 
 // Stateful wrapper so the controlled component responds to onChange like it would in a form.
@@ -26,12 +26,12 @@ function ControlledInput({ initialValue = null, onChangeSpy, ...rest }: Controll
   }
   return (
     <MantineProvider>
-      <GfcrNumberInput id="test" value={value} onChange={handleChange} {...rest} />
+      <LocaleNumberInput id="test" value={value} onChange={handleChange} {...rest} />
     </MantineProvider>
   )
 }
 
-describe('GfcrNumberInput', () => {
+describe('LocaleNumberInput', () => {
   it('calls onChange with null when input is cleared', async () => {
     const onChangeSpy = vi.fn()
     const { user } = renderUnauthenticatedOffline(
@@ -102,26 +102,71 @@ describe('GfcrNumberInput', () => {
     })
   })
 
-  it('clamps to min on blur', async () => {
+  it('refuses a keystroke that would go over max and says why', async () => {
     const onChangeSpy = vi.fn()
     const { user } = renderUnauthenticatedOffline(
-      <ControlledInput onChangeSpy={onChangeSpy} min={0} allowNegatives />,
+      <ControlledInput onChangeSpy={onChangeSpy} max={100} />,
     )
     const input = screen.getByRole('textbox')
-    await user.type(input, '-5')
-    fireEvent.blur(input)
-    expect(onChangeSpy).toHaveBeenLastCalledWith(0)
+    await user.type(input, '101')
+    expect(input).toHaveValue('10')
+    expect(onChangeSpy).toHaveBeenLastCalledWith(10)
+    expect(screen.getByRole('status')).toHaveTextContent('forms.number_maximum')
   })
 
-  it('clamps to max on blur', async () => {
+  it('refuses a paste that would go over max', async () => {
     const onChangeSpy = vi.fn()
     const { user } = renderUnauthenticatedOffline(
-      <ControlledInput onChangeSpy={onChangeSpy} max={10} />,
+      <ControlledInput onChangeSpy={onChangeSpy} max={100} />,
     )
     const input = screen.getByRole('textbox')
-    await user.type(input, '50')
+    await user.click(input)
+    await user.paste('150')
+    expect(input).toHaveValue('')
+    expect(onChangeSpy).not.toHaveBeenCalled()
+    expect(screen.getByRole('status')).toHaveTextContent('forms.number_maximum')
+  })
+
+  it('does not step over max with the arrow keys', async () => {
+    const onChangeSpy = vi.fn()
+    const { user } = renderUnauthenticatedOffline(
+      <ControlledInput onChangeSpy={onChangeSpy} max={100} />,
+    )
+    const input = screen.getByRole('textbox')
+    await user.type(input, '100')
+    await user.keyboard('{ArrowUp}')
+    expect(input).toHaveValue('100')
+    expect(onChangeSpy).toHaveBeenLastCalledWith(100)
+  })
+
+  it('clears the refusal message on the next accepted keystroke', async () => {
+    const { user } = renderUnauthenticatedOffline(<ControlledInput max={100} />)
+    const input = screen.getByRole('textbox')
+    await user.type(input, '101')
+    await user.type(input, '{Backspace}5')
+    expect(input).toHaveValue('15')
+    expect(screen.getByRole('status')).toBeEmptyDOMElement()
+  })
+
+  it('clears the refusal message on blur', async () => {
+    const { user } = renderUnauthenticatedOffline(<ControlledInput max={100} />)
+    const input = screen.getByRole('textbox')
+    await user.type(input, '101')
     fireEvent.blur(input)
-    expect(onChangeSpy).toHaveBeenLastCalledWith(10)
+    expect(screen.getByRole('status')).toBeEmptyDOMElement()
+  })
+
+  it('refuses digits after a decimal separator on a whole-number field', async () => {
+    const onChangeSpy = vi.fn()
+    const { user } = renderUnauthenticatedOffline(
+      <ControlledInput onChangeSpy={onChangeSpy} decimalPlaces={0} />,
+    )
+    const input = screen.getByRole('textbox')
+    await user.type(input, '1.5')
+    expect(screen.getByRole('status')).toHaveTextContent('forms.number_whole_only')
+    fireEvent.blur(input)
+    expect(input).toHaveValue('1')
+    expect(onChangeSpy).toHaveBeenLastCalledWith(1)
   })
 
   it('does not emit a change when an untouched value is focused and blurred', () => {
@@ -150,5 +195,10 @@ describe('GfcrNumberInput', () => {
   it('asks for the decimal mobile keypad on a fractional field', () => {
     renderUnauthenticatedOffline(<ControlledInput decimalPlaces={2} />)
     expect(screen.getByRole('textbox')).toHaveAttribute('inputmode', 'decimal')
+  })
+
+  it('puts the test id on the input element', () => {
+    renderUnauthenticatedOffline(<ControlledInput data-testid="depth-input" />)
+    expect(screen.getByTestId('depth-input')).toBe(screen.getByRole('textbox'))
   })
 })

@@ -477,6 +477,8 @@
     "benthic_attribute": "Atributo bentónico",
     "buttons": {
       "confirm_all": "Confirmar todo",
+      "next_photo": "Siguiente foto",
+      "previous_photo": "Foto anterior",
       "upload_photos": "Subir fotos",
       "zoom_to_attribute": "Ampliar para ver los atributos"
     },
@@ -496,7 +498,8 @@
       "invalid_file_type": "Tipo de archivo no válido.",
       "no_classification_enabled": "Actualmente no puedes subir fotos nuevas para clasificar. Puedes acceder a las fotos que has subido anteriormente y revisarlas.",
       "no_photo_found": "No se pudo eliminar la foto: no se encontró ninguna foto.",
-      "photo_too_small": "Las fotos deben tener una altura y una anchura mínimas de {{minImageWidthAndHeight}} píxeles. Esta foto es demasiado pequeña: {{fileName}}."
+      "photo_too_small": "Las fotos deben tener una altura y una anchura mínimas de {{minImageWidthAndHeight}} píxeles. Esta foto es demasiado pequeña: {{fileName}}.",
+      "save_failed_changes_kept": "No se pudieron guardar los cambios. Se conservan en esta ventana. Inténtelo de nuevo en breve."
     },
     "feature_introduction": {
       "description": "Gracias a una colaboración con <a /> de la Universidad de California en San Diego y el Instituto Scripps de Oceanografía, MERMAID ahora incluye clasificación basada en IA mediante un modelo de aprendizaje profundo de PySpace. Esta integración permite un análisis rápido y escalable de fotos bentónicas para generar información de forma rápida y consistente con aprendizaje automático e IA.",
@@ -764,7 +767,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Esta página no está disponible sin conexión.",
-    "setup_failed": "No se pudo configurar el modo sin conexión. Recargue la página con conexión a internet antes de trabajar sin conexión.",
+    "setup_failed": "No se pudo activar el modo offline. Recargue la página con conexión a internet antes de intentar nuevamente el modo offline.",
     "unavailable_offline": "No disponible sin conexión"
   },
   "offline_toggle": "Alternar sin conexión",
@@ -963,6 +966,8 @@
       "data_unavailable": "Los datos de la unidad de muestra no están disponibles actualmente.",
       "observations_unavailable_offline": "Observaciones de la unidad de muestra no disponibles sin conexión",
       "submit_disabled": "Errores o advertencias le impiden enviar",
+      "submit_failed": "Actualmente no es posible enviar este registro.",
+      "submit_rejected": "No se pudo enviar este registro. Corrija los errores y avisos de la validación y vuelva a validarlo.",
       "submitted_data_unavailable": "Los datos de registro enviados no están disponibles actualmente.",
       "submitted_moved_to_collecting": "El registro enviado ha sido movido a la sección Recopilación.",
       "submitted_not_editable": "El registro enviado no se ha hecho editable",
@@ -1016,8 +1021,8 @@
       "chip_label_error_other": "{{count}} Errores",
       "chip_label_ignored_one": "{{count}} Ignorado",
       "chip_label_ignored_other": "{{count}} Ignorado",
-      "chip_label_warning_one": "{{count}} Advertencia",
-      "chip_label_warning_other": "{{count}} Advertencias",
+      "chip_label_warning_one": "{{count}} Aviso",
+      "chip_label_warning_other": "{{count}} Avisos",
       "errors": "Errores",
       "next": "Próximo",
       "next_announcement": "{{position}} de {{total}}. {{description}}",
@@ -1236,8 +1241,9 @@
     "similar_name": "Existe otro régimen de gestión similar a este.",
     "site_not_found": "El registro del sitio no está disponible para la validación de similitud",
     "system_validation_error": "Error de validación del sistema:",
-    "unconfirmed_annotation": "Número incorrecto de anotaciones confirmadas",
-    "unknown_protocol": "Protocolo desconocido",
+    "unclassified_annotation": "Todos los puntos deben ser clasificados y confirmados",
+    "unconfirmed_annotation": "Todos los puntos deben ser confirmados",
+    "unknown_protocol": "Método desconocido",
     "value_not_set": "El valor no está establecido"
   },
   "validations": {

@@ -823,115 +823,115 @@ test('Macroinvertebrate validation: user can reset dismissed non-observation inp
   expect(isFormDirtyAfterReset)
 
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(siteRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(siteRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(siteRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(siteRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(siteRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(managementRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(managementRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(managementRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(managementRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(managementRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(depthRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(depthRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(depthRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(depthRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(depthRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(sampleDateRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(sampleDateRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(sampleDateRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(sampleDateRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(sampleDateRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(sampleTimeRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(sampleTimeRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(sampleTimeRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(sampleTimeRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(sampleTimeRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(transectNumberRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() =>
     expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
-  expect(within(transectNumberRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(transectNumberRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(transectNumberRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(transectNumberRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(
     within(transectNumberRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()
 
   await user.click(within(labelRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(labelRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(labelRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(labelRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(labelRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(labelRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(lengthSurveyedRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
-  expect(within(lengthSurveyedRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(lengthSurveyedRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(lengthSurveyedRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(lengthSurveyedRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(
     within(lengthSurveyedRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()
 
   await user.click(within(widthRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(widthRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(widthRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(widthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(widthRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(widthRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(widthRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(sizeBinRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(sizeBinRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(sizeBinRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(sizeBinRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(sizeBinRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(sizeBinRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(sizeBinRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(reefSlopeRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(reefSlopeRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(reefSlopeRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(reefSlopeRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(relativeDepthRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() =>
     expect(within(relativeDepthRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
-  expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(relativeDepthRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(relativeDepthRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(
     within(relativeDepthRow).queryByTestId('passed-validation-indicator'),
   ).not.toBeInTheDocument()
 
   await user.click(within(visibilityRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(visibilityRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(visibilityRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(visibilityRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(visibilityRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(visibilityRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(visibilityRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(currentRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(currentRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(currentRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(currentRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(currentRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(currentRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(currentRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(tideRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(tideRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(tideRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(tideRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(tideRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(tideRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(notesRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(notesRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(notesRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(notesRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(notesRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(notesRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 
   await user.click(within(observersRow).getByTestId('ignore-warning-checkbox'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(observersRow).getAllByTestId('message-pill-warning')).toHaveLength(2)
+  expect(within(observersRow).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
   expect(within(observersRow).queryByTestId('passed-validation-indicator')).not.toBeInTheDocument()
 }, 50000)

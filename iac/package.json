@@ -9,7 +9,7 @@
     "cdk-synth-dev": "cdk --profile mermaid synth -c domain=app2.datamermaid.org -c subdomain=dev -c accountId=1234567890"
   },
   "devDependencies": {
-    "@types/node": "22.20.5",
+    "@types/node": "24.19.2",
     "aws-cdk": "2.1145.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"

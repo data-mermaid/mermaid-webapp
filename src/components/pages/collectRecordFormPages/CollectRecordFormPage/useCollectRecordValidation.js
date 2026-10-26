@@ -5,6 +5,7 @@ import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import getValidationSummary from './getValidationSummary'
+import { VALIDATION_STATUS } from '../../Collect/collectConstants'
 import theme from '../../../../theme'
 
 const HIGHLIGHT_CLASS = 'validation-target-highlight'
@@ -62,6 +63,13 @@ const whenScrollSettles = (element, onSettled) => {
 // page went. The cap stops a wide observation row reciting every cell.
 const describeTarget = (element) => element.textContent.replace(/\s+/g, ' ').trim().slice(0, 120)
 
+const getIsErrorOrWarning = (collectRecord) =>
+  collectRecord.validations?.status === VALIDATION_STATUS.error ||
+  collectRecord.validations?.status === VALIDATION_STATUS.warning
+
+const getIsValidationResultCurrent = (collectRecord) =>
+  collectRecord.validations?.status === VALIDATION_STATUS.ok || getIsErrorOrWarning(collectRecord)
+
 const useCollectRecordValidation = ({
   collectRecordBeingEdited,
   databaseSwitchboardInstance,
@@ -81,6 +89,7 @@ const useCollectRecordValidation = ({
   const { t } = useTranslation()
   const validationIgnoreText = t('sample_units.errors.validation_ignore')
   const validationResetText = t('sample_units.errors.validation_reset')
+  const validationUnignoreText = t('sample_units.errors.validation_unignore')
 
   // Per-chip cursors — refs so advancing doesn't trigger a render.
   // Reset to 0 whenever validations get refreshed (see handleValidate below).
@@ -158,17 +167,45 @@ const useCollectRecordValidation = ({
     ],
   )
 
+  // Any save marks a record's validations stale, so a stored ok, warning, or error result is
+  // current, whether Collect or another client (such as mermaidr) ran the validation.
+  const recordIdShownOnLoadRef = useRef(null)
+
+  useEffect(
+    function showStoredValidationsOnLoad() {
+      if (
+        isParentDataLoading ||
+        !collectRecordBeingEdited ||
+        collectRecordBeingEdited.id !== recordId ||
+        recordIdShownOnLoadRef.current === recordId
+      ) {
+        return
+      }
+
+      recordIdShownOnLoadRef.current = recordId
+
+      if (getIsValidationResultCurrent(collectRecordBeingEdited)) {
+        setAreValidationsShowing(true)
+        setIsSubmitWarningVisible(getIsErrorOrWarning(collectRecordBeingEdited))
+      }
+    },
+    [
+      isParentDataLoading,
+      collectRecordBeingEdited,
+      recordId,
+      setAreValidationsShowing,
+      setIsSubmitWarningVisible,
+    ],
+  )
+
   // Shows a record the API has just validated, whether from Validate or from a Submit the API
   // refused after re-validating.
   const showValidationResult = (validatedRecord) => {
-    const isErrorOrWarning =
-      validatedRecord.validations.status === 'error' ||
-      validatedRecord.validations.status === 'warning'
     setAreValidationsShowing(true)
     resetNextCursors()
     handleCollectRecordChange(validatedRecord)
     setValidateButtonState(getValidationButtonStatus(validatedRecord))
-    setIsSubmitWarningVisible(isErrorOrWarning)
+    setIsSubmitWarningVisible(getIsErrorOrWarning(validatedRecord))
   }
 
   const handleValidate = () => {
@@ -319,6 +356,35 @@ const useCollectRecordValidation = ({
     ],
   )
 
+  const unignoreObservationValidations = useCallback(
+    ({ observationId }) => {
+      if (collectRecordBeingEdited && observationId) {
+        databaseSwitchboardInstance
+          .unignoreObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
+          .then((recordWithUnignoredValidations) => {
+            handleCollectRecordChange(recordWithUnignoredValidations)
+            setIsFormDirty(true)
+          })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(validationUnignoreText))
+              },
+            })
+          })
+      }
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+      validationUnignoreText,
+    ],
+  )
+
   const resetRecordLevelValidation = useCallback(
     ({ validationId }) => {
       databaseSwitchboardInstance
@@ -378,6 +444,38 @@ const useCollectRecordValidation = ({
       handleHttpResponseError,
       setIsFormDirty,
       validationResetText,
+    ],
+  )
+
+  const unignoreNonObservationFieldValidations = useCallback(
+    ({ validationPath }) => {
+      if (collectRecordBeingEdited && validationPath) {
+        databaseSwitchboardInstance
+          .unignoreNonObservationFieldValidations({
+            record: collectRecordBeingEdited,
+            validationPath,
+          })
+          .then((recordWithUnignoredValidations) => {
+            handleCollectRecordChange(recordWithUnignoredValidations)
+            setIsFormDirty(true)
+          })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(validationUnignoreText))
+              },
+            })
+          })
+      }
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+      validationUnignoreText,
     ],
   )
 
@@ -473,6 +571,8 @@ const useCollectRecordValidation = ({
     resetObservationValidations,
     resetRecordLevelValidation,
     showValidationResult,
+    unignoreNonObservationFieldValidations,
+    unignoreObservationValidations,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,

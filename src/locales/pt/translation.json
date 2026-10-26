@@ -477,6 +477,8 @@
     "benthic_attribute": "Atributo bentónico",
     "buttons": {
       "confirm_all": "Confirmar tudo",
+      "next_photo": "Próxima foto",
+      "previous_photo": "Foto anterior",
       "upload_photos": "Carregar fotografias",
       "zoom_to_attribute": "Ampliar para ver os atributos"
     },
@@ -496,7 +498,8 @@
       "invalid_file_type": "Tipo de ficheiro inválido.",
       "no_classification_enabled": "De momento, não é possível carregar novas imagens para classificação. Pode aceder e rever as imagens carregadas anteriormente.",
       "no_photo_found": "Não foi possível eliminar a fotografia – não foi encontrada nenhuma fotografia.",
-      "photo_too_small": "As fotografias devem ter, no mínimo, {{minImageWidthAndHeight}} píxeis de altura e largura. Esta fotografia é demasiado pequena: {{fileName}}."
+      "photo_too_small": "As fotografias devem ter, no mínimo, {{minImageWidthAndHeight}} píxeis de altura e largura. Esta fotografia é demasiado pequena: {{fileName}}.",
+      "save_failed_changes_kept": "Não foi possível salvar suas alterações. Elas serão mantidas nesta janela. Tente novamente em breve."
     },
     "feature_introduction": {
       "description": "Através de uma parceria com o projeto « <a /> », da Universidade da Califórnia em San Diego e do Instituto Oceanográfico Scripps, o MERMAID inclui agora uma classificação baseada em IA, utilizando um modelo de aprendizagem profunda do «pyspacer». Esta integração permite uma análise rápida e escalável de fotografias bentónicas, para que possa obter informações de forma rápida e consistente com recurso à aprendizagem automática e à IA.",
@@ -764,7 +767,7 @@
   },
   "offline": {
     "page_unavailable_offline": "Esta página não está disponível offline.",
-    "setup_failed": "Não foi possível configurar o modo offline. Recarregue a página enquanto estiver online antes de tentar novamente offline.",
+    "setup_failed": "Não foi possível ativar o modo offline. Recarregue a página enquanto estiver online antes de tentar novamente o modo offline.",
     "unavailable_offline": "Indisponível offline"
   },
   "offline_toggle": "Botão para alternar para o modo offline",
@@ -963,6 +966,8 @@
       "data_unavailable": "Os dados de amostra da unidade não estão disponíveis neste momento.",
       "observations_unavailable_offline": "As observações da unidade de amostra não estão disponíveis offline.",
       "submit_disabled": "Existem erros ou avisos que o estão a impedir de submeter.",
+      "submit_failed": "A submissão deste registro está atualmente indisponível.",
+      "submit_rejected": "Este registro não pôde ser submetido. Corrija os erros e avisos da validação e tente novamente.",
       "submitted_data_unavailable": "A unidade amostral submetida está atualmente indisponível.",
       "submitted_moved_to_collecting": "A unidade amostral submetida foi movida para a seção Coleta.",
       "submitted_not_editable": "A unidade amostral submetida não foi tornada editável.",
@@ -1236,7 +1241,8 @@
     "similar_name": "Existe outro regime de gestão semelhante a este",
     "site_not_found": "Não existe um registo do site para a validação da semelhança",
     "system_validation_error": "Erro de validação do sistema:",
-    "unconfirmed_annotation": "Número incorreto de anotações confirmadas",
+    "unclassified_annotation": "Todos os pontos devem ser classificados e confirmados",
+    "unconfirmed_annotation": "Todos os pontos devem ser confimados",
     "unknown_protocol": "Método desconhecido",
     "value_not_set": "O valor não está definido"
   },

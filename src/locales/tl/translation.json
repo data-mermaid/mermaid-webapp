@@ -477,6 +477,8 @@
     "benthic_attribute": "Katangiang bentiko",
     "buttons": {
       "confirm_all": "Kumpirmahin lahat",
+      "next_photo": "Susunod na larawan",
+      "previous_photo": "Nakaraang larawan",
       "upload_photos": "Mag-upload ng mga larawan",
       "zoom_to_attribute": "Mag-zoom para i-attribute"
     },
@@ -496,7 +498,8 @@
       "invalid_file_type": "Hindi wastong uri ng file.",
       "no_classification_enabled": "Kasalukuyan kang hindi makakapag-upload ng mga bagong larawan para sa pag-uuri. Maaari mong i-access at suriin ang mga naunang na-upload na larawan.",
       "no_photo_found": "Nabigong tanggalin ang larawan – walang nakitang larawan",
-      "photo_too_small": "Ang mga larawan ay dapat may minimum na taas at lapad na {{minImageWidthAndHeight}} mga pixel. Masyadong maliit ang larawang ito: {{fileName}}."
+      "photo_too_small": "Ang mga larawan ay dapat may minimum na taas at lapad na {{minImageWidthAndHeight}} mga pixel. Masyadong maliit ang larawang ito: {{fileName}}.",
+      "save_failed_changes_kept": "Nabigong i-save ang iyong mga pagbabago. Nakatago ang mga ito sa window na ito. Pakisubukang muli maya-maya."
     },
     "feature_introduction": {
       "description": "Sa pamamagitan ng pakikipagtulungan sa <a /> mula sa University of California San Diego at Scripps Institution of Oceanography, isinama na ngayon ng MERMAID ang klasipikasyon batay sa AI gamit ang isang pyspacer deep learning model. Ang integrasyong ito ay nagbibigay-daan sa mabilis at nasusukat na pagsusuri ng mga benthic na larawan upang mabilis at palagian kang makabuo ng mga insight gamit ang machine learning at AI.",
@@ -963,6 +966,8 @@
       "data_unavailable": "Kasalukuyang hindi available ang sample na data ng unit.",
       "observations_unavailable_offline": "Hindi available offline ang mga sample na unit observation",
       "submit_disabled": "May mga error o babala na pumipigil sa iyo sa pagsusumite",
+      "submit_failed": "Hindi available ang pagsusumite para sa rekord na ito sa kasalukuyan.",
+      "submit_rejected": "Hindi maisumite ang talaang ito. Ayusin ang mga error sa pagpapatunay at patunayan itong muli.",
       "submitted_data_unavailable": "Kasalukuyang hindi available ang isinumiteng record data.",
       "submitted_moved_to_collecting": "Ang isinumiteng rekord ay inilipat na sa pangongolekta.",
       "submitted_not_editable": "Hindi pa nae-edit ang isinumiteng rekord",
@@ -1236,13 +1241,14 @@
     "similar_name": "May isa pang Rehimen sa Pamamahala na katulad nito.",
     "site_not_found": "Hindi magagamit ang talaan ng site para sa pagpapatunay ng pagkakatulad",
     "system_validation_error": "Error sa pagpapatunay ng sistema:",
-    "unconfirmed_annotation": "Maling bilang ng mga nakumpirmang anotasyon",
-    "unknown_protocol": "Hindi kilalang protokol",
+    "unclassified_annotation": "Ang lahat ng mga puntos ay dapat na uriin at kumpirmahin",
+    "unconfirmed_annotation": "Ang lahat ng mga puntos ay dapat kumpirmahin",
+    "unknown_protocol": "Hindi kilalang pamamaraan",
     "value_not_set": "Hindi nakatakda ang halaga"
   },
   "validations": {
     "ignored": "Hindi pinansin",
-    "passed": "Nakapasa sa Pagpapatunay",
+    "passed": "Nakapasa sa pagpapatunay",
     "validations": "Mga Pagpapatunay"
   },
   "view_fish_info": "Tingnan ang impormasyon ng pangalan ng isda",

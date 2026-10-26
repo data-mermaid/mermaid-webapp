@@ -17,7 +17,7 @@ import mockBleachingCollectRecords from '../../../../testUtilities/mockCollectRe
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Bleaching validation: user can reset ignored observation warnings (colonies bleached) ', async () => {
+test('Bleaching validation: user can un-ignore observation warnings (colonies bleached)', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const observationsValidations = [
     [
@@ -138,17 +138,15 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
     ).not.toBeInTheDocument(),
   )
   expect(
-    within(coloniesBleachedObservationTable).queryByText('firstWarning'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(coloniesBleachedObservationTable).queryByText('secondWarning'),
-  ).not.toBeInTheDocument()
+    within(coloniesBleachedObservationTable).getByTestId('ignore-warning-checkbox'),
+  ).not.toBeChecked()
+  expect(coloniesBleachedObservationTable.querySelectorAll('li.warning-indicator')).toHaveLength(2)
   expect(
     within(coloniesBleachedObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 })
 
-test('Bleaching validation: user can reset ignored observation warnings (percent cover) ', async () => {
+test('Bleaching validation: user can un-ignore observation warnings (percent cover)', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const observationsValidations = [
     [
