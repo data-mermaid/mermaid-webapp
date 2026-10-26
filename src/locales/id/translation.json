@@ -220,6 +220,8 @@
   "fish_size_bin_info": "Nama skema rentang ukuran yang digunakan untuk memperkirakan ukuran ikan pada tiap transek. Pilih 1 cm jika ukuran ikan yang dicatat tidak menggunakan rentang ukuran.",
   "fish_size_observed": "Ukuran ikan yang diamati, dalam cm (misalnya 4,5 atau 5-10).",
   "forms": {
+    "number_maximum": "Hingga {{max}}",
+    "number_whole_only": "Hanya bilangan bulat",
     "required_field": "Bidang ini wajib diisi",
     "submit_for_review": "Kirim untuk ditinjau"
   },
@@ -959,7 +961,8 @@
       "supporting_data_unavailable": "Data pendukung untuk membuat unit sampel saat ini tidak tersedia.",
       "validation_ignore": "Validasi ini tidak dapat diabaikan.",
       "validation_reset": "Validasi ini tidak dapat diatur ulang.",
-      "validation_unavailable": "Validasi saat ini tidak tersedia untuk unit sampel ini."
+      "validation_unavailable": "Validasi saat ini tidak tersedia untuk unit sampel ini.",
+      "validation_unignore": "Validasi ini tidak dapat dibatalkan."
     },
     "last_edited_by": "Terakhir disunting oleh",
     "method": "Metode",

@@ -222,6 +222,8 @@
   "fish_size_bin_info": "Nom du schéma de classes utilisé pour estimer la taille des poissons pour le transect. Choisissez 1 cm si la taille de poisson enregistrée n'utilise pas de classes.",
   "fish_size_observed": "Taille du poisson observé, en cm (par ex. 4,5 ou 5-10).",
   "forms": {
+    "number_maximum": "Jusqu'à {{max}}",
+    "number_whole_only": "Nombres entiers uniquement",
     "required_field": "Ce champ est obligatoire",
     "submit_for_review": "Envoyer à MERMAID pour révision"
   },
@@ -974,7 +976,8 @@
       "supporting_data_unavailable": "Les données de support pour créer une unité d'échantillonnage sont actuellement indisponibles.",
       "validation_ignore": "Cette validation ne peut être ignorée.",
       "validation_reset": "Cette validation ne peut pas être réinitialisée.",
-      "validation_unavailable": "La validation de cet enregistrement est actuellement indisponible."
+      "validation_unavailable": "La validation de cet enregistrement est actuellement indisponible.",
+      "validation_unignore": "Cette validation ne peut être ignorée."
     },
     "last_edited_by": "Dernière modification par",
     "method": "Méthode",
