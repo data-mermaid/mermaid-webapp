@@ -2103,14 +2103,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify/react@npm:^1.1.4":
-  version: 1.1.4
-  resolution: "@iconify/react@npm:1.1.4"
-  checksum: 10c0/4c4b1bb5d10c64b4eccfe9480420056d7622c598af0e41685c690a3a80d0e95e76b0633f1a9ce625a21d8fdb1a7f93ff435fee6baccfcc0cde6709b53fa86edf
+"@iconify/react@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@iconify/react@npm:6.0.3"
+  dependencies:
+    "@iconify/types": "npm:^2.0.0"
+  peerDependencies:
+    react: ">=18.0.0"
+  checksum: 10c0/5c0c88d5724220bae2107b4a073f44088ae313fb89cc3f6aaa7f9e48dc91ad78cf694ca3f911556bbec8d17539d62863b09bad5c2940dae7e5ed2eaf58b1fe24
   languageName: node
   linkType: hard
 
-"@iconify/types@npm:*":
+"@iconify/types@npm:*, @iconify/types@npm:^2.0.0":
   version: 2.0.0
   resolution: "@iconify/types@npm:2.0.0"
   checksum: 10c0/65a3be43500c7ccacf360e136d00e1717f050b7b91da644e94370256ac66f582d59212bdb30d00788aab4fc078262e91c95b805d1808d654b72f6d2072a7e4b2
@@ -8967,7 +8971,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
     "@iconify-icons/mdi": "npm:^1.1.12"
-    "@iconify/react": "npm:^1.1.4"
+    "@iconify/react": "npm:^6.0.3"
     "@mantine/core": "npm:^9.7.1"
     "@mantine/hooks": "npm:^9.7.1"
     "@mui/material": "npm:^5.15.16"
