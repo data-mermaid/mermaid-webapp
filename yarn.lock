@@ -2011,10 +2011,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/open-sans@npm:^4.4.5":
-  version: 4.5.14
-  resolution: "@fontsource/open-sans@npm:4.5.14"
-  checksum: 10c0/90081358e51c41d4e470d61612d53d4a202768a8d0a09a259697c98fb323aecf93d38736d8f2473f5f4940e2a74580c6b49a78c1316bed8299e2aa386751818b
+"@fontsource/open-sans@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@fontsource/open-sans@npm:5.3.0"
+  checksum: 10c0/c52a583617187cb731d2606b7f22337168db055df7600f79ad42a37d44764065ff1fe060069467c43a086296f43a6ffc0328dd2c8031c459bfb60d253f2522d6
   languageName: node
   linkType: hard
 
@@ -8962,7 +8962,7 @@ __metadata:
     "@emotion/styled": "npm:^11.11.0"
     "@eslint/compat": "npm:^2.1.1"
     "@eslint/js": "npm:^10.0.1"
-    "@fontsource/open-sans": "npm:^4.4.5"
+    "@fontsource/open-sans": "npm:^5.3.0"
     "@fortawesome/fontawesome-svg-core": "npm:^7.3.1"
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
