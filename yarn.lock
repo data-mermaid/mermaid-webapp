@@ -7930,15 +7930,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.5.3":
-  version: 26.5.3
-  resolution: "i18next@npm:26.5.3"
+"i18next@npm:^26.5.4":
+  version: 26.5.4
+  resolution: "i18next@npm:26.5.4"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/85b8f7b45b9eb5a90e396f5a8270f45d4cb0a1add3da21253a3211ed892ffdc0d1c32dbb50124199db3ef279133c19edfeaeaf3278ce8326c447d65d5f33e05c
+  checksum: 10c0/b2ee46803cf19c565d3b80f9a8542ca4fcc92d96434202926f09e032d08e20188d6640434cd3f7987b7a1144cd3c2e034d27f51129a31ca18db8b8cea475c11f
   languageName: node
   linkType: hard
 
@@ -9054,7 +9054,7 @@ __metadata:
     formik: "npm:^2.4.9"
     globals: "npm:^17.13.0"
     husky: "npm:^9.1.7"
-    i18next: "npm:^26.5.3"
+    i18next: "npm:^26.5.4"
     i18next-intervalplural-postprocessor: "npm:^3.0.0"
     i18next-resources-to-backend: "npm:^1.2.3"
     jsdom: "npm:^26.1.0"
