@@ -63,8 +63,8 @@ describe('getValidationMessage for ranges and thresholds', () => {
     getValidationMessage({ code: 'invalid_depth', context: { depth_range: [0, 40] } })
     getValidationMessage({ code: 'max_depth', context: { depth_range: [0, 40] } })
 
-    expect(tSpy).toHaveBeenCalledTimes(2)
-    expect(tSpy).toHaveBeenCalledWith('validation_messages.depth_out_of_range', { max: 40 })
+    expect(tSpy).toHaveBeenNthCalledWith(1, 'validation_messages.depth_out_of_range', { max: 40 })
+    expect(tSpy).toHaveBeenNthCalledWith(2, 'validation_messages.depth_out_of_range', { max: 40 })
   })
 
   test('threshold codes use the zero messages from the audit sheet', () => {

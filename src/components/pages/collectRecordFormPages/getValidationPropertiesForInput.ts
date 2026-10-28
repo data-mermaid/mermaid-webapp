@@ -5,7 +5,7 @@ import type { Validation, ValidationContext } from '../../../types/validation'
 // walkFieldSubtree in getValidationSummary), so they are read by key.
 export type RowValidations = Validation[] | Record<string, Validation>
 
-export interface ValidationMessage {
+interface ValidationMessage {
   code?: string
   name?: string
   id?: string
@@ -16,11 +16,6 @@ export interface InputValidationProperties {
   validationType?: ValidationStatus
   validationMessages?: ValidationMessage[]
 }
-
-// Which of a row's validations actually reach the screen. One error hides everything else on
-// that row: the required error if there is one, otherwise the first. Otherwise warnings and
-// ignores show together, and a row left with only resets shows nothing. Also read by
-// getValidationSummary, so the status indicator chips count exactly what this returns.
 
 // An empty field usually fails more than one check (empty depth is also "not a number"), and
 // "Required" is the only one of those messages the user can act on.
@@ -33,6 +28,10 @@ const isSiteNotFoundOnManagement = (validation: Validation) =>
   validation.code === 'site_not_found' &&
   (validation.fields ?? []).includes('data.sample_event.management')
 
+// Which of a row's validations actually reach the screen. One error hides everything else on
+// that row: the required error if there is one, otherwise the first. Otherwise warnings and
+// ignores show together, and a row left with only resets shows those. Also read by
+// getValidationSummary, so the status indicator chips count exactly what this returns.
 export const getValidationsToDisplay = (inputValidations: RowValidations): Validation[] => {
   const validationObjectKeys = Object.keys(inputValidations).filter(
     (key) => !isSiteNotFoundOnManagement(inputValidations[key]),

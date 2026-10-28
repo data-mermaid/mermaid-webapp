@@ -3,8 +3,8 @@
 // worth showing once nothing else at the record level is failing.
 //
 // `len_surveyed_not_positive` and `interval_size_not_positive` come from the observation count
-// checks on benthic LIT, benthic PIT and habitat complexity, when the transect length or interval
-// size is empty, zero or negative. The transect length and interval size fields report every one
+// check on benthic PIT and habitat complexity, and the total length check on benthic LIT, when
+// the transect length or interval size is empty, zero or negative. The transect length and interval size fields report every one
 // of those cases themselves, so the record-level copies are never the only sign of the problem.
 //
 // Both the record-level panel and the form status indicator chips filter through here, so
