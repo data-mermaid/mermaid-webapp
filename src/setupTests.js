@@ -77,8 +77,7 @@ vi.mock('../i18n', async () => {
 
   i18next.init({
     lng: 'cimode',
-    initImmediate: false,
-    showSupportNotice: false,
+    initAsync: false,
   })
 
   return { default: i18next }
