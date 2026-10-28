@@ -264,8 +264,12 @@ test('Bleaching validation: user can un-ignore observation warnings (percent cov
       within(percentCoverObservationTable).queryByTestId('ignore-warning-label'),
     ).not.toBeInTheDocument(),
   )
-  expect(within(percentCoverObservationTable).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(percentCoverObservationTable).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(
+    within(percentCoverObservationTable).getByTestId('ignore-warning-checkbox'),
+  ).not.toBeChecked()
+  expect(within(percentCoverObservationTable).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(percentCoverObservationTable).getByText('secondWarning')).toBeInTheDocument()
+  expect(percentCoverObservationTable.querySelectorAll('li.warning-indicator')).toHaveLength(2)
   expect(
     within(percentCoverObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
