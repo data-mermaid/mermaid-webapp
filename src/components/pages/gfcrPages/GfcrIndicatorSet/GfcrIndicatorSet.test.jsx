@@ -31,7 +31,7 @@ vi.mock('../../../../App/CurrentProjectContext', async (importOriginal) => ({
   useCurrentProject: () => ({ gfcrIndicatorSets: [indicatorSet], setGfcrIndicatorSets: () => {} }),
 }))
 
-test('An indicator set whose choices fail to load does not crash on its finance solutions', async () => {
+test('An indicator set whose choices fail to load says so instead of crashing', async () => {
   mockMermaidApiAllSuccessful.use(
     http.get(`${apiBaseUrl}/projects/${projectId}/indicatorsets/`, () =>
       HttpResponse.json({ count: 1, next: null, results: [indicatorSet] }),
@@ -51,9 +51,12 @@ test('An indicator set whose choices fail to load does not crash on its finance 
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
+  expect(screen.getByText('gfcr.errors.indicator_sets_unavailable')).toBeInTheDocument()
+
   await user.click(screen.getByText('gfcr.businesses_finance_solutions'))
 
   // A crash replaces the whole page, nav included
   expect(screen.getByText('gfcr.businesses_finance_solutions')).toBeInTheDocument()
+  expect(screen.getByText('gfcr.errors.indicator_sets_unavailable')).toBeInTheDocument()
   expect(screen.queryByText('gfcr.forms.finance_solutions.add')).not.toBeInTheDocument()
 })

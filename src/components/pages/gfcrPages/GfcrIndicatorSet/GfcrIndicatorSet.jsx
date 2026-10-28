@@ -66,6 +66,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
   const [choices, setChoices] = useState()
+  const [hasSupportingDataLoadFailed, setHasSupportingDataLoadFailed] = useState(false)
 
   const [isLoading, setIsLoading] = useState(true)
   const [isFormDirty, setIsFormDirty] = useState(false)
@@ -114,6 +115,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
             },
           })
 
+          setHasSupportingDataLoadFailed(true)
           setIsLoading(false)
         })
     }
@@ -288,6 +290,11 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
             choices={choices}
             displayHelp={displayHelp}
           />
+        )}
+        {!!indicatorSetBeingEdited && !choices && hasSupportingDataLoadFailed && (
+          <GfcrPageUnavailablePadding>
+            <PageUnavailable mainText={indicatorSetsUnavailableText} />
+          </GfcrPageUnavailablePadding>
         )}
       </div>
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
