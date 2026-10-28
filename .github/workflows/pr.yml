@@ -79,10 +79,23 @@ jobs:
         env:
           CDK_DEFAULT_ACCOUNT: '000000000000'
           CDK_DEFAULT_REGION: us-east-1
+        # cdk-nag v3 runs as a CDK policy validation plugin: every unacknowledged finding
+        # (error or warning) fails `cdk synth` and is listed in cdk.out/validation-report.json.
+        # A missing report means synth failed before validation ran, so that fails too.
+        # Only plugins that concluded "failure" count: CDK's built-in CloudFormation Validate
+        # plugin can add advisory warnings under a "success" conclusion.
         run: |
-          npx cdk synth --quiet 2>&1 | tee /tmp/cdk-nag.log || true
+          report=cdk.out/validation-report.json
+          rm -f "${report}"
+          # Capture synth's status straight from PIPESTATUS (`|| true` would reset it under pipefail).
+          set +e
+          npx cdk synth --quiet 2>&1 | tee /tmp/cdk-nag.log
           synth_exit=${PIPESTATUS[0]}
-          if [ "${synth_exit}" != "0" ] || grep -q '^\[Error' /tmp/cdk-nag.log; then
+          set -e
+          if [ ! -f "${report}" ]; then
+            echo "::error::${report} not found: cdk synth failed before cdk-nag ran"
+            echo "has_errors=true" >> "$GITHUB_OUTPUT"
+          elif [ "${synth_exit}" != "0" ] || [ "$(jq '[.pluginReports[] | select(.conclusion == "failure") | .violations[]] | length' "${report}")" != "0" ]; then
             echo "has_errors=true" >> "$GITHUB_OUTPUT"
           else
             echo "has_errors=false" >> "$GITHUB_OUTPUT"
@@ -94,20 +107,31 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const log = fs.readFileSync('/tmp/cdk-nag.log', 'utf8');
-            const errors = log.split('\n').filter(l => l.startsWith('[Error'));
-            const warnings = log.split('\n').filter(l => l.startsWith('[Warning'));
+            const reportPath = 'iac/cdk.out/validation-report.json';
+            const list = (violations) => violations
+              .map(v => `- \`${v.ruleName}\`\n` + v.violatingConstructs.map(c => `  - \`${c.constructPath}\``).join('\n'))
+              .join('\n');
             let body = '## cdk-nag report\n\n';
-            if (errors.length === 0) {
-              body += ':white_check_mark: **No unsuppressed errors.**\n';
+            if (!fs.existsSync(reportPath)) {
+              body += ':x: **`cdk synth` failed before cdk-nag ran.** See the job log.\n';
             } else {
-              body += `:x: **${errors.length} unsuppressed error(s):**\n\n`;
-              body += '```\n' + errors.join('\n') + '\n```\n';
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              const violations = report.pluginReports
+                .filter(p => p.conclusion === 'failure')
+                .flatMap(p => p.violations);
+              const errors = violations.filter(v => v.severity === 'error');
+              const warnings = violations.filter(v => v.severity !== 'error');
+              if (violations.length === 0) {
+                body += ':white_check_mark: **No unacknowledged findings.**\n';
+              }
+              if (errors.length > 0) {
+                body += `:x: **${errors.length} unacknowledged error(s):**\n\n${list(errors)}\n`;
+              }
+              if (warnings.length > 0) {
+                body += `\n:warning: **${warnings.length} unacknowledged warning(s)** (these also fail the job):\n\n${list(warnings)}\n`;
+              }
             }
-            if (warnings.length > 0) {
-              body += `\n:warning: ${warnings.length} warning(s)\n`;
-            }
-            body += '\n---\n*See `iac/nag-suppressions.ts` to add suppressions for accepted risks.*';
+            body += '\n---\n*See `iac/nag-suppressions.ts` to acknowledge accepted risks.*';
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -133,7 +157,7 @@ jobs:
       - name: Fail on CDK Nag errors
         if: steps.cdk-nag.outputs.has_errors == 'true'
         run: |
-          echo "::error::cdk-nag found unsuppressed errors — see PR comment for details"
+          echo "::error::cdk-nag found unacknowledged findings — see the PR comment or the CDK Nag step log"
           exit 1
 
       # Dependabot PRs cannot read repo secrets, so CDK_DEPLOY_ROLE is empty and
