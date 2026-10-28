@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
+import { groupBy } from 'lodash'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
@@ -312,7 +313,8 @@ const ImageClassificationObservationTable = ({
         let totalConfirmed = 0
         let totalUnconfirmed = 0
 
-        const imageAnnotationData = Object.groupBy(
+        // lodash rather than Object.groupBy, which some older mobile browsers lack
+        const imageAnnotationData = groupBy(
           classifiedPoints,
           ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
         )

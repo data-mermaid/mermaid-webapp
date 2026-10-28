@@ -219,3 +219,27 @@ test('The photo table shows confirmations as each save completes, without reload
 
   expect(listRequests.count).toBe(listRequestsBeforeSave)
 })
+
+test('The photo table and review window work in browsers without Object.groupBy', async () => {
+  // Older browsers, such as HeyTap on Android, don't have Object.groupBy
+  vi.spyOn(Object, 'groupBy').mockImplementation(() => {
+    throw new TypeError('Object.groupBy is not a function')
+  })
+  mockImageClassificationApi([
+    makeImage({
+      id: 'first',
+      name: 'first.jpg',
+      createdOn: '2026-09-01T00:00:00Z',
+      status: IMAGE_CLASSIFICATION_STATUS.completed,
+    }),
+  ])
+
+  const { user } = renderRecord()
+
+  await user.click(await screen.findByTestId('review-photo-first', {}, { timeout: 10000 }))
+
+  expect(
+    await screen.findByRole('button', { name: 'image_classification.buttons.confirm_all' }),
+  ).toBeInTheDocument()
+  expect(getPhotoTableCounts('Dead Coral with Algae')).toEqual({ confirmed: '0', unconfirmed: '1' })
+})
