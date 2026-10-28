@@ -273,7 +273,9 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         setSelectedNavItem={setSelectedNavItem}
       />
       <div style={{ flex: 1 }}>
-        {!!indicatorSetBeingEdited && (
+        {/* Sub-pages and their modals need choices, but the set can be here without them
+            (already in context from the GFCR list, with choices still loading or failed) */}
+        {!!indicatorSetBeingEdited && !!choices && (
           <GfcrIndicatorSetForm
             formik={formik}
             indicatorSet={indicatorSetBeingEdited}
