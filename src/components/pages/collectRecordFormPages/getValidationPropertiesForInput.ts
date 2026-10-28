@@ -26,8 +26,17 @@ export interface InputValidationProperties {
 // "Required" is the only one of those messages the user can act on.
 const REQUIRED_CODE = 'required'
 
+// The management field's similarity check reports `site_not_found` when the site field is
+// empty, so it only ever fires alongside the site field's own Required. A site that is set but
+// missing from the project is reported on the site field instead, where it stays.
+const isSiteNotFoundOnManagement = (validation: Validation) =>
+  validation.code === 'site_not_found' &&
+  (validation.fields ?? []).includes('data.sample_event.management')
+
 export const getValidationsToDisplay = (inputValidations: RowValidations): Validation[] => {
-  const validationObjectKeys = Object.keys(inputValidations)
+  const validationObjectKeys = Object.keys(inputValidations).filter(
+    (key) => !isSiteNotFoundOnManagement(inputValidations[key]),
+  )
   const errors = validationObjectKeys
     .filter((key) => inputValidations[key].status === 'error')
     .map((key) => inputValidations[key])

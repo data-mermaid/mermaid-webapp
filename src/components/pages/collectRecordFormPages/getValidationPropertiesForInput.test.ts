@@ -61,6 +61,26 @@ describe('getValidationsToDisplay', () => {
     expect(getValidationsToDisplay([warning, ignored])).toEqual([warning, ignored])
   })
 
+  test('hides site not found on the management field, which the site field already reports', () => {
+    const siteNotFound: Validation = {
+      status: 'error',
+      code: 'site_not_found',
+      fields: ['data.sample_event.management'],
+    }
+
+    expect(getValidationsToDisplay([siteNotFound])).toEqual([])
+  })
+
+  test('keeps site not found on the site field, where it is the only report of a missing site', () => {
+    const siteNotFound: Validation = {
+      status: 'error',
+      code: 'site_not_found',
+      fields: ['data.sample_event.site'],
+    }
+
+    expect(getValidationsToDisplay([siteNotFound])).toEqual([siteNotFound])
+  })
+
   test('shows resets only when the row has nothing else', () => {
     const reset = validation('reset', 'max_fish_size')
 

@@ -196,8 +196,8 @@ export const getValidationMessage = (
     invalid_percent_value: () => getInvalidBleachingObsMessage(context, 'percent_cover'),
     invalid_total: () => getInvalidBleachingObsTotalMessage(context),
     exceed_total_colonies: () => i18n.t('validation_messages.exceed_total_colonies'),
-    implausibly_old_date: () => i18n.t('validation_messages.implausibly_old_date'),
-    future_sample_date: () => i18n.t('validation_messages.future_sample_date'),
+    implausibly_old_date: () => i18n.t('validation_messages.date_before_1900'),
+    future_sample_date: () => i18n.t('validation_messages.date_in_future'),
     high_density: () =>
       i18n.t('validation_messages.high_density', {
         max: context?.biomass_range?.[1] ?? '',
@@ -206,35 +206,40 @@ export const getValidationMessage = (
       i18n.t('validation_messages.incorrect_observation_count', {
         expectedCount: context?.expected_count ?? '',
       }),
-    invalid_interval_size: () => i18n.t('validation_messages.greater_than_zero'),
+    invalid_interval_size: () => i18n.t('validation_messages.size_greater_than_zero'),
     max_interval_size: () =>
-      i18n.t('validation_messages.max_interval_size', {
+      i18n.t('validation_messages.maximum_metres', {
         max: context?.interval_size_range?.[1] ?? '',
       }),
+    invalid_interval_start: () => i18n.t('validation_messages.zero_or_greater'),
     max_interval_start: () =>
-      i18n.t('validation_messages.max_interval_start', {
+      i18n.t('validation_messages.maximum_metres', {
         max: context?.interval_start_range?.[1] ?? '',
       }),
     invalid_benthic_transect: () => i18n.t('validation_messages.invalid_benthic_transect'),
     invalid_depth: () => getDepthMessage(context),
     excessive_precision: () =>
-      i18n.t('validation_messages.excessive_precision', {
+      i18n.t('validation_messages.decimal_places_exceeded', {
         count: context?.decimal_places,
       }),
-    invalid_fish_count: () => i18n.t('validation_messages.zero_or_greater'),
+    // An observation row has one Validations cell, so its message names the column.
+    invalid_fish_count: () => i18n.t('validation_messages.count_zero_or_greater'),
     invalid_fish_size: () => i18n.t('validation_messages.invalid_size'),
     invalid_fishbelt_transect: () => i18n.t('validation_messages.invalid_fishbelt_transect'),
-    invert_count_high: () => i18n.t('validation_messages.invert_count_high'),
-    invert_size_exceeds_maximum: () => i18n.t('validation_messages.invert_size_exceeds_maximum'),
+    invalid_invert_count: () => i18n.t('validation_messages.count_greater_than_zero'),
+    invert_count_high: () => i18n.t('validation_messages.count_unusually_high'),
+    invert_size_exceeds_maximum: () =>
+      i18n.t('validation_messages.size_larger_than_maximum_expected'),
+    duplicate_invert_belt_transect: () => getDuplicateSampleUnitLink(context, projectId),
     invalid_invert_belt_transect: () => i18n.t('validation_messages.invalid_invert_belt_transect'),
     invalid_number_of_points: () =>
       i18n.t('validation_messages.invalid_number_of_points', {
         invalidQuadratNumbers: context?.invalid_quadrat_numbers ?? '',
       }),
     invalid_quadrat_collection: () => i18n.t('validation_messages.invalid_quadrat_collection'),
-    invalid_quadrat_size: () => i18n.t('validation_messages.greater_than_zero'),
+    invalid_quadrat_size: () => i18n.t('validation_messages.size_greater_than_zero'),
     max_quadrat_size: () =>
-      i18n.t('validation_messages.max_quadrat_size', {
+      i18n.t('validation_messages.less_than_square_metres', {
         max: context?.quadrat_size_range?.[1] ?? '',
       }),
     invalid_quadrat_transect: () => i18n.t('validation_messages.invalid_quadrat_transect'),
@@ -282,9 +287,9 @@ export const getValidationMessage = (
     required_management_rules: () => i18n.t('validation_messages.required_management_rules'),
     sample_time_out_of_range: () => getOutsideOfRangeMessage(context?.time_range?.map(formatTime)),
     similar_name: () => i18n.t('validation_messages.similar_name'),
-    size_bin_required: () => i18n.t('validation_messages.required_size'),
+    size_bin_required: () => i18n.t('validation_messages.size_bin_required'),
     similar_date_sample_unit: () => i18n.t('validation_messages.similar_date_sample_unit'),
-    site_not_found: () => i18n.t('validation_messages.site_not_found'),
+    site_not_found: () => i18n.t('validation_messages.site_not_found_short'),
     too_many_observations: () =>
       i18n.t('validation_messages.too_many_observations', {
         max: context?.observation_count_range?.[1] ?? '',
