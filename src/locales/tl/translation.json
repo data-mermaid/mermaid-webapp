@@ -222,6 +222,8 @@
   "fish_size_bin_info": "Pangalan ng bin scheme na ginamit upang tantiyahin ang laki ng isda para sa transect. Pumili ng 1 cm kung ang laki ng isda na naitala ay hindi gumagamit ng mga basurahan.",
   "fish_size_observed": "Sukat ng isda na naobserbahan, sa cm (hal. 4.5 o 5-10).",
   "forms": {
+    "number_maximum": "Hanggang sa {{max}}",
+    "number_whole_only": "Mga buong numero lamang",
     "required_field": "Kinakailangan ang field na ito",
     "submit_for_review": "Ipadala sa MERMAID para sa pagsusuri"
   },
@@ -974,7 +976,8 @@
       "supporting_data_unavailable": "Kasalukuyang hindi available ang pagsuporta sa data para sa paggawa ng sample unit.",
       "validation_ignore": "Hindi maaaring balewalain ang pagpapatunay na ito.",
       "validation_reset": "Hindi na maaaring i-reset ang pagpapatunay na ito.",
-      "validation_unavailable": "Kasalukuyang hindi magagamit ang pagpapatunay para sa rekord na ito."
+      "validation_unavailable": "Kasalukuyang hindi magagamit ang pagpapatunay para sa rekord na ito.",
+      "validation_unignore": "Hindi maaaring hindi balewalain ang pagpapatunay na ito."
     },
     "last_edited_by": "Huling na-edit ni",
     "method": "Pamamaraan",

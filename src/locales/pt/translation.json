@@ -222,6 +222,8 @@
   "fish_size_bin_info": "Nome do esquema de intervalos utilizado para estimar o tamanho dos peixes no transecto. Escolha «1 cm» se o tamanho dos peixes registado não utilizar intervalos.",
   "fish_size_observed": "Tamanho dos peixes observados, em cm (por exemplo, 4,5 ou 5-10).",
   "forms": {
+    "number_maximum": "Até {{max}}",
+    "number_whole_only": "Apenas números inteiros",
     "required_field": "Este campo é obrigatório",
     "submit_for_review": "Enviar para revisão"
   },
@@ -974,7 +976,8 @@
       "supporting_data_unavailable": "Os dados necessários para criar uma unidade de amostra não estão disponíveis neste momento.",
       "validation_ignore": "Esta validação não pode ser ignorada.",
       "validation_reset": "Esta validação não pode ser reiniciada.",
-      "validation_unavailable": "A validação para esta unidade de amostra não está disponível no momento."
+      "validation_unavailable": "A validação para esta unidade de amostra não está disponível no momento.",
+      "validation_unignore": "Essa validação não pode ser desconsiderada."
     },
     "last_edited_by": "Última edição por",
     "method": "Método",

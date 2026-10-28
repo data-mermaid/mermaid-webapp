@@ -222,6 +222,8 @@
   "fish_size_bin_info": "Nombre del esquema de bins utilizado para estimar el tamaño de los peces en el transecto. Elija 1 cm si el tamaño de los peces registrado no utiliza bins.",
   "fish_size_observed": "Tamaño del pez observado, en cm (por ejemplo 4,5 o 5-10).",
   "forms": {
+    "number_maximum": "Arriba a {{max}}",
+    "number_whole_only": "Solo números enteros",
     "required_field": "Este campo es obligatorio",
     "submit_for_review": "Enviar a MERMAID para revisión"
   },
@@ -974,7 +976,8 @@
       "supporting_data_unavailable": "Actualmente no hay datos de apoyo para crear una unidad de muestra disponibles.",
       "validation_ignore": "Esta validación no puede ignorarse.",
       "validation_reset": "Esta validación no se puede restablecer.",
-      "validation_unavailable": "La validación no está disponible actualmente para este registro."
+      "validation_unavailable": "La validación no está disponible actualmente para este registro.",
+      "validation_unignore": "Esta validación no puede ser ignorada."
     },
     "last_edited_by": "Última edición por",
     "method": "Método",
