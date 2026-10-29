@@ -1181,7 +1181,6 @@
   "validation_messages": {
     "all_attributes_same_category": "All benthic attributes are {{category}}",
     "all_equal": "All observations are the same",
-    "count_greater_than_zero": "Count must be greater than zero",
     "count_unusually_high": "Count unusually high",
     "count_zero_or_greater": "Count must be zero or greater",
     "date_before_1900": "Date is before 1900",
@@ -1268,7 +1267,6 @@
     "site_not_found": "Site record not available for similarity validation",
     "site_not_found_short": "Site not found",
     "size_bin_required": "Size bin is required when an observation has a size",
-    "size_greater_than_zero": "Size must be greater than zero",
     "size_larger_than_maximum_expected": "Size larger than maximum expected",
     "size_larger_than_maximum_observed": "Size larger than maximum observed",
     "system_validation_error": "System validation error:",
