@@ -44,6 +44,7 @@ const useAuthentication = ({
   const setUnauthenticatedStates = useCallback(() => {
     localStorage.removeItem('hasAuth0Authenticated')
     setIsMermaidAuthenticated(false)
+    Sentry.setUser(null)
   }, [])
 
   const handleAccessTokenError = useCallback(
@@ -97,8 +98,15 @@ const useAuthentication = ({
     // Without this every Sentry issue reports zero users, so there is no way to tell one stuck
     // browser apart from a fault hitting everyone. The Auth0 subject id is opaque: no email or
     // name is sent.
-    Sentry.setUser(isAuth0Authenticated && auth0User?.sub ? { id: auth0User.sub } : null)
-  }, [isAuth0Authenticated, auth0User?.sub])
+    //
+    // Keyed on the subject id rather than on isAuth0Authenticated, because an offline user is
+    // still logged in as far as this app is concerned. Clearing whenever Auth0 reports
+    // unauthenticated would drop identity from the offline reports that are hardest to triage.
+    // setUnauthenticatedStates clears it when the user actually logs out.
+    if (auth0User?.sub) {
+      Sentry.setUser({ id: auth0User.sub })
+    }
+  }, [auth0User?.sub])
 
   const _silentAuthentication = useEffect(() => {
     const silentAuth = async () => {

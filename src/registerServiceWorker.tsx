@@ -25,7 +25,9 @@ const promptToReload = () => {
         button: <ButtonPrimary type="button" onClick={() => window.location.reload()} />,
       }}
     />,
-    { toastId: NEW_VERSION_TOAST_ID, autoClose: false },
+    // closeOnClick is on for the container, and no second controllerchange follows for this page,
+    // so a stray click would dismiss the only notice the user gets.
+    { toastId: NEW_VERSION_TOAST_ID, autoClose: false, closeOnClick: false },
   )
 }
 
@@ -41,15 +43,20 @@ export const registerServiceWorker = () => {
     return
   }
 
-  // A first-ever registration also fires controllerchange once clientsClaim() runs. Reading the
-  // controller before registering tells the two cases apart: only a page that already had one is
-  // running a superseded build.
-  const wasAlreadyControlled = Boolean(navigator.serviceWorker.controller)
+  // A first-ever registration also fires controllerchange once clientsClaim() runs, and that is
+  // setup rather than an update. Only a page that already had a controller is running a
+  // superseded build. This has to be tracked rather than sampled once: a tab that starts
+  // uncontrolled becomes controlled by the first claim, and any later deploy is a real update.
+  let isControlled = Boolean(navigator.serviceWorker.controller)
 
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (wasAlreadyControlled) {
+    if (isControlled) {
       promptToReload()
+
+      return
     }
+
+    isControlled = true
   })
 
   window.addEventListener('load', () => {
