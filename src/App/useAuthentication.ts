@@ -90,7 +90,15 @@ const useAuthentication = ({
     isLoading: isAuth0Loading,
     logout: auth0Logout,
     getAccessTokenSilently: getAuth0AccessTokenSilently,
+    user: auth0User,
   } = useAuth0()
+
+  const _sentryUserContext = useEffect(() => {
+    // Without this every Sentry issue reports zero users, so there is no way to tell one stuck
+    // browser apart from a fault hitting everyone. The Auth0 subject id is opaque: no email or
+    // name is sent.
+    Sentry.setUser(isAuth0Authenticated && auth0User?.sub ? { id: auth0User.sub } : null)
+  }, [isAuth0Authenticated, auth0User?.sub])
 
   const _silentAuthentication = useEffect(() => {
     const silentAuth = async () => {
