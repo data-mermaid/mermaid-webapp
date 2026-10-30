@@ -31,10 +31,25 @@ const InputValidationInfo = ({
 }) => {
   const { projectId } = useParams()
   const { t } = useTranslation()
-  const areThereValidationMessages = validationMessages.length
-  const isWarningValidation = areThereValidationMessages && validationType === 'warning'
-  const isIgnoredWarningValidation = validationType === 'ignore'
-  const isErrorValidation = validationType === 'error'
+  // Collect record messages carry their own status. Other forms (management regimes, GFCR) pass
+  // messages without one, which take the field's type.
+  const messages = validationMessages.map((message) => ({
+    ...message,
+    status: message.status ?? validationType,
+  }))
+  const areThereValidationMessages = messages.length
+  // A field can show an error and a warning together, so the warning controls follow the
+  // field's warnings rather than its overall type. It counts as ignored only when none of its
+  // warnings are still showing.
+  const isValidationShowing =
+    validationType === 'error' || validationType === 'warning' || validationType === 'ignore'
+  const warningMessages = messages.filter(
+    ({ status }) => status === 'warning' || status === 'ignore',
+  )
+  const isWarningValidation =
+    isValidationShowing && warningMessages.some(({ status }) => status === 'warning')
+  const isIgnoredWarningValidation =
+    isValidationShowing && warningMessages.length > 0 && !isWarningValidation
   const isValidationPassing = validationType === 'ok'
 
   const handleIgnoreWarningChange = async (event) => {
@@ -49,11 +64,11 @@ const InputValidationInfo = ({
   }
 
   const getWarningValidationButtons = () => {
-    if (validationMessages[0]?.code === 'not_unique_site') {
+    if (warningMessages[0]?.code === 'not_unique_site') {
       return (
         <ResolveDuplicateSiteButtonAndModal
           currentSelectValue={currentSelectValue}
-          validationMessages={validationMessages}
+          validationMessages={warningMessages}
           updateValueAndResetValidationForDuplicateWarning={
             updateValueAndResetValidationForDuplicateWarning
           }
@@ -62,11 +77,11 @@ const InputValidationInfo = ({
       )
     }
 
-    if (validationMessages[0]?.code === 'similar_name') {
+    if (warningMessages[0]?.code === 'similar_name') {
       return (
         <ResolveDuplicateMRButtonAndModal
           currentSelectValue={currentSelectValue}
-          validationMessages={validationMessages}
+          validationMessages={warningMessages}
           updateValueAndResetValidationForDuplicateWarning={
             updateValueAndResetValidationForDuplicateWarning
           }
@@ -85,14 +100,13 @@ const InputValidationInfo = ({
 
   return (
     <ValidationWrapper data-testid={testId}>
-      {areThereValidationMessages &&
-      (isErrorValidation || isWarningValidation || isIgnoredWarningValidation) ? (
+      {areThereValidationMessages && isValidationShowing ? (
         <>
-          {validationMessages.map((validation) => (
+          {messages.map((validation) => (
             <InlineMessage
-              type={validationType}
+              type={validation.status}
               key={validation.id}
-              className={`${validationType}-indicator`}
+              className={`${validation.status}-indicator`}
             >
               <p>{getValidationMessage(validation, projectId)}</p>
             </InlineMessage>

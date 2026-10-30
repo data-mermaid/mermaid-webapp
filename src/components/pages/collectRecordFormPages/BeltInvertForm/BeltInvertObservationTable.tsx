@@ -256,7 +256,6 @@ const BeltInvertObservationRow = ({
     hasObservationErrorValidation,
     hasObservationIgnoredValidation,
     observationValidationMessages,
-    observationValidationType,
   } = getObservationValidationInfo({
     observationId,
     collectRecord,
@@ -380,7 +379,6 @@ const BeltInvertObservationRow = ({
           isObservationValid={isObservationValid}
           observationId={observationId}
           observationValidationMessages={observationValidationMessages}
-          observationValidationType={observationValidationType}
         />
       ) : null}
       <Td $align="right" className={tableStyles.tdCellText}>
