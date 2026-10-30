@@ -2094,12 +2094,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify-icons/mdi@npm:^1.1.12":
-  version: 1.2.48
-  resolution: "@iconify-icons/mdi@npm:1.2.48"
+"@iconify-icons/mdi@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@iconify-icons/mdi@npm:2.0.0"
   dependencies:
     "@iconify/types": "npm:*"
-  checksum: 10c0/839807aed867cf70bcdd53f15bdc18a93e91c51b958eb8c427177c0f37fdc8b095468f06a4631137bcdfd2b21e691008321f88416b41edcd95515be88c69a85a
+  checksum: 10c0/0f3ea98c598f82a0509920125d61ab3490772be17e9d3e347f2250e495c0e788b2c08a9c303b6e487d25189b815ba48179d3bd61f33a013d76afc73e6c9ca81e
   languageName: node
   linkType: hard
 
@@ -9004,7 +9004,7 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": "npm:^7.3.1"
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
-    "@iconify-icons/mdi": "npm:^1.1.12"
+    "@iconify-icons/mdi": "npm:^2.0.0"
     "@iconify/react": "npm:^6.0.3"
     "@mantine/core": "npm:^9.7.1"
     "@mantine/hooks": "npm:^9.7.1"
