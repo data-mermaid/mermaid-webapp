@@ -624,7 +624,6 @@ const ImageClassificationObservationTable = ({
                   hasObservationErrorValidation,
                   hasObservationIgnoredValidation,
                   observationValidationMessages,
-                  observationValidationType,
                 } = getObservationValidationInfo({
                   observationId: obsId,
                   collectRecord,
@@ -657,7 +656,6 @@ const ImageClassificationObservationTable = ({
                       isObservationValid={isObservationValid}
                       observationId={obsId}
                       observationValidationMessages={observationValidationMessages}
-                      observationValidationType={observationValidationType}
                     />
                   ) : (
                     <StyledTd />
@@ -779,7 +777,6 @@ const ImageClassificationObservationTable = ({
                         observationValidationMessages={
                           unclassifiedValidation.observationValidationMessages
                         }
-                        observationValidationType={unclassifiedValidation.observationValidationType}
                       />
                     ) : (
                       <StyledTd />

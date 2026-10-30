@@ -131,13 +131,13 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation error')).toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation warning')).not.toBeInTheDocument()
+  expect(within(observationsTable).getByText('observation warning')).toBeInTheDocument()
   expect(
     within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
   ).not.toBeInTheDocument()
 })
 
-test('Fishbelt validations will show only the first error when there are multiple errors and warnings', async () => {
+test('Fishbelt validations will show every error and warning when there are several', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -249,18 +249,23 @@ test('Fishbelt validations will show only the first error when there are multipl
   // regular inputs
 
   expect(within(screen.getByTestId('site')).getByText('firstError')).toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondError')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('secondError')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('secondWarning')).toBeInTheDocument()
 
   // observations table (has one empty observation)
 
   const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation error 1')).toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation warning 1')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation warning 2')).not.toBeInTheDocument()
+  expect(within(observationsTable).getByText('observation error 2')).toBeInTheDocument()
+  expect(within(observationsTable).getByText('observation warning 1')).toBeInTheDocument()
+  expect(within(observationsTable).getByText('observation warning 2')).toBeInTheDocument()
+  // A warning next to an error can still be ignored, on a field and on a row.
+  expect(
+    within(screen.getByTestId('site')).getByTestId('ignore-warning-checkbox'),
+  ).toBeInTheDocument()
+  expect(within(observationsTable).getByTestId('ignore-warning-checkbox')).toBeInTheDocument()
   expect(
     within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
   ).not.toBeInTheDocument()

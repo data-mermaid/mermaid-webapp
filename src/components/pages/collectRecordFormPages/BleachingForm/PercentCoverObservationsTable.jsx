@@ -213,7 +213,6 @@ const PercentCoverObservationTable = ({
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
-              observationValidationType={observationValidationType}
             />
           ) : null}
           <Td $align="center">

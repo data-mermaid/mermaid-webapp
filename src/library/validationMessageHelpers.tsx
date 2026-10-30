@@ -153,10 +153,14 @@ const REQUIRED_MESSAGE_KEYS_BY_OBSERVATION_COLUMN: Record<string, string> = {
 
 const LIST_REQUIRED_VALIDATOR_SUFFIX = '_list_required_validator'
 
-const getRequiredMessage = (validatorName = '') => {
-  const column = validatorName.endsWith(LIST_REQUIRED_VALIDATOR_SUFFIX)
+// The observation column a row's required validator names, or undefined for a form field's.
+export const getRequiredColumn = (validatorName = ''): string | undefined =>
+  validatorName.endsWith(LIST_REQUIRED_VALIDATOR_SUFFIX)
     ? validatorName.slice(0, -LIST_REQUIRED_VALIDATOR_SUFFIX.length)
     : undefined
+
+const getRequiredMessage = (validatorName = '') => {
+  const column = getRequiredColumn(validatorName)
   const key = REQUIRED_MESSAGE_KEYS_BY_OBSERVATION_COLUMN[column] ?? 'validation_messages.required'
 
   return i18n.t(key)

@@ -16,9 +16,10 @@ import getDuplicateValuesObservationIds, {
  *   - A target answers "where do I scroll to?". It is one per row, so those same three warnings
  *     share one target.
  *
- * Both sides read getValidationsToDisplay, which owns the rule for what a row shows: only the
- * first error when a row has errors, otherwise every warning and ignore, and nothing at all for
- * a row left with only resets. A chip therefore cannot claim a message the row is not showing.
+ * Both sides read getValidationsToDisplay, which owns the rule for what a row shows: its errors
+ * and warnings together, without the errors that only repeat an empty required cell, and
+ * nothing at all for a row left with only resets. A chip therefore cannot claim a message the
+ * row is not showing.
  *
  * duplicate_values is the one validation that reaches the screen twice, as a record-level
  * message and as a mark on every row it names. It is counted once, at the record level, and
@@ -218,8 +219,8 @@ const collectObservationValidations = (
 
 /**
  * `duplicate_values` is rendered on each observation row it names, so it joins those rows
- * before precedence is applied. Appended last, matching the order getObservationValidationInfo
- * builds, so a row's own error stays the one its message shows.
+ * before the display rule is applied. Appended last, matching the order
+ * getObservationValidationInfo builds, so a row's own messages list before the duplicate.
  */
 const addDuplicateValuesToRows = (
   recordValidations: unknown,

@@ -16,7 +16,6 @@ const ObservationValidationInfo = ({
   hasObservationErrorValidation,
   hasObservationIgnoredValidation,
   observationValidationMessages,
-  observationValidationType,
 }) => {
   const { t } = useTranslation()
 
@@ -45,7 +44,7 @@ const ObservationValidationInfo = ({
       {hasObservationErrorValidation || hasObservationWarningValidation ? (
         <TableValidationList>
           {observationValidationMessages.map((validation) => (
-            <li className={`${observationValidationType}-indicator`} key={validation.id}>
+            <li className={`${validation.status}-indicator`} key={validation.id}>
               {getValidationMessage(validation)}
             </li>
           ))}
@@ -73,7 +72,6 @@ ObservationValidationInfo.propTypes = {
   hasObservationErrorValidation: PropTypes.bool.isRequired,
   hasObservationIgnoredValidation: PropTypes.bool.isRequired,
   observationValidationMessages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  observationValidationType: PropTypes.string.isRequired,
 }
 
 export default ObservationValidationInfo

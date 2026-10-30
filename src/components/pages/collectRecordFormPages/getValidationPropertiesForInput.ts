@@ -1,11 +1,13 @@
 import type { ValidationStatus } from '../../../types/constants'
 import type { Validation, ValidationContext } from '../../../types/validation'
+import { getRequiredColumn } from '../../../library/validationMessageHelpers'
 
 // A row's validations are usually an array, but some paths hold a keyed object (see
 // walkFieldSubtree in getValidationSummary), so they are read by key.
 export type RowValidations = Validation[] | Record<string, Validation>
 
 interface ValidationMessage {
+  status?: ValidationStatus
   code?: string
   name?: string
   id?: string
@@ -17,9 +19,18 @@ export interface InputValidationProperties {
   validationMessages?: ValidationMessage[]
 }
 
-// An empty field usually fails more than one check (empty depth is also "not a number"), and
-// "Required" is the only one of those messages the user can act on.
 const REQUIRED_CODE = 'required'
+
+// An empty cell fails more than one check: an empty count is also not a valid count. Only
+// "Required" is actionable, so these errors are hidden when the same column's required error is
+// showing. An error missing from this map always shows, so a gap here adds a message rather
+// than hiding one.
+const EMPTY_CELL_ERROR_COLUMNS: Record<string, string> = {
+  invalid_fish_count: 'count',
+  invalid_fish_size: 'size',
+  invalid_invert_count: 'count',
+  not_positive_integer: 'quadrat_number',
+}
 
 // The management field's similarity check reports `site_not_found` when the site field is
 // empty, so it only ever fires alongside the site field's own Required. A site that is set but
@@ -28,44 +39,37 @@ const isSiteNotFoundOnManagement = (validation: Validation) =>
   validation.code === 'site_not_found' &&
   (validation.fields ?? []).includes('data.sample_event.management')
 
-// Which of a row's validations actually reach the screen. One error hides everything else on
-// that row: the required error if there is one, otherwise the first. Otherwise warnings and
-// ignores show together, and a row left with only resets shows those. Also read by
-// getValidationSummary, so the status indicator chips count exactly what this returns.
+const isRequiredError = (validation: Validation) =>
+  validation.status === 'error' && validation.code === REQUIRED_CODE
+
+// Which of a field's or row's validations reach the screen. Every required error shows, then
+// every other error and every warning or ignore, so an error never hides a warning. A field is
+// one cell, so its required error hides the field's other errors. A row's required error names
+// its column, so it hides only the errors the API also raises for that empty cell. A row or
+// field left with only resets shows those. Also read by getValidationSummary, so the status
+// indicator chips count exactly what this returns.
 export const getValidationsToDisplay = (inputValidations: RowValidations): Validation[] => {
-  const validationObjectKeys = Object.keys(inputValidations).filter(
-    (key) => !isSiteNotFoundOnManagement(inputValidations[key]),
+  const validations = Object.values(inputValidations).filter(
+    (validation) => !isSiteNotFoundOnManagement(validation),
   )
-  const errors = validationObjectKeys
-    .filter((key) => inputValidations[key].status === 'error')
-    .map((key) => inputValidations[key])
-  const warnings = validationObjectKeys
-    .filter(
-      (key) =>
-        inputValidations[key].status === 'warning' || inputValidations[key].status === 'ignore',
-    )
-    .map((key) => inputValidations[key])
-  const resets = validationObjectKeys
-    .filter((key) => inputValidations[key].status === 'reset')
-    .map((key) => inputValidations[key])
+  const requiredErrors = validations.filter(isRequiredError)
+  const isFieldRequired = requiredErrors.some((validation) => !getRequiredColumn(validation.name))
+  const emptyColumns = new Set(
+    requiredErrors.map((validation) => getRequiredColumn(validation.name)),
+  )
+  const otherErrors = validations.filter(
+    (validation) =>
+      validation.status === 'error' &&
+      !isRequiredError(validation) &&
+      !isFieldRequired &&
+      !emptyColumns.has(EMPTY_CELL_ERROR_COLUMNS[validation.code ?? '']),
+  )
+  const warnings = validations.filter(
+    (validation) => validation.status === 'warning' || validation.status === 'ignore',
+  )
+  const shown = [...requiredErrors, ...otherErrors, ...warnings]
 
-  const areErrors = errors.length
-  const areWarnings = warnings.length
-  const areResets = resets.length
-
-  if (areErrors) {
-    const requiredError = errors.find((validation) => validation.code === REQUIRED_CODE)
-
-    return [requiredError ?? errors[0]]
-  }
-  if (!areErrors && areWarnings) {
-    return warnings
-  }
-  if (!areErrors && !areWarnings && areResets) {
-    return resets
-  }
-
-  return []
+  return shown.length ? shown : validations.filter((validation) => validation.status === 'reset')
 }
 
 const getValidationPropertiesForInput = (
@@ -82,16 +86,15 @@ const getValidationPropertiesForInput = (
   const validationsToDisplay = getValidationsToDisplay(inputValidations)
 
   const validationMessages = validationsToDisplay.map((validation) => ({
+    status: validation.status,
     context: validation.context,
     code: validation.code,
     id: validation.validation_id,
     name: validation.name,
   }))
 
-  const statusToDisplayIfNotOk = validationsToDisplay.length
-    ? validationsToDisplay[0].status
-    : undefined
-  const validationType = !validationsToDisplay.length ? 'ok' : statusToDisplayIfNotOk
+  // Errors are listed first, so the first message's status is the field's or row's colour.
+  const validationType = validationsToDisplay.length ? validationsToDisplay[0].status : 'ok'
 
   return {
     validationType,

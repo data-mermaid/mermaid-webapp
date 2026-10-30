@@ -5,7 +5,13 @@ import getValidationPropertiesForInput, {
   getValidationsToDisplay,
 } from './getValidationPropertiesForInput'
 
-const validation = (status: ValidationStatus, code: string): Validation => ({ status, code })
+const validation = (status: ValidationStatus, code: string, name?: string): Validation => ({
+  status,
+  code,
+  name,
+})
+const rowRequired = (column: string) =>
+  validation('error', 'required', `${column}_list_required_validator`)
 
 describe('getValidationPropertiesForInput', () => {
   test('keeps the validator name on each message so the text can name the column', () => {
@@ -21,6 +27,7 @@ describe('getValidationPropertiesForInput', () => {
       validationType: 'error',
       validationMessages: [
         {
+          status: 'error',
           code: 'required',
           name: 'size_list_required_validator',
           id: 'v1',
@@ -32,7 +39,7 @@ describe('getValidationPropertiesForInput', () => {
 })
 
 describe('getValidationsToDisplay', () => {
-  test('shows the required error over any other error on the row, whatever the order', () => {
+  test('a field shows only its required error, whatever the order', () => {
     const invalid = validation('error', 'invalid_fish_count')
     const required = validation('error', 'required')
 
@@ -40,18 +47,39 @@ describe('getValidationsToDisplay', () => {
     expect(getValidationsToDisplay([required, invalid])).toEqual([required])
   })
 
-  test('shows the first error when none of them is required', () => {
+  test('shows every error when none of them is required', () => {
     const first = validation('error', 'invalid_depth')
     const second = validation('error', 'excessive_precision')
 
-    expect(getValidationsToDisplay([first, second])).toEqual([first])
+    expect(getValidationsToDisplay([first, second])).toEqual([first, second])
   })
 
-  test('an error hides the warnings and ignores on the same row', () => {
-    const error = validation('error', 'required')
+  test("shows a row's warnings and ignores alongside its errors, errors first", () => {
+    const error = rowRequired('count')
     const warning = validation('warning', 'max_fish_size')
+    const ignored = validation('ignore', 'no_region_match')
 
-    expect(getValidationsToDisplay([warning, error])).toEqual([error])
+    expect(getValidationsToDisplay([warning, error, ignored])).toEqual([error, warning, ignored])
+  })
+
+  test('shows every empty required cell on a row', () => {
+    const size = rowRequired('size')
+    const count = rowRequired('count')
+
+    expect(getValidationsToDisplay([size, count])).toEqual([size, count])
+  })
+
+  test("hides only the errors the API also raises for a row's empty cell", () => {
+    const required = rowRequired('count')
+    const emptyCount = validation('error', 'invalid_fish_count')
+    const otherCell = validation('error', 'invalid_fish_size')
+    const unmapped = validation('error', 'invalid_count')
+
+    expect(getValidationsToDisplay([emptyCount, required, otherCell, unmapped])).toEqual([
+      required,
+      otherCell,
+      unmapped,
+    ])
   })
 
   test('shows warnings and ignores together when there is no error', () => {

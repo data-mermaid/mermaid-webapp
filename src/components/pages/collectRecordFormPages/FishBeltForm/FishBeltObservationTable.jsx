@@ -329,7 +329,6 @@ const FishBeltObservationTable = ({
         hasObservationErrorValidation,
         hasObservationIgnoredValidation,
         observationValidationMessages,
-        observationValidationType,
       } = getObservationValidationInfo({
         observationId,
         collectRecord,
@@ -420,7 +419,6 @@ const FishBeltObservationTable = ({
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
-              observationValidationType={observationValidationType}
             />
           ) : null}
           <Td $align="center">
