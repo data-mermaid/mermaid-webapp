@@ -206,7 +206,7 @@ export const getValidationMessage = (
       i18n.t('validation_messages.incorrect_observation_count', {
         expectedCount: context?.expected_count ?? '',
       }),
-    invalid_interval_size: () => i18n.t('validation_messages.size_greater_than_zero'),
+    invalid_interval_size: () => i18n.t('validation_messages.size_not_positive'),
     max_interval_size: () =>
       i18n.t('validation_messages.maximum_metres', {
         max: context?.interval_size_range?.[1] ?? '',
@@ -226,7 +226,7 @@ export const getValidationMessage = (
     invalid_fish_count: () => i18n.t('validation_messages.count_zero_or_greater'),
     invalid_fish_size: () => i18n.t('validation_messages.invalid_size'),
     invalid_fishbelt_transect: () => i18n.t('validation_messages.invalid_fishbelt_transect'),
-    invalid_invert_count: () => i18n.t('validation_messages.count_greater_than_zero'),
+    invalid_invert_count: () => i18n.t('validation_messages.count_not_positive'),
     invert_count_high: () => i18n.t('validation_messages.count_unusually_high'),
     invert_size_exceeds_maximum: () =>
       i18n.t('validation_messages.size_larger_than_maximum_expected'),
@@ -237,7 +237,7 @@ export const getValidationMessage = (
         invalidQuadratNumbers: context?.invalid_quadrat_numbers ?? '',
       }),
     invalid_quadrat_collection: () => i18n.t('validation_messages.invalid_quadrat_collection'),
-    invalid_quadrat_size: () => i18n.t('validation_messages.size_greater_than_zero'),
+    invalid_quadrat_size: () => i18n.t('validation_messages.size_not_positive'),
     max_quadrat_size: () =>
       i18n.t('validation_messages.less_than_square_metres', {
         max: context?.quadrat_size_range?.[1] ?? '',
