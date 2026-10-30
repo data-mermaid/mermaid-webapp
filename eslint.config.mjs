@@ -32,20 +32,24 @@ export default [
       react: {
         version: 'detect',
       },
+      // Resolvers run in order. node ignores package.json "exports", so ESM-only packages such as
+      // uuid and the per-icon @iconify-icons/mdi entries fall through to typescript. typescript
+      // can't go first: it prefers .d.ts files, and import/named then misses exports that
+      // src/components/generic/Table/table.d.ts and @types/lodash don't declare. Leaving "types"
+      // out of conditionNames resolves to the JavaScript file for the same reason, and keeps every
+      // @iconify-icons/mdi icon from resolving to the one shared data.d.ts (import/no-duplicates).
       'import/resolver': {
         node: {
           extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        },
+        typescript: {
+          conditionNames: ['import', 'require', 'browser', 'default'],
         },
       },
       'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
     },
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     rules: {
-      // uuid v14+ is ESM-only (exports field only, no main); eslint-import-resolver-node
-      // uses the resolve package which doesn't support the exports field, producing a false
-      // positive. Vite and the test runner resolve it correctly.
-      'import/no-unresolved': ['error', { ignore: ['^uuid$'] }],
-
       camelcase: 'off',
       curly: 'error',
       'no-underscore-dangle': 'off',
@@ -93,7 +97,6 @@ export default [
       'react/no-danger': 'error',
       'max-nested-callbacks': ['error', { max: 3 }],
       'consistent-return': 'error',
-      'import/no-unresolved': ['error', { ignore: ['^uuid$'] }],
     },
   },
   { languageOptions: { globals: { ...globals.browser } } },
