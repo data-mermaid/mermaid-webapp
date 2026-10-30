@@ -1117,6 +1117,7 @@
     "mermaid_data_save_online_sync_error": "The {{dataType}} has been saved on your computer, but not online.",
     "mermaid_data_save_success_offline": "The {{dataType}} has been saved on your computer.",
     "mermaid_data_save_success_online": "The {{dataType}} has been saved on your computer and online.",
+    "new_version_available": "<p>A new version of MERMAID is available.</p><button>Reload</button>",
     "unsaved_work_confirmation": "Are you sure you want to leave this page? You have some unsaved changes."
   },
   "toggle_label_visibility": "Toggle label visibility",
