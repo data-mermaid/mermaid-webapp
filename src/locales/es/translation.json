@@ -1181,6 +1181,7 @@
   "validation_messages": {
     "all_attributes_same_category": "Todos los atributos bentónicos son {{category}}",
     "all_equal": "Todas las observaciones son las mismas",
+    "count_not_positive": "El recuento debe ser mayor que cero.",
     "count_unusually_high": "Recuento inusualmente alto",
     "count_zero_or_greater": "El recuento debe ser cero o mayor.",
     "date_before_1900": "La fecha es anterior a 1900.",
@@ -1269,6 +1270,7 @@
     "size_bin_required": "Se requiere un intervalo de tamaño cuando una observación tiene un tamaño",
     "size_larger_than_maximum_expected": "Tamaño mayor que el máximo esperado",
     "size_larger_than_maximum_observed": "Tamaño mayor que el máximo observado",
+    "size_not_positive": "El tamaño debe ser mayor que cero.",
     "system_validation_error": "Error de validación del sistema:",
     "too_few_observations": "Menos que {{min}} observaciones",
     "too_many_observations": "Más que {{max}} observaciones",

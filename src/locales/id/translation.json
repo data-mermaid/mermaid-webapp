@@ -1161,6 +1161,7 @@
   "validation_messages": {
     "all_attributes_same_category": "Semua atribut bentik adalah {{category}}",
     "all_equal": "Semua pengamatan adalah sama",
+    "count_not_positive": "Nilai Count harus lebih besar dari nol",
     "count_unusually_high": "Jumlahnya sangat tinggi",
     "count_zero_or_greater": "Nilai Count harus nol atau lebih besar dari nol",
     "date_before_1900": "Tanggalnya sebelum tahun 1900",
@@ -1247,6 +1248,7 @@
     "size_bin_required": "Kolom ukuran diperlukan jika suatu pengamatan memiliki ukuran",
     "size_larger_than_maximum_expected": "Ukuran lebih besar dari batas maksimum yang diperkirakan",
     "size_larger_than_maximum_observed": "Ukuran lebih besar dari nilai maksimum yang teramati",
+    "size_not_positive": "Ukuran harus lebih besar dari nol",
     "system_validation_error": "Kesalahan validasi sistem:",
     "too_few_observations": "Jumlah pengamatan kurang dari {{min}} ",
     "too_many_observations": "Lebih dari pengamatan yang dilakukan oleh satelit {{max}} ",

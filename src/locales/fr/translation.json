@@ -1181,6 +1181,7 @@
   "validation_messages": {
     "all_attributes_same_category": "Tous les attributs benthiques sont {{category}}",
     "all_equal": "Toutes les observations sont identiques",
+    "count_not_positive": "Le nombre doit être supérieur à zéro",
     "count_unusually_high": "Nombre inhabituellement élevé",
     "count_zero_or_greater": "Le nombre doit être égal ou supérieur à zéro.",
     "date_before_1900": "La date est antérieure à 1900",
@@ -1269,6 +1270,7 @@
     "size_bin_required": "Un intervalle de taille est requis lorsqu'une observation a une taille",
     "size_larger_than_maximum_expected": "Taille supérieure à la taille maximale attendue",
     "size_larger_than_maximum_observed": "Taille supérieure à la taille maximale observée",
+    "size_not_positive": "La taille doit être supérieure à zéro",
     "system_validation_error": "Erreur de validation du système :",
     "too_few_observations": "Moins de {{min}} observations",
     "too_many_observations": "Supérieur à {{max}} observations",

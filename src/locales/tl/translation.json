@@ -1181,6 +1181,7 @@
   "validation_messages": {
     "all_attributes_same_category": "Lahat ng benthic na katangian ay {{category}}",
     "all_equal": "Lahat ng obserbasyon ay pareho",
+    "count_not_positive": "Ang bilang ay dapat na higit sa zero",
     "count_unusually_high": "Bilangin nang hindi pangkaraniwang mataas",
     "count_zero_or_greater": "Dapat sero o mas mataas ang bilang",
     "date_before_1900": "Ang petsa ay bago ang 1900",
@@ -1269,6 +1270,7 @@
     "size_bin_required": "Kinakailangan ang size bin kapag ang isang obserbasyon ay may sukat",
     "size_larger_than_maximum_expected": "Mas malaki ang sukat kaysa sa inaasahan",
     "size_larger_than_maximum_observed": "Sukat na mas malaki kaysa sa pinakamataas na naobserbahan",
+    "size_not_positive": "Dapat mas malaki sa zero ang laki",
     "system_validation_error": "Error sa pagpapatunay ng sistema:",
     "too_few_observations": "Mas kaunti kaysa sa {{min}} mga obserbasyon",
     "too_many_observations": "Mas malaki kaysa sa {{max}} mga obserbasyon",
