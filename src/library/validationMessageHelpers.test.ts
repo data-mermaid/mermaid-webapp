@@ -75,10 +75,10 @@ describe('getValidationMessage for ranges and thresholds', () => {
       'validation_messages.zero_or_greater',
     )
     expect(getValidationMessage({ code: 'invalid_interval_size' })).toBe(
-      'validation_messages.size_greater_than_zero',
+      'validation_messages.size_not_positive',
     )
     expect(getValidationMessage({ code: 'invalid_quadrat_size' })).toBe(
-      'validation_messages.size_greater_than_zero',
+      'validation_messages.size_not_positive',
     )
   })
 })
@@ -100,7 +100,7 @@ describe('getValidationMessage for observation counts and renamed messages', () 
       'validation_messages.count_zero_or_greater',
     )
     expect(getValidationMessage({ code: 'invalid_invert_count' })).toBe(
-      'validation_messages.count_greater_than_zero',
+      'validation_messages.count_not_positive',
     )
   })
 
