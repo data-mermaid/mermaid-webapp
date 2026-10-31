@@ -109,9 +109,28 @@ describe('getValidationsToDisplay', () => {
     expect(getValidationsToDisplay([siteNotFound])).toEqual([siteNotFound])
   })
 
-  test('shows resets only when the row has nothing else', () => {
-    const reset = validation('reset', 'max_fish_size')
+  test('keeps a greyed message in its place, so an edited row still shows it', () => {
+    const staleError = { ...validation('error', 'invalid_depth'), isStale: true }
+    const warning = validation('warning', 'max_depth')
 
-    expect(getValidationsToDisplay([reset])).toEqual([reset])
+    expect(getValidationsToDisplay([warning, staleError])).toEqual([staleError, warning])
+  })
+})
+
+describe('getValidationPropertiesForInput colour', () => {
+  const staleError = { ...validation('error', 'invalid_depth'), isStale: true }
+
+  test('is the first live message, so a greyed error does not colour the field', () => {
+    const { validationType, validationMessages } = getValidationPropertiesForInput(
+      [staleError, validation('warning', 'max_depth')],
+      true,
+    )
+
+    expect(validationType).toBe('warning')
+    expect(validationMessages?.map(({ isStale }) => isStale)).toEqual([true, undefined])
+  })
+
+  test('is info when every message is greyed', () => {
+    expect(getValidationPropertiesForInput([staleError], true).validationType).toBe('info')
   })
 })

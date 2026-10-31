@@ -26,7 +26,7 @@ const renderRecordLevelValidationInfo = (
     <RecordLevelValidationInfo
       areValidationsShowing={true}
       ignoreRecordLevelValidation={vi.fn()}
-      resetRecordLevelValidation={vi.fn()}
+      unignoreRecordLevelValidation={vi.fn()}
       validations={[getRecordLevelWarning(fields)]}
       handleScrollToObservation={handleScrollToObservation}
     />,
@@ -98,7 +98,7 @@ describe('RecordLevelValidationInfo dry submit summary', () => {
       <RecordLevelValidationInfo
         areValidationsShowing={true}
         ignoreRecordLevelValidation={vi.fn()}
-        resetRecordLevelValidation={vi.fn()}
+        unignoreRecordLevelValidation={vi.fn()}
         validations={[drySubmitSummary, { ...alongside, validation_id: 'other' }]}
         handleScrollToObservation={vi.fn()}
       />,

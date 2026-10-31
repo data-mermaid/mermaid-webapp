@@ -49,3 +49,45 @@ test('Un-ignoring a field restores its warning and leaves its other results alon
 
   expect(getStatuses(reignoredRecord)).toEqual(['ok', 'ignore', 'ok'])
 })
+
+const recordWithIgnoredAndLiveWarnings = {
+  id: 'record-with-ignored-and-live-warnings',
+  validations: {
+    results: {
+      data: {
+        sample_event: {
+          management: [
+            { validation_id: 'required', status: 'ok' },
+            { validation_id: 'unique', code: 'not_unique_management', status: 'ignore' },
+            { validation_id: 'similar', code: 'similar_name', status: 'warning' },
+          ],
+        },
+      },
+    },
+  },
+}
+
+const getStatusesWithStale = (record: typeof recordWithIgnoredAndLiveWarnings) =>
+  record.validations.results.data.sample_event.management.map(
+    ({ status, isStale }: { status: string; isStale?: boolean }) =>
+      isStale ? `${status}*` : status,
+  )
+
+test('Editing a field greys its warning, keeps its ignored warning, and restores an un-ignored warning as greyed', async () => {
+  const dbSwitchboardInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+  const editedRecord = await dbSwitchboardInstance.markFieldValidationsStale({
+    record: recordWithIgnoredAndLiveWarnings,
+    validationPath,
+  })
+
+  expect(getStatusesWithStale(editedRecord)).toEqual(['ok', 'ignore', 'warning*'])
+
+  const unignoredRecord = await dbSwitchboardInstance.unignoreNonObservationFieldValidations({
+    record: editedRecord,
+    validationPath,
+    validationId: 'unique',
+  })
+
+  expect(getStatusesWithStale(unignoredRecord)).toEqual(['ok', 'warning*', 'warning*'])
+})

@@ -107,26 +107,23 @@ test('Bleaching validation: user can un-ignore observation warnings (colonies bl
 
   const coloniesBleachedObservationTable = screen.getByTestId('observations-section-table')
 
-  // only one observation will have warnings
-
+  // Row 9's two ignored warnings stay on screen, each with its own ticked box.
   await waitFor(() =>
     expect(
-      within(coloniesBleachedObservationTable).queryByText('firstWarning'),
-    ).not.toBeInTheDocument(),
+      within(coloniesBleachedObservationTable).getAllByTestId('ignore-warning-checkbox'),
+    ).toHaveLength(2),
   )
-  expect(
-    within(coloniesBleachedObservationTable).queryByText('secondWarning'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(coloniesBleachedObservationTable).getByTestId('ignore-warning-label'),
-  ).toBeInTheDocument()
+  expect(coloniesBleachedObservationTable.querySelectorAll('li.ignore-indicator')).toHaveLength(2)
 
   // other two passing
   expect(
     within(coloniesBleachedObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 
-  await user.click(within(coloniesBleachedObservationTable).getByTestId('ignore-warning-checkbox'))
+  // Unticking one brings that warning back and leaves the other ignored.
+  await user.click(
+    within(coloniesBleachedObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+  )
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
@@ -134,13 +131,14 @@ test('Bleaching validation: user can un-ignore observation warnings (colonies bl
 
   await waitFor(() =>
     expect(
-      within(coloniesBleachedObservationTable).queryByTestId('ignore-warning-label'),
-    ).not.toBeInTheDocument(),
+      within(coloniesBleachedObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+    ).not.toBeChecked(),
   )
   expect(
-    within(coloniesBleachedObservationTable).getByTestId('ignore-warning-checkbox'),
-  ).not.toBeChecked()
-  expect(coloniesBleachedObservationTable.querySelectorAll('li.warning-indicator')).toHaveLength(2)
+    within(coloniesBleachedObservationTable).getAllByTestId('ignore-warning-checkbox')[1],
+  ).toBeChecked()
+  expect(coloniesBleachedObservationTable.querySelectorAll('li.warning-indicator')).toHaveLength(1)
+  expect(coloniesBleachedObservationTable.querySelectorAll('li.ignore-indicator')).toHaveLength(1)
   expect(
     within(coloniesBleachedObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
@@ -236,24 +234,23 @@ test('Bleaching validation: user can un-ignore observation warnings (percent cov
 
   const percentCoverObservationTable = screen.getByTestId('observations2-section-table')
 
-  // only one observation will have warnings
-
+  // Row 9's two ignored warnings stay on screen, each with its own ticked box.
   await waitFor(() =>
     expect(
-      within(percentCoverObservationTable).queryByText('firstWarning'),
-    ).not.toBeInTheDocument(),
+      within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox'),
+    ).toHaveLength(2),
   )
-  expect(within(percentCoverObservationTable).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(
-    within(percentCoverObservationTable).getByTestId('ignore-warning-label'),
-  ).toBeInTheDocument()
+  expect(percentCoverObservationTable.querySelectorAll('li.ignore-indicator')).toHaveLength(2)
 
   // other two passing
   expect(
     within(percentCoverObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 
-  await user.click(within(percentCoverObservationTable).getByTestId('ignore-warning-checkbox'))
+  // Unticking one brings that warning back and leaves the other ignored.
+  await user.click(
+    within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+  )
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
@@ -261,15 +258,14 @@ test('Bleaching validation: user can un-ignore observation warnings (percent cov
 
   await waitFor(() =>
     expect(
-      within(percentCoverObservationTable).queryByTestId('ignore-warning-label'),
-    ).not.toBeInTheDocument(),
+      within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+    ).not.toBeChecked(),
   )
   expect(
-    within(percentCoverObservationTable).getByTestId('ignore-warning-checkbox'),
-  ).not.toBeChecked()
-  expect(within(percentCoverObservationTable).getByText('firstWarning')).toBeInTheDocument()
-  expect(within(percentCoverObservationTable).getByText('secondWarning')).toBeInTheDocument()
-  expect(percentCoverObservationTable.querySelectorAll('li.warning-indicator')).toHaveLength(2)
+    within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox')[1],
+  ).toBeChecked()
+  expect(percentCoverObservationTable.querySelectorAll('li.warning-indicator')).toHaveLength(1)
+  expect(percentCoverObservationTable.querySelectorAll('li.ignore-indicator')).toHaveLength(1)
   expect(
     within(percentCoverObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)

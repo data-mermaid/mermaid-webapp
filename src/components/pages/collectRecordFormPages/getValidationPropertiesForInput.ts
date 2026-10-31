@@ -8,14 +8,18 @@ export type RowValidations = Validation[] | Record<string, Validation>
 
 interface ValidationMessage {
   status?: ValidationStatus
+  isStale?: boolean
   code?: string
   name?: string
   id?: string
   context?: ValidationContext | null
 }
 
+// `info` is the colour of a field or row whose every message is greyed: nothing on it is live.
+type InputValidationType = ValidationStatus | 'info'
+
 export interface InputValidationProperties {
-  validationType?: ValidationStatus
+  validationType?: InputValidationType
   validationMessages?: ValidationMessage[]
 }
 
@@ -45,9 +49,8 @@ const isRequiredError = (validation: Validation) =>
 // Which of a field's or row's validations reach the screen. Every required error shows, then
 // every other error and every warning or ignore, so an error never hides a warning. A field is
 // one cell, so its required error hides the field's other errors. A row's required error names
-// its column, so it hides only the errors the API also raises for that empty cell. A row or
-// field left with only resets shows those. Also read by getValidationSummary, so the status
-// indicator chips count exactly what this returns.
+// its column, so it hides only the errors the API also raises for that empty cell. Also read by
+// getValidationSummary, so the status indicator chips count exactly what this returns.
 export const getValidationsToDisplay = (inputValidations: RowValidations): Validation[] => {
   const validations = Object.values(inputValidations).filter(
     (validation) => !isSiteNotFoundOnManagement(validation),
@@ -67,9 +70,8 @@ export const getValidationsToDisplay = (inputValidations: RowValidations): Valid
   const warnings = validations.filter(
     (validation) => validation.status === 'warning' || validation.status === 'ignore',
   )
-  const shown = [...requiredErrors, ...otherErrors, ...warnings]
 
-  return shown.length ? shown : validations.filter((validation) => validation.status === 'reset')
+  return [...requiredErrors, ...otherErrors, ...warnings]
 }
 
 const getValidationPropertiesForInput = (
@@ -87,14 +89,17 @@ const getValidationPropertiesForInput = (
 
   const validationMessages = validationsToDisplay.map((validation) => ({
     status: validation.status,
+    isStale: validation.isStale,
     context: validation.context,
     code: validation.code,
     id: validation.validation_id,
     name: validation.name,
   }))
 
-  // Errors are listed first, so the first message's status is the field's or row's colour.
-  const validationType = validationsToDisplay.length ? validationsToDisplay[0].status : 'ok'
+  // Errors are listed first, so the first live message's status is the field's or row's colour.
+  const liveValidations = validationsToDisplay.filter((validation) => !validation.isStale)
+  const validationType: InputValidationType =
+    liveValidations[0]?.status ?? (validationsToDisplay.length ? 'info' : 'ok')
 
   return {
     validationType,

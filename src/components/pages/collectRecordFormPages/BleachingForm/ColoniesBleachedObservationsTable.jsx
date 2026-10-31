@@ -60,7 +60,7 @@ const ColoniesBleachedObservationTable = ({
   ignoreObservationValidations,
   unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
   setObservationIdToAddNewBenthicAttributeTo,
@@ -128,19 +128,13 @@ const ColoniesBleachedObservationTable = ({
         growth_form = '',
       } = observation
 
-      const {
-        isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
-        observationValidationMessages,
-        observationValidationType,
-      } = getObservationValidationInfo({
-        observationId,
-        collectRecord,
-        areValidationsShowing,
-        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-      })
+      const { isObservationValid, observationValidationMessages, observationValidationType } =
+        getObservationValidationInfo({
+          observationId,
+          collectRecord,
+          areValidationsShowing,
+          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+        })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -162,7 +156,7 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -178,7 +172,7 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -195,7 +189,7 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -354,9 +348,6 @@ const ColoniesBleachedObservationTable = ({
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
@@ -390,7 +381,7 @@ const ColoniesBleachedObservationTable = ({
     noResultsText,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
@@ -524,7 +515,7 @@ ColoniesBleachedObservationTable.propTypes = {
     }),
   }).isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
