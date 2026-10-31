@@ -545,20 +545,25 @@ test('Bleaching collect record validation: user can dismiss colonies bleached ob
   expect(within(coloniesBleachedObservationsTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(coloniesBleachedObservationsTable).getByText('secondWarning')).toBeInTheDocument()
 
-  await user.click(within(coloniesBleachedObservationsTable).getByTestId('ignore-warning-checkbox'))
+  // Each warning has its own box, and ticking one ignores that warning alone. Both stay on
+  // screen, the ignored one with its own pill.
+  await user.click(
+    within(coloniesBleachedObservationsTable).getAllByTestId('ignore-warning-checkbox')[0],
+  )
 
   await waitFor(() =>
     expect(
-      within(coloniesBleachedObservationsTable).queryByText('firstWarning'),
-    ).not.toBeInTheDocument(),
+      within(coloniesBleachedObservationsTable).getAllByTestId('ignore-warning-checkbox')[0],
+    ).toBeChecked(),
   )
   expect(
-    within(coloniesBleachedObservationsTable).queryByText('secondWarning'),
-  ).not.toBeInTheDocument()
-
+    within(coloniesBleachedObservationsTable).getAllByTestId('ignore-warning-checkbox')[1],
+  ).not.toBeChecked()
+  expect(within(coloniesBleachedObservationsTable).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(coloniesBleachedObservationsTable).getByText('secondWarning')).toBeInTheDocument()
   expect(
-    within(coloniesBleachedObservationsTable).getByTestId('ignore-warning-checkbox'),
-  ).toBeChecked()
+    within(coloniesBleachedObservationsTable).getAllByTestId('message-pill-ignore'),
+  ).toHaveLength(1)
 
   const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 
@@ -656,19 +661,23 @@ test('Bleaching collect record validation: user can dismiss percent cover observ
   expect(within(percentCoverObservationTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(percentCoverObservationTable).getByText('secondWarning')).toBeInTheDocument()
 
-  await user.click(within(percentCoverObservationTable).getByTestId('ignore-warning-checkbox'))
+  // Each warning has its own box, and ticking one ignores that warning alone. Both stay on
+  // screen, the ignored one with its own pill.
+  await user.click(
+    within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+  )
 
   await waitFor(() =>
     expect(
-      within(percentCoverObservationTable).queryByText('firstWarning'),
-    ).not.toBeInTheDocument(),
+      within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+    ).toBeChecked(),
   )
-  expect(within(percentCoverObservationTable).queryByText('secondWarning')).not.toBeInTheDocument()
-
-  expect(within(percentCoverObservationTable).getByTestId('ignore-warning-checkbox')).toBeChecked()
   expect(
-    within(percentCoverObservationTable).getByTestId('ignore-warning-label'),
-  ).toBeInTheDocument()
+    within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox')[1],
+  ).not.toBeChecked()
+  expect(within(percentCoverObservationTable).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(percentCoverObservationTable).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(percentCoverObservationTable).getAllByTestId('message-pill-ignore')).toHaveLength(1)
 
   const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 

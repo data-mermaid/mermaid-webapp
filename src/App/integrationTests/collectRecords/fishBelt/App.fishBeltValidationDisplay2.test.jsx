@@ -261,11 +261,12 @@ test('Fishbelt validations will show every error and warning when there are seve
   expect(within(observationsTable).getByText('observation error 2')).toBeInTheDocument()
   expect(within(observationsTable).getByText('observation warning 1')).toBeInTheDocument()
   expect(within(observationsTable).getByText('observation warning 2')).toBeInTheDocument()
-  // A warning next to an error can still be ignored, on a field and on a row.
+  // A warning next to an error can still be ignored, on a field and on a row. The row has a
+  // box per warning.
   expect(
     within(screen.getByTestId('site')).getByTestId('ignore-warning-checkbox'),
   ).toBeInTheDocument()
-  expect(within(observationsTable).getByTestId('ignore-warning-checkbox')).toBeInTheDocument()
+  expect(within(observationsTable).getAllByTestId('ignore-warning-checkbox')).toHaveLength(2)
   expect(
     within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
   ).not.toBeInTheDocument()

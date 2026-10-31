@@ -122,7 +122,7 @@ interface BeltInvertObservationTableProps {
   ignoreObservationValidations: (...args: unknown[]) => void
   unignoreObservationValidations: (args: { observationId: string }) => void
   observationsReducer: [ObservationRecord[], (action: unknown) => void]
-  resetObservationValidations: (args: { observationId: string }) => void
+  markObservationValidationsStale: (args: { observationId: string }) => void
   setAreObservationsInputsDirty: (isDirty: boolean) => void
   setIsNewInvertAttributeModalOpen: (isOpen: boolean) => void
   setObservationIdToAddNewInvertAttributeTo: (observationId: string) => void
@@ -144,7 +144,7 @@ interface ObservationRowProps {
   observationDensity: number
   observationsDispatch: (action: unknown) => void
   onNotesClick: (observationId: string) => void
-  resetObservationValidations: (args: { observationId: string }) => void
+  markObservationValidationsStale: (args: { observationId: string }) => void
   setAreObservationsInputsDirty: (isDirty: boolean) => void
   setIsNewInvertAttributeModalOpen: (isOpen: boolean) => void
   setObservationIdToAddNewInvertAttributeTo: (observationId: string) => void
@@ -171,7 +171,7 @@ const BeltInvertObservationRow = ({
   observationDensity,
   observationsDispatch,
   onNotesClick,
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewInvertAttributeModalOpen,
   setObservationIdToAddNewInvertAttributeTo,
@@ -200,7 +200,7 @@ const BeltInvertObservationRow = ({
       type: 'updateSize',
       payload: { newSize, observationId },
     })
-    resetObservationValidations({ observationId })
+    markObservationValidationsStale({ observationId })
   }
 
   const handleUpdateSizeFromInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -228,7 +228,7 @@ const BeltInvertObservationRow = ({
       type: 'updateCount',
       payload: { newCount: newValue, observationId },
     })
-    resetObservationValidations({ observationId })
+    markObservationValidationsStale({ observationId })
   }
 
   const handleInvertAttributeChange = (selectedOption: { value: string }) => {
@@ -242,7 +242,7 @@ const BeltInvertObservationRow = ({
         observationId,
       },
     })
-    resetObservationValidations({ observationId })
+    markObservationValidationsStale({ observationId })
   }
 
   const proposeNewSpeciesClick = () => {
@@ -250,13 +250,7 @@ const BeltInvertObservationRow = ({
     setIsNewInvertAttributeModalOpen(true)
   }
 
-  const {
-    isObservationValid,
-    hasObservationWarningValidation,
-    hasObservationErrorValidation,
-    hasObservationIgnoredValidation,
-    observationValidationMessages,
-  } = getObservationValidationInfo({
+  const { isObservationValid, observationValidationMessages } = getObservationValidationInfo({
     observationId,
     collectRecord,
     areValidationsShowing,
@@ -371,9 +365,6 @@ const BeltInvertObservationRow = ({
       </Td>
       {areValidationsShowing ? (
         <ObservationValidationInfo
-          hasObservationErrorValidation={hasObservationErrorValidation}
-          hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-          hasObservationWarningValidation={hasObservationWarningValidation}
           ignoreObservationValidations={ignoreObservationValidations}
           unignoreObservationValidations={unignoreObservationValidations}
           isObservationValid={isObservationValid}
@@ -407,7 +398,7 @@ const BeltInvertObservationTable = ({
   ignoreObservationValidations,
   unignoreObservationValidations,
   observationsReducer = [[], () => undefined],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewInvertAttributeModalOpen,
   setObservationIdToAddNewInvertAttributeTo,
@@ -610,7 +601,7 @@ const BeltInvertObservationTable = ({
                 observation={observation}
                 observationDensity={observationDensities.get(observation.id) ?? 0}
                 observationsDispatch={observationsDispatch}
-                resetObservationValidations={resetObservationValidations}
+                markObservationValidationsStale={markObservationValidationsStale}
                 setAreObservationsInputsDirty={setAreObservationsInputsDirty}
                 setIsNewInvertAttributeModalOpen={setIsNewInvertAttributeModalOpen}
                 setObservationIdToAddNewInvertAttributeTo={

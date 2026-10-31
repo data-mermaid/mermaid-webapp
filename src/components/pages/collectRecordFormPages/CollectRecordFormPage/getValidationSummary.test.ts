@@ -388,35 +388,36 @@ describe('getValidationSummary with duplicate_values', () => {
   })
 })
 
-describe('getValidationSummary record level statuses', () => {
-  test('counts a record level reset as a warning, since the panel still renders it as one', () => {
-    const { counts, targets } = getValidationSummary({
-      $record: [{ status: 'reset', validation_id: 'r1' }],
-    })
-
-    expect(targets.warning).toEqual([recordTarget('r1')])
-    expect(targets.ignore).toEqual([])
-    expect(counts).toEqual({ error: 0, warning: 1, ignore: 0 })
-  })
-
-  test('leaves a field reset uncounted, since the input renders nothing for it', () => {
+// A greyed message (edited since the last Validate) stays on screen, so a diver can see what the
+// last Validate said, but it is out of their hands until the next one: not counted, not a stop.
+describe('getValidationSummary with greyed messages', () => {
+  test('leaves a greyed field message uncounted and untargeted', () => {
     const summary = getValidationSummary({
-      data: { fishbelt_transect: { depth: [{ status: 'reset' }] } },
+      data: { fishbelt_transect: { depth: [{ status: 'error', isStale: true }] } },
     })
 
     expect(summary).toEqual({ counts: noCounts, targets: noTargets })
   })
 
-  test('leaves an observation reset uncounted', () => {
-    const summary = getValidationSummary({
+  test('counts only the live messages on an edited row', () => {
+    const { counts, targets } = getValidationSummary({
       data: {
-        obs_belt_fishes: [[{ status: 'reset', context: { observation_id: 'obs1' } }]],
+        obs_belt_fishes: [
+          [
+            { status: 'error', isStale: true, context: { observation_id: 'obs1' } },
+            { status: 'warning', isStale: true, context: { observation_id: 'obs1' } },
+            { status: 'ignore', context: { observation_id: 'obs1' } },
+          ],
+        ],
       },
     })
 
-    expect(summary).toEqual({ counts: noCounts, targets: noTargets })
+    expect(counts).toEqual({ error: 0, warning: 0, ignore: 1 })
+    expect(targets).toEqual({ error: [], warning: [], ignore: [observationTarget('obs1')] })
   })
+})
 
+describe('getValidationSummary record level statuses', () => {
   test('skips the dry submit summary while other record level errors are unresolved', () => {
     const { counts, targets } = getValidationSummary({
       $record: [

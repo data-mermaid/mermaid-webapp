@@ -622,7 +622,6 @@ const ImageClassificationObservationTable = ({
                   isObservationValid,
                   hasObservationWarningValidation,
                   hasObservationErrorValidation,
-                  hasObservationIgnoredValidation,
                   observationValidationMessages,
                 } = getObservationValidationInfo({
                   observationId: obsId,
@@ -648,9 +647,6 @@ const ImageClassificationObservationTable = ({
                   areValidationsShowing &&
                   (shouldDisplayObservationValidation ? (
                     <ObservationValidationInfo
-                      hasObservationErrorValidation={hasObservationErrorValidation}
-                      hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-                      hasObservationWarningValidation={hasObservationWarningValidation}
                       ignoreObservationValidations={ignoreObservationValidations}
                       unignoreObservationValidations={unignoreObservationValidations}
                       isObservationValid={isObservationValid}
@@ -761,15 +757,6 @@ const ImageClassificationObservationTable = ({
                   {areValidationsShowing &&
                     (unclassifiedValidation.hasObservationErrorValidation ? (
                       <ObservationValidationInfo
-                        hasObservationErrorValidation={
-                          unclassifiedValidation.hasObservationErrorValidation
-                        }
-                        hasObservationIgnoredValidation={
-                          unclassifiedValidation.hasObservationIgnoredValidation
-                        }
-                        hasObservationWarningValidation={
-                          unclassifiedValidation.hasObservationWarningValidation
-                        }
                         ignoreObservationValidations={ignoreObservationValidations}
                         unignoreObservationValidations={unignoreObservationValidations}
                         isObservationValid={unclassifiedValidation.isObservationValid}

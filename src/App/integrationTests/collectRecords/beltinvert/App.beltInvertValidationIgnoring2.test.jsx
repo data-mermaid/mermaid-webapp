@@ -103,30 +103,32 @@ test('Validation: user can un-ignore observation warnings', async () => {
 
   const observationsTable = await screen.findByTestId('observations-section')
 
-  // only one observation will have warnings
-
+  // Row 9's two ignored warnings stay on screen, each with its own ticked box.
   await waitFor(() =>
-    expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument(),
+    expect(within(observationsTable).getAllByTestId('ignore-warning-checkbox')).toHaveLength(2),
   )
-  expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).getByTestId('ignore-warning-label')).toBeInTheDocument()
+  expect(observationsTable.querySelectorAll('li.ignore-indicator')).toHaveLength(2)
 
   // other two passing
   expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
     2,
   )
 
-  await user.click(within(observationsTable).getByTestId('ignore-warning-checkbox'))
+  // Unticking one brings that warning back and leaves the other ignored.
+  await user.click(within(observationsTable).getAllByTestId('ignore-warning-checkbox')[0])
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
   await waitFor(() =>
-    expect(within(observationsTable).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(
+      within(observationsTable).getAllByTestId('ignore-warning-checkbox')[0],
+    ).not.toBeChecked(),
   )
-  expect(within(observationsTable).getByTestId('ignore-warning-checkbox')).not.toBeChecked()
-  expect(observationsTable.querySelectorAll('li.warning-indicator')).toHaveLength(2)
+  expect(within(observationsTable).getAllByTestId('ignore-warning-checkbox')[1]).toBeChecked()
+  expect(observationsTable.querySelectorAll('li.warning-indicator')).toHaveLength(1)
+  expect(observationsTable.querySelectorAll('li.ignore-indicator')).toHaveLength(1)
   expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
     2,
   )
