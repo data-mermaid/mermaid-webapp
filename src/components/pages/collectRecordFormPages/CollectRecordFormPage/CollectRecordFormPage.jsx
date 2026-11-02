@@ -391,14 +391,12 @@ const CollectRecordFormPage = ({
     showValidationResult,
     unignoreNonObservationFieldValidations,
     unignoreRecordLevelValidation,
-    validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,
     nextAnnouncement,
   } = useCollectRecordValidation({
     collectRecordBeingEdited,
     databaseSwitchboardInstance,
-    formikInstance: formik,
     handleCollectRecordChange,
     isParentDataLoading,
     observationIdsOnPage,
@@ -578,11 +576,8 @@ const CollectRecordFormPage = ({
             sites={sites}
             handleSitesChange={handleSitesChange}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-            resetNonObservationFieldValidations={markFieldValidationsStale}
+            markFieldValidationsStale={markFieldValidationsStale}
             unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
-            validationPropertiesWithDirtyResetOnInputChange={
-              validationPropertiesWithDirtyResetOnInputChange
-            }
           />
         )}
         {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
@@ -591,12 +586,9 @@ const CollectRecordFormPage = ({
             choices={choices}
             formik={formik}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-            resetNonObservationFieldValidations={markFieldValidationsStale}
+            markFieldValidationsStale={markFieldValidationsStale}
             unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationsApiData={validationsApiData}
-            validationPropertiesWithDirtyResetOnInputChange={
-              validationPropertiesWithDirtyResetOnInputChange
-            }
             isImageClassificationSelected={collectRecordBeingEdited?.data?.image_classification}
           />
         )}
@@ -607,12 +599,9 @@ const CollectRecordFormPage = ({
             formik={formik}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
             usersBelongingToProject={observerProfiles}
-            resetNonObservationFieldValidations={markFieldValidationsStale}
+            markFieldValidationsStale={markFieldValidationsStale}
             unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationsApiData={validationsApiData}
-            validationPropertiesWithDirtyResetOnInputChange={
-              validationPropertiesWithDirtyResetOnInputChange
-            }
           />
         )}
         <div

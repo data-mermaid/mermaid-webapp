@@ -117,10 +117,8 @@ const threeWarningsOnOneRow = {
 }
 
 // This pins the end-to-end totals: what the chips say against a known payload, and that
-// editing an input takes its validation out of the count. It does not isolate *why* the
-// count drops, because two mechanisms do it together (the onChange handlers reset the
-// field's validations to 'reset', and the dirty check in useCollectRecordValidation hides
-// it immediately). getValidationSummary.test.ts covers the dirty check on its own.
+// editing an input greys its validation and takes it out of the count. The onChange handlers
+// mark the field's validations stale, and getValidationSummary.test.ts covers the counting.
 test('Form status indicator counts match the validations on show, and drop as inputs are edited', async () => {
   const { user } = await renderFishBeltAndValidate(oneValidationPerRow)
 

@@ -11,9 +11,10 @@ const InputWithLabelAndValidation = ({
   required = false,
   helperText = undefined,
   id,
-  ignoreNonObservationFieldValidations = () => {},
+  ignoreNonObservationFieldValidations = undefined,
   label,
-  unignoreNonObservationFieldValidations = () => {},
+  unignoreNonObservationFieldValidations = undefined,
+  validationPath = undefined,
   testId = undefined,
   unit = undefined,
   validationMessages = [],
@@ -46,6 +47,7 @@ const InputWithLabelAndValidation = ({
         renderItemAboveInput={renderItemAboveInput}
         renderItemWithinInput={renderItemWithinInput}
         unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+        validationPath={validationPath}
         testId={testId}
         unit={unit}
         validationMessages={validationMessages}
@@ -67,6 +69,7 @@ InputWithLabelAndValidation.propTypes = {
   renderItemAboveInput: PropTypes.node,
   renderItemWithinInput: PropTypes.node,
   unignoreNonObservationFieldValidations: PropTypes.func,
+  validationPath: PropTypes.string,
   testId: PropTypes.string,
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,

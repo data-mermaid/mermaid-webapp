@@ -23,32 +23,14 @@ const matchesValidationId = (validation, validationId) =>
 const isOnObservation = (validation, observationId) =>
   (validation.context?.observation_id ?? validation.context?.id) === observationId
 
-const toIgnored = (validation) => {
-  const ignored = { ...validation, status: 'ignore' }
+const toIgnored = (validation) => ({ ...validation, status: 'ignore' })
 
-  delete ignored.isStale
+const toWarning = (validation) => ({ ...validation, status: 'warning' })
 
-  return ignored
-}
-
-// A warning restored on an edited field or row is as stale as its neighbours: the value it
-// judged has changed too.
-const toWarning = (validation, siblings) => {
-  const warning = { ...validation, status: 'warning' }
-
-  if (siblings.some((sibling) => sibling.isStale)) {
-    warning.isStale = true
-  }
-
-  return warning
-}
-
-// Editing greys a field's or row's errors and warnings until the next Validate. An ignored
-// warning was the diver's call about the record, not a finding about the value, so it stays.
-const toStale = (validation) =>
-  validation.status === 'error' || validation.status === 'warning'
-    ? { ...validation, isStale: true }
-    : validation
+// `isStale` means the field or row was edited after this result. Every result takes it, an
+// ignored warning included: it keeps its status and its count, but if it is unticked later the
+// warning comes back greyed, since the value it judged has changed.
+const toStale = (validation) => ({ ...validation, isStale: true })
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
@@ -488,11 +470,10 @@ const CollectRecordsMixin = (Base) =>
       }
 
       // The API keys a field's results by validator name; they are stored back as an array.
-      const siblings = Object.values(fieldValidations)
       const updatedRecord = setObjectPropertyOnClone({
         object: record,
         path,
-        value: siblings.map((validation) => mapValidation(validation, siblings)),
+        value: Object.values(fieldValidations).map(mapValidation),
       })
 
       return this._dexiePerUserDataInstance.collect_records
@@ -525,9 +506,7 @@ const CollectRecordsMixin = (Base) =>
           path,
           value: table.map((rowValidations) =>
             rowValidations.map((validation) =>
-              isOnObservation(validation, observationId)
-                ? mapValidation(validation, rowValidations)
-                : validation,
+              isOnObservation(validation, observationId) ? mapValidation(validation) : validation,
             ),
           ),
         })
@@ -557,7 +536,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       return this._mapRecordLevelValidations(record, (validation) =>
-        validation.validation_id === validationId ? toWarning(validation, []) : validation,
+        validation.validation_id === validationId ? toWarning(validation) : validation,
       )
     }
 
@@ -591,9 +570,9 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      return this._mapFieldValidations(record, validationPath, (validation, siblings) =>
+      return this._mapFieldValidations(record, validationPath, (validation) =>
         validation.status === 'ignore' && matchesValidationId(validation, validationId)
-          ? toWarning(validation, siblings)
+          ? toWarning(validation)
           : validation,
       )
     }
@@ -635,9 +614,9 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      return this._mapObservationValidations(recordId, observationId, (validation, siblings) =>
+      return this._mapObservationValidations(recordId, observationId, (validation) =>
         validation.status === 'ignore' && matchesValidationId(validation, validationId)
-          ? toWarning(validation, siblings)
+          ? toWarning(validation)
           : validation,
       )
     }
