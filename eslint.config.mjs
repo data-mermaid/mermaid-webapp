@@ -38,12 +38,15 @@ export default [
       // src/components/generic/Table/table.d.ts and @types/lodash don't declare. Leaving "types"
       // out of conditionNames resolves to the JavaScript file for the same reason, and keeps every
       // @iconify-icons/mdi icon from resolving to the one shared data.d.ts (import/no-duplicates).
+      // alwaysTryTypes is off so a types-only package such as geojson still fails
+      // import/no-unresolved instead of resolving to its @types/* declarations.
       'import/resolver': {
         node: {
           extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
         typescript: {
           conditionNames: ['import', 'require', 'browser', 'default'],
+          alwaysTryTypes: false,
         },
       },
       'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
