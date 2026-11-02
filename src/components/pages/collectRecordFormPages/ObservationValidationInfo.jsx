@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { TableValidationList } from './CollectingFormPage.Styles'
 import ValidationMessage, { EditedNote } from '../../generic/ValidationMessage/ValidationMessage'
+import ValidationMessageGroup from '../../generic/ValidationMessage/ValidationMessageGroup'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 import { getValidationMessage } from '../../../library/validationMessageHelpers'
 import { isDuplicateValuesValidation } from './CollectRecordFormPage/getDuplicateValuesObservationIds'
@@ -52,19 +53,24 @@ const ObservationValidationInfo = ({
         </span>
       ) : null}
       {observationValidationMessages.length ? (
-        <TableValidationList>
-          {observationValidationMessages.map((message) => (
-            <li className={`${message.status}-indicator`} key={message.id}>
-              <ValidationMessage
-                status={message.status}
-                isStale={message.isStale}
-                action={getIgnoreCheckbox(message)}
-              >
-                {getValidationMessage(message)}
-              </ValidationMessage>
-            </li>
-          ))}
-        </TableValidationList>
+        <ValidationMessageGroup
+          disclosureKey={`row:${observationId}`}
+          messages={observationValidationMessages}
+        >
+          <TableValidationList>
+            {observationValidationMessages.map((message) => (
+              <li className={`${message.status}-indicator`} key={message.id}>
+                <ValidationMessage
+                  status={message.status}
+                  isStale={message.isStale}
+                  action={getIgnoreCheckbox(message)}
+                >
+                  {getValidationMessage(message)}
+                </ValidationMessage>
+              </li>
+            ))}
+          </TableValidationList>
+        </ValidationMessageGroup>
       ) : null}
       {isEdited ? <EditedNote>{t('validations.edited_revalidate')}</EditedNote> : null}
     </Td>
