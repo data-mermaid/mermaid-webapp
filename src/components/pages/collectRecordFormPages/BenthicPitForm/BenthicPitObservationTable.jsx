@@ -31,6 +31,7 @@ import { getObservationsPropertyNames } from '../../../../App/mermaidData/record
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -297,6 +298,7 @@ const BenthicPitObservationsTable = ({
     <>
       <InputWrapper data-testid={testId}>
         <H2 id="table-label">{t('observations.observations')}</H2>
+        <ObservationsHeadingValidations />
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable aria-labelledby="table-label">

@@ -10,7 +10,6 @@ import { getValidationMessage } from '../../../../library/validationMessageHelpe
 import theme from '../../../../theme'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 import DuplicateImageValidationContent, { Image } from './DuplicateImageValidationContent'
-import getRecordLevelValidationsToDisplay from '../getRecordLevelValidationsToDisplay'
 
 interface RecordValidationInfo {
   status: ValidationStatus
@@ -21,11 +20,12 @@ interface RecordValidationInfo {
   [key: string]: unknown
 }
 
-interface RecordLevelValidationInfoProps {
+export interface RecordLevelValidationInfoProps {
   areValidationsShowing: boolean
   ignoreRecordLevelValidation: (args: { validationId: string }) => void
   unignoreRecordLevelValidation: (args: { validationId: string }) => void
   validations: RecordValidationInfo[]
+  testId?: string
 }
 
 const InlineValidationItem = styled.li`
@@ -40,6 +40,7 @@ const RecordLevelValidationInfo = ({
   ignoreRecordLevelValidation,
   unignoreRecordLevelValidation,
   validations,
+  testId = 'record-level-validations',
 }: RecordLevelValidationInfoProps) => {
   const { projectId, recordId } = useParams()
   const handleIgnoreWarningChange = async (args: {
@@ -57,11 +58,9 @@ const RecordLevelValidationInfo = ({
     }
   }
 
-  const filteredValidations = getRecordLevelValidationsToDisplay(validations)
-
   return (
-    <ValidationList data-testid="record-level-validations">
-      {filteredValidations.map((validation) => {
+    <ValidationList data-testid={testId}>
+      {validations.map((validation) => {
         const { status, validation_id, code, context } = validation
         const isWarning = status === 'warning'
         const isError = status === 'error'

@@ -44,6 +44,8 @@ import ObserversInput from '../ObserversInput'
 import PageUnavailable from '../../PageUnavailable'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo'
+import { ObservationsHeadingValidationsContext } from '../ObservationsHeadingValidations'
+import splitRecordLevelValidations from '../splitRecordLevelValidations'
 import SampleEventInputs from '../SampleEventInputs'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCollectRecordValidation from './useCollectRecordValidation'
@@ -155,6 +157,11 @@ const CollectRecordFormPage = ({
     submitButtonState === buttonGroupStates.submitting
   const isLoading = isParentDataLoading || isCommonProtocolDataLoading
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+  const observationTableNames = getObservationsPropertyNames(collectRecordBeingEdited)
+  const splitValidations = splitRecordLevelValidations(
+    recordLevelValidations,
+    observationTableNames,
+  )
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
   const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
 
@@ -549,10 +556,17 @@ const CollectRecordFormPage = ({
     </ErrorBox>
   )
 
+  const getObservationsHeadingValidations = (tableName) => ({
+    validations: splitValidations.byTable[tableName] ?? [],
+    areValidationsShowing,
+    ignoreRecordLevelValidation,
+    unignoreRecordLevelValidation,
+  })
+
   const contentViewByRole = !isReadOnlyUser ? (
     <>
       <RecordLevelInputValidationInfo
-        validations={recordLevelValidations}
+        validations={splitValidations.top}
         areValidationsShowing={areValidationsShowing}
         unignoreRecordLevelValidation={unignoreRecordLevelValidation}
         ignoreRecordLevelValidation={ignoreRecordLevelValidation}
@@ -600,7 +614,9 @@ const CollectRecordFormPage = ({
             validationsApiData={validationsApiData}
           />
         )}
-        <div>
+        <ObservationsHeadingValidationsContext
+          value={getObservationsHeadingValidations(observationTableNames[0])}
+        >
           <ObservationTable1
             {...observationTable1Props}
             testId="observations-section"
@@ -617,9 +633,11 @@ const CollectRecordFormPage = ({
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
           />
-        </div>
+        </ObservationsHeadingValidationsContext>
         {ObservationTable2 ? (
-          <div>
+          <ObservationsHeadingValidationsContext
+            value={getObservationsHeadingValidations(observationTableNames[1])}
+          >
             <ObservationTable2
               testId="observations2-section"
               areValidationsShowing={areValidationsShowing}
@@ -636,7 +654,7 @@ const CollectRecordFormPage = ({
                 setObservationIdToAddNewBenthicAttributeTo
               }
             />
-          </div>
+          </ObservationsHeadingValidationsContext>
         ) : null}
       </form>
       {!isBenthicPQTNewRecordWithImageClassificationEnabled && (

@@ -32,6 +32,7 @@ import { hasNonEmptyValue } from '../../../../library/hasNonEmptyValue'
 import ObservationSizeSelect from '../ObservationSizeSelect'
 import { ObservationRecord } from './BeltInvertTypes'
 import MacroinvertebrateSummaryStats from '../../BeltInvert/MacroinvertebrateSummaryStats'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 interface SizeBinChoice {
   id: string | number
@@ -542,6 +543,7 @@ const BeltInvertObservationTable = ({
         onDone={handleNotesDone}
       />
       <H2 id="table-label">{t('observations.observations')}</H2>
+      <ObservationsHeadingValidations />
       <StyledOverflowWrapper>
         <StickyObservationTable
           data-testid="invert-observations-table"
