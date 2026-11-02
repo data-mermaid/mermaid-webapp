@@ -386,11 +386,11 @@ const CollectRecordFormPage = ({
     ignoreObservationValidations,
     unignoreObservationValidations,
     ignoreRecordLevelValidation,
-    resetNonObservationFieldValidations,
-    resetObservationValidations,
-    resetRecordLevelValidation,
+    markFieldValidationsStale,
+    markObservationValidationsStale,
     showValidationResult,
     unignoreNonObservationFieldValidations,
+    unignoreRecordLevelValidation,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,
@@ -559,7 +559,7 @@ const CollectRecordFormPage = ({
       <RecordLevelInputValidationInfo
         validations={recordLevelValidations}
         areValidationsShowing={areValidationsShowing}
-        resetRecordLevelValidation={resetRecordLevelValidation}
+        unignoreRecordLevelValidation={unignoreRecordLevelValidation}
         ignoreRecordLevelValidation={ignoreRecordLevelValidation}
         handleScrollToObservation={handleScrollToObservation}
       />
@@ -578,7 +578,7 @@ const CollectRecordFormPage = ({
             sites={sites}
             handleSitesChange={handleSitesChange}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-            resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            resetNonObservationFieldValidations={markFieldValidationsStale}
             unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationPropertiesWithDirtyResetOnInputChange={
               validationPropertiesWithDirtyResetOnInputChange
@@ -591,7 +591,7 @@ const CollectRecordFormPage = ({
             choices={choices}
             formik={formik}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-            resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            resetNonObservationFieldValidations={markFieldValidationsStale}
             unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationsApiData={validationsApiData}
             validationPropertiesWithDirtyResetOnInputChange={
@@ -607,7 +607,7 @@ const CollectRecordFormPage = ({
             formik={formik}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
             usersBelongingToProject={observerProfiles}
-            resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+            resetNonObservationFieldValidations={markFieldValidationsStale}
             unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationsApiData={validationsApiData}
             validationPropertiesWithDirtyResetOnInputChange={
@@ -630,7 +630,7 @@ const CollectRecordFormPage = ({
             ignoreObservationValidations={ignoreObservationValidations}
             unignoreObservationValidations={unignoreObservationValidations}
             observationsReducer={observationsTable1Reducer}
-            resetObservationValidations={resetObservationValidations}
+            markObservationValidationsStale={markObservationValidationsStale}
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
@@ -647,7 +647,7 @@ const CollectRecordFormPage = ({
               ignoreObservationValidations={ignoreObservationValidations}
               unignoreObservationValidations={unignoreObservationValidations}
               observationsReducer={observationsTable2Reducer}
-              resetObservationValidations={resetObservationValidations}
+              markObservationValidationsStale={markObservationValidationsStale}
               setAreObservationsInputsDirty={setAreObservationsInputsDirty}
               setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
               setObservationIdToAddNewBenthicAttributeTo={

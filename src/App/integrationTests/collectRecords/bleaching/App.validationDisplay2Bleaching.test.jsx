@@ -120,8 +120,8 @@ test('Validating an empty bleaching collect record collect record shows validati
     within(observationsColoniesBleachedTable).getByText('observation error'),
   ).toBeInTheDocument()
   expect(
-    within(observationsColoniesBleachedTable).queryByText('observation warning'),
-  ).not.toBeInTheDocument()
+    within(observationsColoniesBleachedTable).getByText('observation warning'),
+  ).toBeInTheDocument()
   expect(
     within(observationsColoniesBleachedTable).queryByText(
       `observation validation with ok status shouldn't show`,
@@ -131,9 +131,7 @@ test('Validating an empty bleaching collect record collect record shows validati
   const observationsPercentCover = screen.getByTestId('observations2-section-table')
 
   expect(within(observationsPercentCover).getByText('observation error')).toBeInTheDocument()
-  expect(
-    within(observationsPercentCover).queryByText('observation warning'),
-  ).not.toBeInTheDocument()
+  expect(within(observationsPercentCover).getByText('observation warning')).toBeInTheDocument()
   expect(
     within(observationsPercentCover).queryByText(
       `observation validation with ok status shouldn't show`,
@@ -141,7 +139,7 @@ test('Validating an empty bleaching collect record collect record shows validati
   ).not.toBeInTheDocument()
 })
 
-test('bleaching collect record validations will show only the first error when there are multiple errors and warnings', async () => {
+test('bleaching collect record validations will show every error and warning when there are several', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -253,9 +251,9 @@ test('bleaching collect record validations will show only the first error when t
   // regular inputs
 
   expect(within(screen.getByTestId('site')).getByText('firstError')).toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondError')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('secondError')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('secondWarning')).toBeInTheDocument()
 
   // observations tables (have one observation error each)
 
@@ -265,14 +263,14 @@ test('bleaching collect record validations will show only the first error when t
     within(coloniesBleachedObservationsTable).getByText('observation error 1'),
   ).toBeInTheDocument()
   expect(
-    within(coloniesBleachedObservationsTable).queryByText('observation error 2'),
-  ).not.toBeInTheDocument()
+    within(coloniesBleachedObservationsTable).getByText('observation error 2'),
+  ).toBeInTheDocument()
   expect(
-    within(coloniesBleachedObservationsTable).queryByText('observation warning 1'),
-  ).not.toBeInTheDocument()
+    within(coloniesBleachedObservationsTable).getByText('observation warning 1'),
+  ).toBeInTheDocument()
   expect(
-    within(coloniesBleachedObservationsTable).queryByText('observation warning 2'),
-  ).not.toBeInTheDocument()
+    within(coloniesBleachedObservationsTable).getByText('observation warning 2'),
+  ).toBeInTheDocument()
   expect(
     within(coloniesBleachedObservationsTable).queryByText(
       `observation validation with ok status shouldn't show`,

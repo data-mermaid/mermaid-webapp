@@ -99,7 +99,7 @@ const FishBeltObservationTable = ({
   ignoreObservationValidations,
   unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
   setObservationIdToAddNewBenthicAttributeTo,
@@ -233,7 +233,7 @@ const FishBeltObservationTable = ({
           type: 'updateSize',
           payload: { newSize, observationId },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -258,7 +258,7 @@ const FishBeltObservationTable = ({
           type: 'updateCount',
           payload: { newCount: newValue, observationId },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -313,7 +313,7 @@ const FishBeltObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -323,14 +323,7 @@ const FishBeltObservationTable = ({
         setIsNewBenthicAttributeModalOpen(true)
       }
 
-      const {
-        isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
-        observationValidationMessages,
-        observationValidationType,
-      } = getObservationValidationInfo({
+      const { isObservationValid, observationValidationMessages } = getObservationValidationInfo({
         observationId,
         collectRecord,
         areValidationsShowing,
@@ -412,15 +405,11 @@ const FishBeltObservationTable = ({
           <Td $align="right">{observationBiomass ?? <> - </>}</Td>
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
-              observationValidationType={observationValidationType}
             />
           ) : null}
           <Td $align="center">
@@ -451,7 +440,7 @@ const FishBeltObservationTable = ({
     observationsBiomass,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
@@ -586,7 +575,7 @@ FishBeltObservationTable.propTypes = {
   ignoreObservationValidations: PropTypes.func.isRequired,
   unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

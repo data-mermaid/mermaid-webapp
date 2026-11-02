@@ -264,249 +264,129 @@ const useCollectRecordValidation = ({
     target?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
   }
 
-  const ignoreObservationValidations = useCallback(
-    ({ observationId }) => {
-      databaseSwitchboardInstance
-        .ignoreObservationValidations({
-          recordId: collectRecordBeingEdited.id,
-          observationId,
-        })
-        .then((recordWithIgnoredValidations) => {
-          handleCollectRecordChange(recordWithIgnoredValidations)
+  // Every ignore, un-ignore and mark-stale change is written to IndexedDB by the switchboard;
+  // the updated record is shown and a save pushes it. A new record has no stored validations
+  // to change yet.
+  const applyValidationChange = useCallback(
+    (getChange, failureText) => {
+      if (!collectRecordBeingEdited) {
+        return
+      }
+
+      getChange(collectRecordBeingEdited)
+        .then((updatedRecord) => {
+          handleCollectRecordChange(updatedRecord)
           setIsFormDirty(true)
         })
         .catch((error) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(validationIgnoreText))
+              toast.error(...getToastArguments(failureText))
             },
           })
         })
     },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationIgnoreText,
-    ],
-  )
-
-  const ignoreNonObservationFieldValidations = useCallback(
-    ({ validationPath }) => {
-      if (collectRecordBeingEdited && validationPath) {
-        databaseSwitchboardInstance
-          .ignoreNonObservationFieldValidations({
-            record: collectRecordBeingEdited,
-            validationPath,
-          })
-          .then((recordWithIgnoredValidations) => {
-            handleCollectRecordChange(recordWithIgnoredValidations)
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(validationIgnoreText))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationIgnoreText,
-    ],
-  )
-
-  const resetObservationValidations = useCallback(
-    ({ observationId }) => {
-      if (collectRecordBeingEdited && observationId) {
-        databaseSwitchboardInstance
-          .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
-          .then((recordWithResetValidations) => {
-            handleCollectRecordChange(recordWithResetValidations)
-
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(validationResetText))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationResetText,
-    ],
-  )
-
-  const unignoreObservationValidations = useCallback(
-    ({ observationId }) => {
-      if (collectRecordBeingEdited && observationId) {
-        databaseSwitchboardInstance
-          .unignoreObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
-          .then((recordWithUnignoredValidations) => {
-            handleCollectRecordChange(recordWithUnignoredValidations)
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(validationUnignoreText))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationUnignoreText,
-    ],
-  )
-
-  const resetRecordLevelValidation = useCallback(
-    ({ validationId }) => {
-      databaseSwitchboardInstance
-        .resetRecordLevelValidation({
-          record: collectRecordBeingEdited,
-          validationId,
-        })
-        .then((recordWithResetValidations) => {
-          handleCollectRecordChange(recordWithResetValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(validationResetText))
-            },
-          })
-        })
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationResetText,
-    ],
-  )
-
-  const resetNonObservationFieldValidations = useCallback(
-    ({ validationPath }) => {
-      if (collectRecordBeingEdited && validationPath) {
-        databaseSwitchboardInstance
-          .resetNonObservationFieldValidations({
-            record: collectRecordBeingEdited,
-            validationPath,
-          })
-          .then((recordWithResetValidations) => {
-            handleCollectRecordChange(recordWithResetValidations)
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(validationResetText))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationResetText,
-    ],
-  )
-
-  const unignoreNonObservationFieldValidations = useCallback(
-    ({ validationPath }) => {
-      if (collectRecordBeingEdited && validationPath) {
-        databaseSwitchboardInstance
-          .unignoreNonObservationFieldValidations({
-            record: collectRecordBeingEdited,
-            validationPath,
-          })
-          .then((recordWithUnignoredValidations) => {
-            handleCollectRecordChange(recordWithUnignoredValidations)
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(validationUnignoreText))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationUnignoreText,
-    ],
+    [collectRecordBeingEdited, handleCollectRecordChange, handleHttpResponseError, setIsFormDirty],
   )
 
   const ignoreRecordLevelValidation = useCallback(
-    ({ validationId }) => {
-      databaseSwitchboardInstance
-        .ignoreRecordLevelValidation({
-          record: collectRecordBeingEdited,
-          validationId,
-        })
-        .then((recordWithIgnoredValidations) => {
-          handleCollectRecordChange(recordWithIgnoredValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(validationIgnoreText))
-            },
-          })
-        })
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationIgnoreText,
-    ],
+    ({ validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.ignoreRecordLevelValidation({ record, validationId }),
+        validationIgnoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationIgnoreText],
+  )
+
+  const unignoreRecordLevelValidation = useCallback(
+    ({ validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.unignoreRecordLevelValidation({ record, validationId }),
+        validationUnignoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationUnignoreText],
+  )
+
+  const ignoreNonObservationFieldValidations = useCallback(
+    ({ validationPath, validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.ignoreNonObservationFieldValidations({
+            record,
+            validationPath,
+            validationId,
+          }),
+        validationIgnoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationIgnoreText],
+  )
+
+  const unignoreNonObservationFieldValidations = useCallback(
+    ({ validationPath, validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.unignoreNonObservationFieldValidations({
+            record,
+            validationPath,
+            validationId,
+          }),
+        validationUnignoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationUnignoreText],
+  )
+
+  const markFieldValidationsStale = useCallback(
+    ({ validationPath }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.markFieldValidationsStale({ record, validationPath }),
+        validationResetText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationResetText],
+  )
+
+  const ignoreObservationValidations = useCallback(
+    ({ observationId, validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.ignoreObservationValidations({
+            recordId: record.id,
+            observationId,
+            validationId,
+          }),
+        validationIgnoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationIgnoreText],
+  )
+
+  const unignoreObservationValidations = useCallback(
+    ({ observationId, validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.unignoreObservationValidations({
+            recordId: record.id,
+            observationId,
+            validationId,
+          }),
+        validationUnignoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationUnignoreText],
+  )
+
+  const markObservationValidationsStale = useCallback(
+    ({ observationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.markObservationValidationsStale({
+            recordId: record.id,
+            observationId,
+          }),
+        validationResetText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationResetText],
   )
 
   // Rebuilt every render on purpose: isFieldValueDirty reads formik values, so an edited
@@ -567,12 +447,12 @@ const useCollectRecordValidation = ({
     ignoreNonObservationFieldValidations,
     ignoreObservationValidations,
     ignoreRecordLevelValidation,
-    resetNonObservationFieldValidations,
-    resetObservationValidations,
-    resetRecordLevelValidation,
+    markFieldValidationsStale,
+    markObservationValidationsStale,
     showValidationResult,
     unignoreNonObservationFieldValidations,
     unignoreObservationValidations,
+    unignoreRecordLevelValidation,
     validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,

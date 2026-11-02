@@ -101,8 +101,10 @@ test('Opening a record with stored ok validations shows its ignored items', asyn
     { timeout: 10000 },
   )
 
-  // A row with only ignored validations shows the Ignored label, not the validation message
-  expect(await within(observationsTable).findByTestId('ignore-warning-label')).toBeInTheDocument()
+  // An ignored row validation shows its message with an ignored pill and a ticked box
+  expect(await within(observationsTable).findByTestId('message-pill-ignore')).toBeInTheDocument()
+  expect(within(observationsTable).getByText('stored observation ignore')).toBeInTheDocument()
+  expect(within(observationsTable).getByTestId('ignore-warning-checkbox')).toBeChecked()
   expect(screen.getByTestId('validated-button')).toBeDisabled()
 }, 50000)
 
