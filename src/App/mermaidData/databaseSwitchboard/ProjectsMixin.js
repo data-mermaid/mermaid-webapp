@@ -16,11 +16,11 @@ const ProjectsMixin = (Base) =>
 
     getProject = function getProject(id) {
       if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
+        return Promise.reject(this._operationMissingIdParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
-        Promise.reject(this._notAuthenticatedAndReadyError)
+        return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
       return this._dexiePerUserDataInstance.projects.get(id)
@@ -79,8 +79,10 @@ const ProjectsMixin = (Base) =>
         url: `${this._apiBaseUrl}/projecttags/`,
         authorizationHeaders: await getAuthorizationHeaders(this._getAccessToken),
         axios,
-        errorCallback: () => {
-          return Promise.reject(this._notAuthenticatedAndReadyError)
+        // Rethrow the original error so handleHttpResponseError can still read its status and run
+        // the 401 logout, 403/500 and no-server-response branches.
+        errorCallback: (error) => {
+          throw error
         },
       })
     }

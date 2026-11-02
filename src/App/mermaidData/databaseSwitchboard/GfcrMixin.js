@@ -17,8 +17,10 @@ const GfcrMixin = (Base) =>
         url: `${this._apiBaseUrl}/projects/${projectId}/indicatorsets/`,
         authorizationHeaders: await getAuthorizationHeaders(this._getAccessToken),
         axios,
-        errorCallback: () => {
-          return Promise.reject(this._notAuthenticatedAndReadyError)
+        // Rethrow the original error so handleHttpResponseError can still read its status and run
+        // the 401 logout, 403/500 and no-server-response branches.
+        errorCallback: (error) => {
+          throw error
         },
       })
     }
