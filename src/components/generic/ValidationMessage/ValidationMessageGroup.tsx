@@ -44,11 +44,11 @@ const Chips = styled.span`
 `
 
 // Stacks messages the way a field's own list does, since a field passes its messages unwrapped.
-const MessageList = styled.div`
+const MessageList = styled.div<{ $isCollapsible: boolean }>`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.xsmall};
-  margin-top: ${theme.spacing.xsmall};
+  margin-top: ${(props) => (props.$isCollapsible ? theme.spacing.xsmall : 0)};
 
   &[hidden] {
     display: none;
@@ -64,43 +64,44 @@ const ValidationMessageGroup = ({
   children,
 }: ValidationMessageGroupProps) => {
   const { t } = useTranslation()
-  const { canCollapse, isOpen, toggle } = useValidationDisclosure(disclosureKey)
+  const { canCollapse, isOpen, open, toggle } = useValidationDisclosure(disclosureKey)
   const summaryId = useId()
   const listId = useId()
 
-  const isAlwaysOpen =
-    !canCollapse || messages.length < 2 || messages.some(({ isStale }) => isStale)
-
-  if (isAlwaysOpen) {
-    return <>{children}</>
-  }
+  const hasSeveralMessages = canCollapse && messages.length >= 2
+  const isCollapsible = hasSeveralMessages && !messages.some(({ isStale }) => isStale)
 
   const chips = CHIP_STATUSES.map((status) => ({
     status,
     count: messages.filter((message) => message.status === status).length,
   })).filter(({ count }) => count > 0)
 
+  // The same tree renders whether or not the group can collapse, so ticking or unticking an Ignore
+  // box never remounts the messages and moves focus. A change inside the group also opens it, so
+  // ignoring its last greyed warning leaves the messages on screen rather than collapsing them.
   return (
-    <div data-testid="validation-message-group">
-      <Summary>
-        <Chips id={summaryId}>
-          {chips.map(({ status, count }) => (
-            <MessagePill key={status} type={status} data-testid={`validation-count-${status}`}>
-              {t(CHIP_LABEL_KEYS[status], { count })}
-            </MessagePill>
-          ))}
-        </Chips>
-        <ButtonThatLooksLikeLinkUnderlined
-          type="button"
-          aria-expanded={isOpen}
-          aria-controls={listId}
-          aria-describedby={summaryId}
-          onClick={toggle}
-        >
-          {isOpen ? t('validations.hide') : t('validations.show')}
-        </ButtonThatLooksLikeLinkUnderlined>
-      </Summary>
-      <MessageList id={listId} hidden={!isOpen}>
+    <div data-testid="validation-message-group" onChange={hasSeveralMessages ? open : undefined}>
+      {isCollapsible ? (
+        <Summary>
+          <Chips id={summaryId}>
+            {chips.map(({ status, count }) => (
+              <MessagePill key={status} type={status} data-testid={`validation-count-${status}`}>
+                {t(CHIP_LABEL_KEYS[status], { count })}
+              </MessagePill>
+            ))}
+          </Chips>
+          <ButtonThatLooksLikeLinkUnderlined
+            type="button"
+            aria-expanded={isOpen}
+            aria-controls={listId}
+            aria-describedby={summaryId}
+            onClick={toggle}
+          >
+            {isOpen ? t('validations.hide') : t('validations.show')}
+          </ButtonThatLooksLikeLinkUnderlined>
+        </Summary>
+      ) : null}
+      <MessageList id={listId} hidden={isCollapsible && !isOpen} $isCollapsible={isCollapsible}>
         {children}
       </MessageList>
     </div>

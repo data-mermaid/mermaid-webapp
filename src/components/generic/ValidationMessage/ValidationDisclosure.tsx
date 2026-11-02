@@ -43,12 +43,13 @@ export const useValidationDisclosure = (key: string | undefined) => {
   const store = useContext(ValidationDisclosureContext)
 
   if (!store || !key) {
-    return { canCollapse: false, isOpen: true, toggle: () => {} }
+    return { canCollapse: false, isOpen: true, open: () => {}, toggle: () => {} }
   }
 
   return {
     canCollapse: true,
     isOpen: store.openKey === key,
+    open: () => store.open(key),
     toggle: () => store.toggle(key),
   }
 }
