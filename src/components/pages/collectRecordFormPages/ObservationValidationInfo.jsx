@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 
 import { TableValidationList } from './CollectingFormPage.Styles'
+import ValidationMessage, { EditedNote } from '../../generic/ValidationMessage/ValidationMessage'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 import { getValidationMessage } from '../../../library/validationMessageHelpers'
+import { isDuplicateValuesValidation } from './CollectRecordFormPage/getDuplicateValuesObservationIds'
 import { Td } from '../../generic/Table/table'
 
 const ObservationValidationInfo = ({
@@ -12,26 +14,34 @@ const ObservationValidationInfo = ({
   observationId,
   unignoreObservationValidations,
   isObservationValid,
-  hasObservationWarningValidation,
-  hasObservationErrorValidation,
-  hasObservationIgnoredValidation,
   observationValidationMessages,
 }) => {
   const { t } = useTranslation()
+  const isEdited = observationValidationMessages.some(({ isStale }) => isStale)
 
-  const handleIgnoreWarningChange = async (event) => {
-    const isIgnoreChecked = event.target.checked
+  // Each warning has its own box. The duplicate observations warning belongs to the record and
+  // is marked on every row it names, so it is ignored at the top of the form, not from a row.
+  const getIgnoreCheckbox = (message) => {
+    const isWarning = message.status === 'warning' || message.status === 'ignore'
 
-    if (isIgnoreChecked) {
-      ignoreObservationValidations({
-        observationId,
-      })
+    if (!isWarning || isDuplicateValuesValidation(message)) {
+      return null
     }
-    if (!isIgnoreChecked) {
-      unignoreObservationValidations({
-        observationId,
-      })
+
+    const handleChange = (event) => {
+      const change = event.target.checked
+        ? ignoreObservationValidations
+        : unignoreObservationValidations
+
+      change({ observationId, validationId: message.id })
     }
+
+    return (
+      <InputIgnoreValidationWarningCheckboxWithLabel
+        onChange={handleChange}
+        checked={message.status === 'ignore'}
+      />
+    )
   }
 
   return (
@@ -41,24 +51,22 @@ const ObservationValidationInfo = ({
           &nbsp;
         </span>
       ) : null}
-      {hasObservationErrorValidation || hasObservationWarningValidation ? (
+      {observationValidationMessages.length ? (
         <TableValidationList>
-          {observationValidationMessages.map((validation) => (
-            <li className={`${validation.status}-indicator`} key={validation.id}>
-              {getValidationMessage(validation)}
+          {observationValidationMessages.map((message) => (
+            <li className={`${message.status}-indicator`} key={message.id}>
+              <ValidationMessage
+                status={message.status}
+                isStale={message.isStale}
+                action={getIgnoreCheckbox(message)}
+              >
+                {getValidationMessage(message)}
+              </ValidationMessage>
             </li>
           ))}
         </TableValidationList>
       ) : null}
-      {hasObservationIgnoredValidation ? (
-        <span data-testid="ignore-warning-label">{t('validations.ignored')}</span>
-      ) : null}
-      {hasObservationWarningValidation || hasObservationIgnoredValidation ? (
-        <InputIgnoreValidationWarningCheckboxWithLabel
-          onChange={handleIgnoreWarningChange}
-          checked={hasObservationIgnoredValidation}
-        />
-      ) : null}
+      {isEdited ? <EditedNote>{t('validations.edited_revalidate')}</EditedNote> : null}
     </Td>
   )
 }
@@ -68,9 +76,6 @@ ObservationValidationInfo.propTypes = {
   observationId: PropTypes.string.isRequired,
   unignoreObservationValidations: PropTypes.func.isRequired,
   isObservationValid: PropTypes.bool.isRequired,
-  hasObservationWarningValidation: PropTypes.bool.isRequired,
-  hasObservationErrorValidation: PropTypes.bool.isRequired,
-  hasObservationIgnoredValidation: PropTypes.bool.isRequired,
   observationValidationMessages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 }
 

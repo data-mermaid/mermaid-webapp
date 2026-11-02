@@ -56,28 +56,18 @@ const getObservationValidationInfo = ({
     areValidationsShowing,
   )
 
-  const { validationType: observationValidationType } = observationValidationsToDisplay
-  const observationValidationMessages = observationValidationsToDisplay?.validationMessages ?? []
+  const { validationType: observationValidationType, validationMessages = [] } =
+    observationValidationsToDisplay
 
-  // A row can show errors and warnings together, so each flag says whether any message has that
-  // status. A row counts as ignored only when none of its warnings are still showing.
-  const hasMessageWithStatus = (status) =>
-    observationValidationMessages.some((message) => message.status === status)
-
-  const isObservationValid = observationValidationType === 'ok'
-  const hasObservationWarningValidation = hasMessageWithStatus('warning')
-  const hasObservationErrorValidation = hasMessageWithStatus('error')
-  const hasObservationIgnoredValidation =
-    hasMessageWithStatus('ignore') && !hasObservationWarningValidation
-  const hasObservationResetIgnoredValidation = observationValidationType === 'reset'
+  // A greyed message is on screen but not live, so the row's flags follow the others.
+  const hasLiveMessageWithStatus = (status) =>
+    validationMessages.some((message) => message.status === status && !message.isStale)
 
   return {
-    hasObservationErrorValidation,
-    hasObservationIgnoredValidation,
-    hasObservationResetIgnoredValidation,
-    hasObservationWarningValidation,
-    isObservationValid,
-    observationValidationMessages,
+    hasObservationErrorValidation: hasLiveMessageWithStatus('error'),
+    hasObservationWarningValidation: hasLiveMessageWithStatus('warning'),
+    isObservationValid: observationValidationType === 'ok',
+    observationValidationMessages: validationMessages,
     observationValidationType,
   }
 }

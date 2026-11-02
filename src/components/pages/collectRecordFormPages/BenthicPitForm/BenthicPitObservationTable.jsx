@@ -69,7 +69,7 @@ const BenthicPitObservationsTable = ({
   ignoreObservationValidations,
   unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
   setObservationIdToAddNewBenthicAttributeTo,
@@ -139,19 +139,13 @@ const BenthicPitObservationsTable = ({
       const rowNumber = index + 1
       const { id: observationId, attribute, growth_form = '', interval } = observation
 
-      const {
-        isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
-        observationValidationMessages,
-        observationValidationType,
-      } = getObservationValidationInfo({
-        observationId,
-        collectRecord,
-        areValidationsShowing,
-        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-      })
+      const { isObservationValid, observationValidationMessages, observationValidationType } =
+        getObservationValidationInfo({
+          observationId,
+          collectRecord,
+          areValidationsShowing,
+          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+        })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -173,7 +167,7 @@ const BenthicPitObservationsTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -189,7 +183,7 @@ const BenthicPitObservationsTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -257,9 +251,6 @@ const BenthicPitObservationsTable = ({
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
@@ -296,7 +287,7 @@ const BenthicPitObservationsTable = ({
     noResultsText,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
@@ -392,7 +383,7 @@ BenthicPitObservationsTable.propTypes = {
   ignoreObservationValidations: PropTypes.func.isRequired,
   unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

@@ -55,7 +55,7 @@ const BenthicLitObservationsTable = ({
   ignoreObservationValidations,
   unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
   setObservationIdToAddNewBenthicAttributeTo,
@@ -112,19 +112,13 @@ const BenthicLitObservationsTable = ({
       const rowNumber = index + 1
       const { id: observationId, attribute, growth_form = '', length = '' } = observation
 
-      const {
-        isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
-        observationValidationMessages,
-        observationValidationType,
-      } = getObservationValidationInfo({
-        observationId,
-        collectRecord,
-        areValidationsShowing,
-        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-      })
+      const { isObservationValid, observationValidationMessages, observationValidationType } =
+        getObservationValidationInfo({
+          observationId,
+          collectRecord,
+          areValidationsShowing,
+          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+        })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -146,7 +140,7 @@ const BenthicLitObservationsTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -162,7 +156,7 @@ const BenthicLitObservationsTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -179,7 +173,7 @@ const BenthicLitObservationsTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -257,9 +251,6 @@ const BenthicLitObservationsTable = ({
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
@@ -293,7 +284,7 @@ const BenthicLitObservationsTable = ({
     observationsDispatch,
     observationsState,
     proposeNewBenthicAttributeText,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
@@ -391,7 +382,7 @@ BenthicLitObservationsTable.propTypes = {
   ignoreObservationValidations: PropTypes.func.isRequired,
   unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,

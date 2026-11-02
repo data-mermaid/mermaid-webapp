@@ -48,7 +48,7 @@ const HabitatComplexityObservationsTable = ({
   ignoreObservationValidations,
   unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   testId,
 }) => {
@@ -115,19 +115,13 @@ const HabitatComplexityObservationsTable = ({
     return observationsState.map((observation, index) => {
       const rowNumber = index + 1
       const { id: observationId, score: habitatComplexityScore = '', interval } = observation
-      const {
-        isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
-        observationValidationMessages,
-        observationValidationType,
-      } = getObservationValidationInfo({
-        observationId,
-        collectRecord,
-        areValidationsShowing,
-        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-      })
+      const { isObservationValid, observationValidationMessages, observationValidationType } =
+        getObservationValidationInfo({
+          observationId,
+          collectRecord,
+          areValidationsShowing,
+          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+        })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -149,7 +143,7 @@ const HabitatComplexityObservationsTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -189,9 +183,6 @@ const HabitatComplexityObservationsTable = ({
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
@@ -224,7 +215,7 @@ const HabitatComplexityObservationsTable = ({
     intervalStart,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
     deleteObservationText,
     metersShort,
@@ -292,7 +283,7 @@ HabitatComplexityObservationsTable.propTypes = {
   ignoreObservationValidations: PropTypes.func.isRequired,
   unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

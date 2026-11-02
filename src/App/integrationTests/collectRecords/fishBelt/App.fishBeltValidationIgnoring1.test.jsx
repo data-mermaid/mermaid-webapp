@@ -634,15 +634,17 @@ test('Fishbelt Validation: user can dismiss observation warnings ', async () => 
   expect(within(observationsTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(observationsTable).getByText('secondWarning')).toBeInTheDocument()
 
-  await user.click(within(observationsTable).getByTestId('ignore-warning-checkbox'))
+  // Each warning has its own box, and ticking one ignores that warning alone. Both stay on
+  // screen, the ignored one with its own pill.
+  await user.click(within(observationsTable).getAllByTestId('ignore-warning-checkbox')[0])
 
   await waitFor(() =>
-    expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument(),
+    expect(within(observationsTable).getAllByTestId('ignore-warning-checkbox')[0]).toBeChecked(),
   )
-  expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
-
-  expect(within(observationsTable).getByTestId('ignore-warning-checkbox')).toBeChecked()
-  expect(within(observationsTable).getByTestId('ignore-warning-label'))
+  expect(within(observationsTable).getAllByTestId('ignore-warning-checkbox')[1]).not.toBeChecked()
+  expect(within(observationsTable).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(observationsTable).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(observationsTable).getAllByTestId('message-pill-ignore')).toHaveLength(1)
 
   const isFormDirtyAfterIgnore = await screen.findByTestId('save-button')
 

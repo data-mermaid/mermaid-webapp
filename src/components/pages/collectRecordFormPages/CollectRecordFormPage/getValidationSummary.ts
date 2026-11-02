@@ -17,9 +17,9 @@ import getDuplicateValuesObservationIds, {
  *     share one target.
  *
  * Both sides read getValidationsToDisplay, which owns the rule for what a row shows: its errors
- * and warnings together, without the errors that only repeat an empty required cell, and
- * nothing at all for a row left with only resets. A chip therefore cannot claim a message the
- * row is not showing.
+ * and warnings together, without the errors that only repeat an empty required cell. A chip
+ * therefore cannot claim a message the row is not showing. A greyed message (`isStale`, edited
+ * since the last Validate) is shown but is neither counted nor a target.
  *
  * duplicate_values is the one validation that reaches the screen twice, as a record-level
  * message and as a mark on every row it names. It is counted once, at the record level, and
@@ -30,6 +30,7 @@ import getDuplicateValuesObservationIds, {
 
 interface Validation {
   status?: ValidationStatus
+  isStale?: boolean
   validation_id?: string
   // The API is inconsistent about which of the two it sends, so the row lookup in
   // getObservationValidationInfo reads both and so must this.
@@ -83,15 +84,6 @@ const getStatus = (validation?: Validation): CountableStatus | undefined => {
   return status === 'error' || status === 'warning' || status === 'ignore' ? status : undefined
 }
 
-/**
- * On a record-level item, `reset` means the user un-ticked "Ignore warning".
- * RecordLevelValidationInfo renders such an item as a warning again, so it counts as one. On an
- * input, `reset` means the user has edited it since the last Validate, and the input renders
- * nothing at all: no message, no pill, no checkbox, normal row stripe. Hence the two functions.
- */
-const getRecordStatus = (validation: Validation): CountableStatus | undefined =>
-  validation.status === 'reset' ? 'warning' : getStatus(validation)
-
 // ---- Emit helpers -----------------------------------------------------------
 
 // Push a target into its bucket only if an equivalent one isn't already there.
@@ -116,7 +108,7 @@ const addRow = (summary: ValidationSummary, rowValidations: unknown, target: Nav
   for (const validation of displayedValidations) {
     const status = getStatus(validation)
 
-    if (!status) {
+    if (!status || validation.isStale) {
       continue
     }
 
@@ -137,9 +129,8 @@ const addRow = (summary: ValidationSummary, rowValidations: unknown, target: Nav
  * its direct children look like validation leaves. Handles three shapes seen in the API:
  *   - deep keyed:    data.sample_event.site.<key>.status
  *   - shallow keyed: data.observers.<key>.status
- *   - array:         data.<section>.<field> = [{ status }]
- *     (post-reset shape — see resetNonObservationFieldValidations in CollectRecordsMixin,
- *     which converts the keyed object into an array).
+ *   - array:         data.<section>.<field> = [{ status }], the shape the switchboard writes
+ *     back after an ignore or an edit (see _mapFieldValidations in CollectRecordsMixin).
  */
 const walkFieldSubtree = (
   path: string,
@@ -257,7 +248,7 @@ const getValidationSummary = (
   // one target.
   if (Array.isArray(results.$record)) {
     for (const validation of getRecordLevelValidationsToDisplay<Validation>(results.$record)) {
-      const status = getRecordStatus(validation)
+      const status = getStatus(validation)
 
       if (!status) {
         continue

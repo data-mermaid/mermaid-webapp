@@ -1281,6 +1281,7 @@
     "zero_or_greater": "Value must be zero or greater"
   },
   "validations": {
+    "edited_revalidate": "Edited. Save and validate again to recheck.",
     "ignored": "Ignored",
     "passed": "Passed validation",
     "validations": "Validations"

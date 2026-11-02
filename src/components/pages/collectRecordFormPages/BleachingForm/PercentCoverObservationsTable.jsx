@@ -49,7 +49,7 @@ const PercentCoverObservationTable = ({
   ignoreObservationValidations,
   unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   testId,
 }) => {
@@ -106,19 +106,13 @@ const PercentCoverObservationTable = ({
         quadrat_number,
       } = observation
 
-      const {
-        isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
-        observationValidationMessages,
-        observationValidationType,
-      } = getObservationValidationInfo({
-        observationId,
-        collectRecord,
-        areValidationsShowing,
-        observationsPropertyName: getObservationsPropertyNames(collectRecord)[1],
-      })
+      const { isObservationValid, observationValidationMessages, observationValidationType } =
+        getObservationValidationInfo({
+          observationId,
+          collectRecord,
+          areValidationsShowing,
+          observationsPropertyName: getObservationsPropertyNames(collectRecord)[1],
+        })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -141,7 +135,7 @@ const PercentCoverObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -205,9 +199,6 @@ const PercentCoverObservationTable = ({
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
@@ -237,7 +228,7 @@ const PercentCoverObservationTable = ({
     unignoreObservationValidations,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
   ])
 
@@ -344,7 +335,7 @@ PercentCoverObservationTable.propTypes = {
     }),
   }).isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
 }
