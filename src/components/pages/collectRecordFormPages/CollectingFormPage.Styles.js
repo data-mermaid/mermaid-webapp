@@ -70,7 +70,10 @@ export const StyledOverflowWrapper = styled(TableOverflowWrapper)`
   overflow-y: visible;
 `
 
-export const StickyObservationTable = styled(GenericStickyTable)`
+// Rows are added and removed here constantly, which is where a page translator's <font> wrappers
+// break React's view of the DOM. The surrounding labels and headers are already translated by
+// i18next, and the cell contents are taxonomic names, so nothing of value is lost by opting out.
+export const StickyObservationTable = styled(GenericStickyTable).attrs({ translate: 'no' })`
   thead tr:nth-child(1) th {
     position: sticky;
     top: calc(
