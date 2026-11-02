@@ -215,7 +215,7 @@ test('user can reset dismissed record-level warnings', async () => {
   expect(isFormDirtyAfterReset)
 })
 
-test('Benthic photo quadrat validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
+test('Benthic photo quadrat validation: user edits non-observation input with ignored validation keeps the ignored status for that input.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -538,31 +538,41 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
   expect(within(reefSlopeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
   await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
-  await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() => expect(within(siteRow).getAllByTestId('message-pill-ignore')).toHaveLength(2))
 
   await user.selectOptions(within(managementRow).getByTestId('management-select'), '1')
-  await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(managementRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(depthRow).getByTestId('depth-input'), '1')
-  await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(depthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(sampleDateRow).getByTestId('sample-date-input'), '2021-11-09')
-  await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleDateRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(sampleTimeRow).getByTestId('sample-time-input'), '02:39 PM')
-  await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleTimeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(transectNumberRow).getByTestId('transect-number-input'), '12')
   await waitFor(() =>
-    expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(transectNumberRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
 
   await user.type(within(labelRow).getByTestId('label-input'), '1')
-  await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(labelRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(lengthSurveyedRow).getByTestId('len-surveyed-input'), '1')
   await waitFor(() =>
-    expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(lengthSurveyedRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
 
   // Relative Depth select on shallow
@@ -571,7 +581,7 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
     'e88cc7bc-bdeb-49cf-b211-99f28c3cd2c3',
   )
   await waitFor(() =>
-    expect(within(relativeDepthRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(relativeDepthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
 
   // Visibility select on <1m - bad
@@ -579,48 +589,60 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
     within(visibilityRow).getByTestId('visibility-select'),
     '40702fad-754a-4982-8ca5-9b97106eca31',
   )
-  await waitFor(() => expect(within(visibilityRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(visibilityRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   // Current select on moderate
   await user.selectOptions(
     within(currentRow).getByTestId('current-select'),
     '60e11188-60d7-4f83-9658-27eb5a09c803',
   )
-  await waitFor(() => expect(within(currentRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(currentRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   // Tide select on low
   await user.selectOptions(
     within(tideRow).getByTestId('tide-select'),
     'bca0273a-51a3-4274-8425-457ca3afcfea',
   )
-  await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() => expect(within(tideRow).getAllByTestId('message-pill-ignore')).toHaveLength(2))
 
   // Reef Slope select on crest
   await user.selectOptions(
     within(reefSlopeRow).getByTestId('reef-slope-select'),
     '12dc11ae-3a4b-4309-8fae-66f51398d96f',
   )
-  await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(reefSlopeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(notesRow).getByTestId('notes-textarea'), '1')
-  await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(notesRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   const observerSelect = within(observersRow).getByTestId('observers-select')
 
   await user.click(within(observerSelect).getByText('Melissa Nunes'))
-  await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(quadratNumberStartRow).getByTestId('quadrat-number-start-input'), '99')
   await waitFor(() =>
-    expect(within(quadratNumberStartRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(quadratNumberStartRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
 
   await user.type(within(quadratSizeRow).getByTestId('quadrat-size-input'), '99')
-  await waitFor(() => expect(within(quadratSizeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(quadratSizeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(numberOfQuadratsRow).getByTestId('num-quadrats-input'), '99')
   await waitFor(() =>
-    expect(within(numberOfQuadratsRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(numberOfQuadratsRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
 
   await user.type(
@@ -628,7 +650,9 @@ test('Benthic photo quadrat validation: user edits non-observation input with ig
     '99',
   )
   await waitFor(() =>
-    expect(within(numberOfPointsPerQuadratRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(numberOfPointsPerQuadratRow).getAllByTestId('message-pill-ignore')).toHaveLength(
+      2,
+    ),
   )
 
   // make act error go away

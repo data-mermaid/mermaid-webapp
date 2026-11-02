@@ -31,10 +31,9 @@ const BleachingTransectInputs = ({
   choices,
   formik,
   ignoreNonObservationFieldValidations,
-  resetNonObservationFieldValidations,
+  markFieldValidationsStale,
   unignoreNonObservationFieldValidations,
   validationsApiData,
-  validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const { t } = useTranslation()
   const { relativedepths, visibilities, currents, tides } = choices
@@ -87,60 +86,60 @@ const BleachingTransectInputs = ({
 
   const handleLabelChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: LABEL_VALIDATION_PATH,
     })
   }
 
   const handleQuadratSizeChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: QUADRAT_SIZE_VALIDATION_PATH,
     })
   }
 
   const handleRelativeDepthChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
     })
   }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
   }
   const handleCurrentChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: CURRENT_VALIDATION_PATH,
     })
   }
 
   const handleNotesChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: NOTES_VALIDATION_PATH,
     })
   }
   const handleTideChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: TIDE_VALIDATION_PATH,
     })
   }
 
   const handleSampleTimeChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
     })
   }
 
   const handleDepthChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: DEPTH_VALIDATION_PATH,
     })
   }
@@ -164,13 +163,10 @@ const BleachingTransectInputs = ({
           id="label"
           testId="label"
           type="text"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(labelValidationProperties, 'label')}
+          validationPath={LABEL_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...labelValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
@@ -181,16 +177,10 @@ const BleachingTransectInputs = ({
           id="sample_time"
           testId="sample-time"
           type="time"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            sampleTimeValidationProperties,
-            'sample_time',
-          )}
+          validationPath={SAMPLE_TIME_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...sampleTimeValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
@@ -200,15 +190,12 @@ const BleachingTransectInputs = ({
           label={t('sample_units.depth')}
           required={true}
           id="depth"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
+          validationPath={DEPTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           testId="depth"
           type="number"
-          {...validationPropertiesWithDirtyResetOnInputChange(depthValidationProperties, 'depth')}
+          {...depthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
@@ -221,18 +208,10 @@ const BleachingTransectInputs = ({
           id="quadrat_size"
           testId="quadrat-size"
           type="number"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({
-              validationPath: QUADRAT_SIZE_VALIDATION_PATH,
-            })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: QUADRAT_SIZE_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            quadratSizeValidationProperties,
-            'quadrat_size',
-          )}
+          validationPath={QUADRAT_SIZE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...quadratSizeValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_size}
           onChange={handleQuadratSizeChange}
@@ -245,17 +224,11 @@ const BleachingTransectInputs = ({
           id="visibility"
           testId="visibility"
           options={visibilityOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
-          }}
+          validationPath={VISIBILITY_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...visibilityValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            visibilityValidationProperties,
-            'visibility',
-          )}
+          {...visibilityValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
@@ -267,17 +240,11 @@ const BleachingTransectInputs = ({
           id="current"
           testId="current"
           options={currentOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
-          }}
+          validationPath={CURRENT_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...currentValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            currentValidationProperties,
-            'current',
-          )}
+          {...currentValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
@@ -289,19 +256,11 @@ const BleachingTransectInputs = ({
           id="relative_depth"
           testId="relative-depth"
           options={relativeDepthOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({
-              validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
-            })
-          }}
+          validationPath={RELATIVE_DEPTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...relativeDepthValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            relativeDepthValidationProperties,
-            'relative_depth',
-          )}
+          {...relativeDepthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
@@ -313,14 +272,11 @@ const BleachingTransectInputs = ({
           id="tide"
           testId="tide"
           options={tideOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
-          }}
+          validationPath={TIDE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...tideValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
+          {...tideValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
@@ -343,13 +299,10 @@ const BleachingTransectInputs = ({
           label={t('notes')}
           id="notes"
           testId="notes"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(notesValidationProperties, 'notes')}
+          validationPath={NOTES_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...notesValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
@@ -364,10 +317,9 @@ BleachingTransectInputs.propTypes = {
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  markFieldValidationsStale: PropTypes.func.isRequired,
   unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,
-  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 export default BleachingTransectInputs

@@ -40,10 +40,9 @@ const ObserversInput = ({
   formik,
   ignoreNonObservationFieldValidations,
   usersBelongingToProject,
-  resetNonObservationFieldValidations,
+  markFieldValidationsStale,
   unignoreNonObservationFieldValidations,
   validationsApiData,
-  validationPropertiesWithDirtyResetOnInputChange,
   ...restOfProps
 }) => {
   const { t } = useTranslation()
@@ -86,7 +85,7 @@ const ObserversInput = ({
     const selectedObservers = getSelectedObservers(selectedItems)
 
     formik.setFieldValue('observers', [...selectedObservers, ...includedObserversNoLongerOnProject])
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath,
     })
   }
@@ -108,7 +107,7 @@ const ObserversInput = ({
     )
 
     formik.setFieldValue('observers', observersWithOneRemoved)
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath,
     })
     handleCloseObserverModal()
@@ -124,13 +123,10 @@ const ObserversInput = ({
           id="observers"
           options={observerNameOptions}
           value={observerNameValues}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(validationProperties, 'observers')}
+          validationPath={validationPath}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...validationProperties}
           onChange={({ selectedItems }) => handleObserversChange(selectedItems)}
           additionalInputContent={
             <AdditionalInputContentWrapper data-testid="removed-observer-warning">
@@ -173,10 +169,9 @@ ObserversInput.propTypes = {
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   usersBelongingToProject: observersPropType.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  markFieldValidationsStale: PropTypes.func.isRequired,
   unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ observers: observersValidationPropType }).isRequired,
-  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 export default ObserversInput

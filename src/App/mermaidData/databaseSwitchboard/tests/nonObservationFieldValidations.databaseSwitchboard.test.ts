@@ -73,7 +73,7 @@ const getStatusesWithStale = (record: typeof recordWithIgnoredAndLiveWarnings) =
       isStale ? `${status}*` : status,
   )
 
-test('Editing a field greys its warning, keeps its ignored warning, and restores an un-ignored warning as greyed', async () => {
+test('Editing a field marks every result, so an ignored warning keeps its status but comes back greyed when unticked', async () => {
   const dbSwitchboardInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   const editedRecord = await dbSwitchboardInstance.markFieldValidationsStale({
@@ -81,7 +81,7 @@ test('Editing a field greys its warning, keeps its ignored warning, and restores
     validationPath,
   })
 
-  expect(getStatusesWithStale(editedRecord)).toEqual(['ok', 'ignore', 'warning*'])
+  expect(getStatusesWithStale(editedRecord)).toEqual(['ok*', 'ignore*', 'warning*'])
 
   const unignoredRecord = await dbSwitchboardInstance.unignoreNonObservationFieldValidations({
     record: editedRecord,
@@ -89,5 +89,5 @@ test('Editing a field greys its warning, keeps its ignored warning, and restores
     validationId: 'unique',
   })
 
-  expect(getStatusesWithStale(unignoredRecord)).toEqual(['ok', 'warning*', 'warning*'])
+  expect(getStatusesWithStale(unignoredRecord)).toEqual(['ok*', 'warning*', 'warning*'])
 })

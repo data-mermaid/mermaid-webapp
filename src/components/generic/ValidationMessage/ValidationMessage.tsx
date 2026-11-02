@@ -10,6 +10,7 @@ interface ValidationMessageProps {
   children: React.ReactNode
   action?: React.ReactNode
   isStale?: boolean
+  className?: string
 }
 
 const MessageRow = styled.div`
@@ -38,12 +39,13 @@ const ValidationMessage = ({
   children,
   action = null,
   isStale = false,
+  className = undefined,
 }: ValidationMessageProps) => {
   const messageId = useId()
 
   return (
     <MessageRow data-stale={isStale}>
-      <InlineMessage type={status} id={messageId}>
+      <InlineMessage type={status} id={messageId} className={className}>
         {children}
       </InlineMessage>
       {React.isValidElement<{ 'aria-describedby'?: string }>(action)
