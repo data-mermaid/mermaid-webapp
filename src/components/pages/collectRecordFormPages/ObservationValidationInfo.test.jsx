@@ -49,6 +49,19 @@ describe('ObservationValidationInfo ignore controls', () => {
     expect(within(duplicate).queryByTestId('ignore-warning-checkbox')).not.toBeInTheDocument()
   })
 
+  test('describes each box by the message it sits beside', () => {
+    renderRow(messages)
+
+    const [, warning, ignored] = screen.getAllByRole('listitem')
+
+    expect(within(warning).getByTestId('ignore-warning-checkbox')).toHaveAccessibleDescription(
+      within(warning).getByTestId('inline-message-warning').textContent,
+    )
+    expect(within(ignored).getByTestId('ignore-warning-checkbox')).toHaveAccessibleDescription(
+      within(ignored).getByTestId('inline-message-ignore').textContent,
+    )
+  })
+
   test('ignores and un-ignores the one message whose box was ticked', async () => {
     const { user, ignoreObservationValidations, unignoreObservationValidations } =
       renderRow(messages)

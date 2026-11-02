@@ -12,7 +12,11 @@ const IgnoreWarningLabel = styled.label`
   }
 `
 
-const InputIgnoreValidationWarningCheckboxWithLabel = ({ onChange, checked }) => {
+const InputIgnoreValidationWarningCheckboxWithLabel = ({
+  onChange,
+  checked,
+  'aria-describedby': ariaDescribedBy = undefined,
+}) => {
   const { t } = useTranslation()
   const ignoreWarningText = t('ignore_warning')
 
@@ -23,6 +27,7 @@ const InputIgnoreValidationWarningCheckboxWithLabel = ({ onChange, checked }) =>
         onChange={onChange}
         checked={checked}
         aria-label={ignoreWarningText}
+        aria-describedby={ariaDescribedBy}
         data-testid="ignore-warning-checkbox"
       />
       {ignoreWarningText}
@@ -34,6 +39,7 @@ InputIgnoreValidationWarningCheckboxWithLabel.propTypes = {
   onChange: PropTypes.func.isRequired,
   checked: PropTypes.bool.isRequired,
   testId: PropTypes.string,
+  'aria-describedby': PropTypes.string,
 }
 
 export default InputIgnoreValidationWarningCheckboxWithLabel

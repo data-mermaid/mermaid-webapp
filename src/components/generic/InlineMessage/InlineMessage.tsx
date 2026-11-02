@@ -9,6 +9,8 @@ interface InlineMessageProps {
   type?: MessageType
   children: React.ReactNode
   className?: string
+  // Lets a control beside the message point at it with aria-describedby.
+  id?: string
 }
 
 const MessagePill = styled.span<{ type: MessageType }>`
@@ -44,6 +46,7 @@ const InlineMessage = ({
   type = 'warning',
   children,
   className = undefined,
+  id = undefined,
 }: InlineMessageProps) => {
   const { t } = useTranslation()
 
@@ -54,7 +57,7 @@ const InlineMessage = ({
           {t(`message_type.${type}`)}
         </MessagePill>
       )}
-      <InlineMessageWrapper className={className} data-testid={`inline-message-${type}`}>
+      <InlineMessageWrapper className={className} id={id} data-testid={`inline-message-${type}`}>
         {children}
       </InlineMessageWrapper>
     </>
