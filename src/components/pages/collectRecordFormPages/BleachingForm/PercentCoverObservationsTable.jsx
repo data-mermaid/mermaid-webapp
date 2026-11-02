@@ -19,7 +19,6 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import { ROW_TOTAL_COLUMN } from '../../../../library/validationMessageHelpers'
 import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -162,7 +161,7 @@ const PercentCoverObservationTable = ({
             {quadrat_number}
           </Td>
 
-          <Td {...getCellMarkProps(cellMarks, 'percent_hard', ROW_TOTAL_COLUMN)} $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'percent_hard', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="hard-coral-percent-cover-label"
               value={percent_hard}
@@ -177,7 +176,7 @@ const PercentCoverObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td {...getCellMarkProps(cellMarks, 'percent_soft', ROW_TOTAL_COLUMN)} $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'percent_soft', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="soft-coral-percent-cover-label"
               value={percent_soft}
@@ -190,7 +189,7 @@ const PercentCoverObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td {...getCellMarkProps(cellMarks, 'percent_algae', ROW_TOTAL_COLUMN)} $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'percent_algae', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="microalgae-percent-cover-label"
               value={percent_algae}

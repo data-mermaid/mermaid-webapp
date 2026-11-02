@@ -46,15 +46,6 @@ describe('cell marks', () => {
     expect(cellMarks.count).toEqual({ status: 'error', isStale: false })
   })
 
-  test('prefers a live message over a greyed one on the same cell', () => {
-    const cellMarks = getCellMarks([
-      { status: 'error', code: 'invalid_invert_count', isStale: true },
-      { status: 'warning', code: 'invert_count_high' },
-    ])
-
-    expect(cellMarks.count).toEqual({ status: 'warning', isStale: false })
-  })
-
   test('marks nothing when validations are not showing', () => {
     const { cellMarks } = getObservationValidationInfo({
       observationId: 'obs-1',
@@ -93,6 +84,5 @@ describe('getCellMarkProps', () => {
 
   test('leaves an unmarked cell alone', () => {
     expect(getCellMarkProps(cellMarks, 'count_dead')).toEqual({})
-    expect(getCellMarkProps(undefined, 'count_dead')).toEqual({})
   })
 })

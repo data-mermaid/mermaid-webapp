@@ -42,18 +42,9 @@ const getObservationValidations = ({ observationId, collectRecord, observationsP
 
 const STATUS_SEVERITY = { ignore: 1, warning: 2, error: 3 }
 
-// Which mark wins when two messages are about one cell: a live message over a greyed one, then
-// the more severe status.
-const isStrongerMark = (mark, current) => {
-  if (!current) {
-    return true
-  }
-  if (mark.isStale !== current.isStale) {
-    return !mark.isStale
-  }
-
-  return STATUS_SEVERITY[mark.status] > STATUS_SEVERITY[current.status]
-}
+// When two messages are about one cell, the more severe status marks it.
+const isStrongerMark = (mark, current) =>
+  !current || STATUS_SEVERITY[mark.status] > STATUS_SEVERITY[current.status]
 
 // The mark for each observation column a row's messages are about, keyed by column.
 const getCellMarks = (validationMessages) =>
@@ -71,7 +62,7 @@ const getCellMarks = (validationMessages) =>
 
 // Props for an observation cell that answers to one or more columns, such as a bleaching count
 // that is both its own column and part of the row's total.
-export const getCellMarkProps = (cellMarks = {}, ...columns) => {
+export const getCellMarkProps = (cellMarks, ...columns) => {
   const mark = columns
     .map((column) => cellMarks[column])
     .reduce(

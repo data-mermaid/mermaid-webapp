@@ -159,32 +159,27 @@ export const getRequiredColumn = (validatorName = ''): string | undefined =>
     ? validatorName.slice(0, -LIST_REQUIRED_VALIDATOR_SUFFIX.length)
     : undefined
 
-// The name cell of every observation table. The API's required check calls it `attribute`,
-// `fish_attribute` or `invert_attribute` depending on the protocol.
-export const ATTRIBUTE_COLUMN = 'attribute'
-
-// A bleaching row's total. Its cells are every count or percentage in the row, so each of those
-// cells answers to this column as well as its own.
-export const ROW_TOTAL_COLUMN = 'total'
-
+// Every observation table calls its name cell `attribute`. The API's required check calls it
+// `attribute`, `fish_attribute` or `invert_attribute` depending on the protocol.
 const COLUMN_ALIASES: Record<string, string> = {
-  fish_attribute: ATTRIBUTE_COLUMN,
-  invert_attribute: ATTRIBUTE_COLUMN,
+  fish_attribute: 'attribute',
+  invert_attribute: 'attribute',
 }
 
+// `total` is a bleaching row's total: every count or percentage cell in the row answers to it as
+// well as to its own column.
 const COLUMNS_BY_ROW_CODE: Record<string, string> = {
   invalid_fish_count: 'count',
   invalid_fish_size: 'size',
   invalid_invert_count: 'count',
   invalid_score: 'score',
-  invalid_total: ROW_TOTAL_COLUMN,
+  invalid_total: 'total',
   invert_count_high: 'count',
   invert_size_exceeds_maximum: 'size',
   max_fish_size: 'size',
-  no_region_match: ATTRIBUTE_COLUMN,
-  not_part_of_fish_family_subset: ATTRIBUTE_COLUMN,
+  no_region_match: 'attribute',
+  not_part_of_fish_family_subset: 'attribute',
   not_positive_integer: 'quadrat_number',
-  size_bin_required: 'size',
 }
 
 // Bleaching names the offending cells itself, by observation key (`count_pale`, `percent_hard`).

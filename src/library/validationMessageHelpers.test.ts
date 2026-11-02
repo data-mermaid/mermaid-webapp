@@ -206,7 +206,6 @@ describe('getMessageColumns', () => {
     [{ code: 'max_fish_size' }, ['size']],
     [{ code: 'invalid_fish_count' }, ['count']],
     [{ code: 'invert_count_high' }, ['count']],
-    [{ code: 'size_bin_required' }, ['size']],
     [{ code: 'no_region_match' }, ['attribute']],
     [{ code: 'invalid_score' }, ['score']],
     [{ code: 'not_positive_integer' }, ['quadrat_number']],

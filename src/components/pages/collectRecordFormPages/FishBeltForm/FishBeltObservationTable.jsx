@@ -36,7 +36,6 @@ import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
-import { ATTRIBUTE_COLUMN } from '../../../../library/validationMessageHelpers'
 import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -341,7 +340,7 @@ const FishBeltObservationTable = ({
           $messageType={validationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td {...getCellMarkProps(cellMarks, ATTRIBUTE_COLUMN)} $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {fishNameOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete

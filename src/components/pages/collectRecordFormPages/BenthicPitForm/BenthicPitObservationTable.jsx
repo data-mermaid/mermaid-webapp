@@ -25,7 +25,6 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { HelperTextLink } from '../../../generic/links'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import { ATTRIBUTE_COLUMN } from '../../../../library/validationMessageHelpers'
 import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -215,7 +214,7 @@ const BenthicPitObservationsTable = ({
           >
             {interval}m
           </Td>
-          <Td {...getCellMarkProps(cellMarks, ATTRIBUTE_COLUMN)} $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete

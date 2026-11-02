@@ -22,7 +22,6 @@ import { Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
-import { ATTRIBUTE_COLUMN } from '../../../../library/validationMessageHelpers'
 import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
@@ -292,7 +291,7 @@ const BeltInvertObservationRow = ({
   return (
     <ObservationTr key={observationId} data-observation-id={observationId}>
       <Td $align="center">{rowNumber}</Td>
-      <Td {...getCellMarkProps(cellMarks, ATTRIBUTE_COLUMN)} $align="left">
+      <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
         <InputAutocompleteContainer>
           <ObservationAutocomplete
             id={`observation-${observationId}`}

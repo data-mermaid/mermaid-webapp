@@ -9,7 +9,7 @@ import { MessagePill } from '../InlineMessage/InlineMessage'
 import { useValidationDisclosure } from './ValidationDisclosure'
 
 interface GroupMessage {
-  status?: MessageType | 'ok'
+  status?: MessageType
   isStale?: boolean
 }
 
@@ -29,11 +29,6 @@ const CHIP_LABEL_KEYS: Record<(typeof CHIP_STATUSES)[number], string> = {
   ignore: 'sample_units.validation_status.chip_label_ignored',
 }
 
-const GroupWrapper = styled.div`
-  flex: 1;
-  min-width: 0;
-`
-
 const Summary = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -46,10 +41,6 @@ const Chips = styled.span`
   display: inline-flex;
   flex-wrap: wrap;
   gap: ${theme.spacing.xsmall};
-`
-
-const ToggleButton = styled(ButtonThatLooksLikeLinkUnderlined)`
-  font-size: inherit;
 `
 
 // Stacks messages the way a field's own list does, since a field passes its messages unwrapped.
@@ -90,7 +81,7 @@ const ValidationMessageGroup = ({
   })).filter(({ count }) => count > 0)
 
   return (
-    <GroupWrapper data-testid="validation-message-group">
+    <div data-testid="validation-message-group">
       <Summary>
         <Chips id={summaryId}>
           {chips.map(({ status, count }) => (
@@ -99,7 +90,7 @@ const ValidationMessageGroup = ({
             </MessagePill>
           ))}
         </Chips>
-        <ToggleButton
+        <ButtonThatLooksLikeLinkUnderlined
           type="button"
           aria-expanded={isOpen}
           aria-controls={listId}
@@ -107,12 +98,12 @@ const ValidationMessageGroup = ({
           onClick={toggle}
         >
           {isOpen ? t('validations.hide') : t('validations.show')}
-        </ToggleButton>
+        </ButtonThatLooksLikeLinkUnderlined>
       </Summary>
       <MessageList id={listId} hidden={!isOpen}>
         {children}
       </MessageList>
-    </GroupWrapper>
+    </div>
   )
 }
 
