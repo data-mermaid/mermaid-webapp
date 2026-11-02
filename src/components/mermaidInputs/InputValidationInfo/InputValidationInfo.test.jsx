@@ -79,13 +79,14 @@ describe('InputValidationInfo greyed messages', () => {
     expect(screen.getAllByText('validations.edited_revalidate')).toHaveLength(1)
   })
 
-  test('shows messages from forms that pass no status, using the field type, with no note', () => {
+  test('shows messages from forms that pass no status, using the field type, with no note or box', () => {
     renderField({
-      validationType: 'warning',
+      validationType: 'error',
       validationMessages: [{ id: 'm', code: 'similar_name_other_form' }],
     })
 
-    expect(screen.getByTestId('message-pill-warning')).toBeInTheDocument()
+    expect(screen.getByTestId('message-pill-error')).toBeInTheDocument()
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
     expect(screen.queryByText('validations.edited_revalidate')).not.toBeInTheDocument()
   })
 })

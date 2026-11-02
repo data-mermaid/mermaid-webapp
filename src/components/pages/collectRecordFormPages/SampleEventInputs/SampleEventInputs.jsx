@@ -99,7 +99,6 @@ const SampleEventInputs = ({
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...siteValidationProperties}
-          {...siteValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.site}
           onChange={handleSiteChange}
@@ -133,7 +132,6 @@ const SampleEventInputs = ({
           validationPath={SAMPLE_DATE_VALIDATION_PATH}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
-          {...sampleDateValidationProperties}
           {...sampleDateValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.sample_date}

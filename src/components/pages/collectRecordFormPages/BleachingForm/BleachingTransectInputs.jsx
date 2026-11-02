@@ -228,7 +228,6 @@ const BleachingTransectInputs = ({
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...visibilityValidationProperties}
-          {...visibilityValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
@@ -243,7 +242,6 @@ const BleachingTransectInputs = ({
           validationPath={CURRENT_VALIDATION_PATH}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
-          {...currentValidationProperties}
           {...currentValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.current}
@@ -260,7 +258,6 @@ const BleachingTransectInputs = ({
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...relativeDepthValidationProperties}
-          {...relativeDepthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
@@ -275,7 +272,6 @@ const BleachingTransectInputs = ({
           validationPath={TIDE_VALIDATION_PATH}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
-          {...tideValidationProperties}
           {...tideValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.tide}
