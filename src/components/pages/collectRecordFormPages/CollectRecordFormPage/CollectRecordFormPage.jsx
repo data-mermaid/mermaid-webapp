@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import PropTypes from 'prop-types'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -168,7 +168,6 @@ const CollectRecordFormPage = ({
   const location = useLocation()
   const isMounted = useIsMounted()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
-  const observationTableRef = useRef(null)
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new record is saved (and that triggers a navigation to its new page)
   const isBenthicPQTNewRecordWithImageClassificationEnabled =
     isImageClassificationEnabledForUser && isNewRecord && sampleUnitName === 'benthicpqt'
@@ -380,7 +379,6 @@ const CollectRecordFormPage = ({
     : tableStateObservationIds
 
   const {
-    handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,
     ignoreObservationValidations,
@@ -400,7 +398,6 @@ const CollectRecordFormPage = ({
     handleCollectRecordChange,
     isParentDataLoading,
     observationIdsOnPage,
-    observationTableRef,
     projectId,
     recordId,
     setAreValidationsShowing,
@@ -559,7 +556,6 @@ const CollectRecordFormPage = ({
         areValidationsShowing={areValidationsShowing}
         unignoreRecordLevelValidation={unignoreRecordLevelValidation}
         ignoreRecordLevelValidation={ignoreRecordLevelValidation}
-        handleScrollToObservation={handleScrollToObservation}
       />
       <form
         id="collect-record-form"
@@ -604,10 +600,7 @@ const CollectRecordFormPage = ({
             validationsApiData={validationsApiData}
           />
         )}
-        <div
-          ref={observationTableRef}
-          data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[0]}
-        >
+        <div>
           <ObservationTable1
             {...observationTable1Props}
             testId="observations-section"
@@ -626,7 +619,7 @@ const CollectRecordFormPage = ({
           />
         </div>
         {ObservationTable2 ? (
-          <div data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[1]}>
+          <div>
             <ObservationTable2
               testId="observations2-section"
               areValidationsShowing={areValidationsShowing}

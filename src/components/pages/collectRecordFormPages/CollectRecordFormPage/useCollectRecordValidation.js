@@ -76,7 +76,6 @@ const useCollectRecordValidation = ({
   handleCollectRecordChange,
   isParentDataLoading,
   observationIdsOnPage,
-  observationTableRef,
   projectId,
   recordId,
   setAreValidationsShowing,
@@ -228,20 +227,6 @@ const useCollectRecordValidation = ({
           },
         })
       })
-  }
-
-  // Bleaching is the only protocol with two observation tables, so the validation's `fields`
-  // decide which one to scroll to.
-  const handleScrollToObservation = (fields = []) => {
-    const namedTable = fields
-      .map((field) =>
-        document.querySelector(`[data-observation-table="${field.replace('data.', '')}"]`),
-      )
-      .find(Boolean)
-
-    const target = namedTable ?? observationTableRef.current
-
-    target?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
   }
 
   // Every ignore, un-ignore and mark-stale change is written to IndexedDB by the switchboard;
@@ -419,7 +404,6 @@ const useCollectRecordValidation = ({
   }
 
   return {
-    handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,
     ignoreObservationValidations,
