@@ -117,11 +117,11 @@ const ManagementRegimesMixin = (Base) =>
 
     getManagementRegime = function getManagementRegime(id) {
       if (!id) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
-        Promise.reject(this._notAuthenticatedAndReadyError)
+        return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
       return this._dexiePerUserDataInstance.project_managements.get(id)

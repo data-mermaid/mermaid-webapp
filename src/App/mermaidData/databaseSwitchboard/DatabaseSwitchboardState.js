@@ -92,13 +92,19 @@ const DatabaseSwitchboardState = class {
     return undefined
   }
 
-  _notAuthenticatedAndReadyError = new Error(i18n.t('api_errors.app_not_authenticated_or_ready'))
+  // Getters, not shared instances. One Error built once in the constructor freezes its stack there,
+  // so every Sentry report named this file instead of the call that failed (MERMAID-WEBAPP-M).
+  get _notAuthenticatedAndReadyError() {
+    return new Error(i18n.t('api_errors.app_not_authenticated_or_ready'))
+  }
 
-  _operationMissingIdParameterError = new Error('This operation requires an id to be supplied')
+  get _operationMissingIdParameterError() {
+    return new Error('This operation requires an id to be supplied')
+  }
 
-  _operationMissingParameterError = new Error(
-    "This operation requires a parameter that isn't being supplied",
-  )
+  get _operationMissingParameterError() {
+    return new Error("This operation requires a parameter that isn't being supplied")
+  }
 
   constructor({
     apiBaseUrl,
