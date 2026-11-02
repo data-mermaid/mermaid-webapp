@@ -48,7 +48,7 @@ const isRequiredError = (validation: Validation) =>
 
 // A result the switchboard marked `isStale` was edited after the last Validate. An error or
 // warning then shows greyed and stops counting. An ignored warning stays as it is: ignoring was
-// the diver's call about the record, not a finding about the value.
+// a decision by someone involved in the survey, not a finding about the value.
 export const isGreyed = (validation: { status?: ValidationStatus; isStale?: boolean }) =>
   Boolean(validation.isStale) && validation.status !== 'ignore'
 
