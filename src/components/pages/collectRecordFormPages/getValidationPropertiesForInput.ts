@@ -46,6 +46,12 @@ const isSiteNotFoundOnManagement = (validation: Validation) =>
 const isRequiredError = (validation: Validation) =>
   validation.status === 'error' && validation.code === REQUIRED_CODE
 
+// A result the switchboard marked `isStale` was edited after the last Validate. An error or
+// warning then shows greyed and stops counting. An ignored warning stays as it is: ignoring was
+// a decision by someone involved in the survey, not a finding about the value.
+export const isGreyed = (validation: { status?: ValidationStatus; isStale?: boolean }) =>
+  Boolean(validation.isStale) && validation.status !== 'ignore'
+
 // Which of a field's or row's validations reach the screen. Every required error shows, then
 // every other error and every warning or ignore, so an error never hides a warning. A field is
 // one cell, so its required error hides the field's other errors. A row's required error names
@@ -89,7 +95,7 @@ const getValidationPropertiesForInput = (
 
   const validationMessages = validationsToDisplay.map((validation) => ({
     status: validation.status,
-    isStale: validation.isStale,
+    isStale: isGreyed(validation),
     context: validation.context,
     code: validation.code,
     id: validation.validation_id,
@@ -97,7 +103,7 @@ const getValidationPropertiesForInput = (
   }))
 
   // Errors are listed first, so the first live message's status is the field's or row's colour.
-  const liveValidations = validationsToDisplay.filter((validation) => !validation.isStale)
+  const liveValidations = validationsToDisplay.filter((validation) => !isGreyed(validation))
   const validationType: InputValidationType =
     liveValidations[0]?.status ?? (validationsToDisplay.length ? 'info' : 'ok')
 

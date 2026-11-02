@@ -196,7 +196,7 @@ test('Validating an empty collect record, and then editing an input with errors 
 
   await user.type(screen.getByTestId('depth-input'), '1')
 
-  // validations remain showing, except Depth is changed
+  // validations remain showing; the edited depth keeps its message, greyed, with the note
   expect(
     await within(screen.getByTestId('site')).findByText('validation_messages.required'),
   ).toBeInTheDocument()
@@ -204,8 +204,11 @@ test('Validating an empty collect record, and then editing an input with errors 
     within(screen.getByTestId('management')).getByText('validation_messages.required'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('depth')).queryByText('validation_messages.required'),
-  ).not.toBeInTheDocument()
+    within(screen.getByTestId('depth')).getByText('validation_messages.required'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('depth')).getByText('validations.edited_revalidate'),
+  ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('sample-date')).getByText('validation_messages.required'),
   ).toBeInTheDocument()

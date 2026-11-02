@@ -209,7 +209,7 @@ test('user can reset dismissed record-level warnings', async () => {
   expect(isFormDirtyAfterReset)
 })
 
-test('Validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
+test('Validation: user edits non-observation input with ignored validation keeps the ignored status for that input.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -446,31 +446,41 @@ test('Validation: user edits non-observation input with ignored validation reset
   expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
   await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
-  await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() => expect(within(siteRow).getAllByTestId('message-pill-ignore')).toHaveLength(2))
 
   await user.selectOptions(within(managementRow).getByTestId('management-select'), '1')
-  await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(managementRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(screen.getByTestId('depth-input'), '1')
-  await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(depthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(screen.getByTestId('sample-date-input'), '2021-11-09')
-  await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleDateRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(screen.getByTestId('sample-time-input'), '02:39 PM')
-  await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleTimeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(screen.getByTestId('transect-number-input'), '12')
   await waitFor(() =>
-    expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(transectNumberRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
 
   await user.type(screen.getByTestId('label-input'), '1')
-  await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(labelRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(screen.getByTestId('len-surveyed-input'), '1')
   await waitFor(() =>
-    expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(lengthSurveyedRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
 
   // Width selection 2m
@@ -478,29 +488,39 @@ test('Validation: user edits non-observation input with ignored validation reset
     screen.getByTestId('width-select'),
     'e1a133d3-70fe-403c-aed2-a70d630ef910',
   )
-  await waitFor(() => expect(within(widthRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(widthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   // Macroinvertebrate Size Bin selection
   await user.selectOptions(
     screen.getByTestId('size-bin-select'),
     'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
   )
-  await waitFor(() => expect(within(sizeBinRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sizeBinRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   // Reef Slope select on crest
   await user.selectOptions(
     screen.getByTestId('reef-slope-select'),
     '12dc11ae-3a4b-4309-8fae-66f51398d96f',
   )
-  await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(reefSlopeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(screen.getByTestId('notes-textarea'), '1')
-  await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(notesRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   const observerSelect = screen.getByTestId('observers-select')
 
   await user.click(within(observerSelect).getByText('Melissa Nunes'))
-  await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   // make act error go away
   expect(

@@ -41,9 +41,8 @@ const FishBeltTransectInputs = ({
   ignoreNonObservationFieldValidations,
   observationsDispatch = () => {},
   observationsState = [],
-  resetNonObservationFieldValidations,
+  markFieldValidationsStale,
   unignoreNonObservationFieldValidations,
-  validationPropertiesWithDirtyResetOnInputChange,
   validationsApiData,
 }) => {
   const {
@@ -152,31 +151,27 @@ const FishBeltTransectInputs = ({
 
   const handleTransectNumberChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'number',
+    markFieldValidationsStale({
       validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
     })
   }
 
   const handleLabelChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'label',
+    markFieldValidationsStale({
       validationPath: LABEL_VALIDATION_PATH,
     })
   }
 
   const handleLengthSurveyedChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'len_surveyed',
+    markFieldValidationsStale({
       validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
     })
   }
   const handleWidthChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'width',
+    markFieldValidationsStale({
       validationPath: WIDTH_VALIDATION_PATH,
     })
   }
@@ -187,75 +182,65 @@ const FishBeltTransectInputs = ({
       openClearSizeValuesModal()
     } else {
       onSizeBinChange(event)
-      resetNonObservationFieldValidations({
-        inputName: 'size_bin',
+      markFieldValidationsStale({
         validationPath: SIZE_BIN_VALIDATION_PATH,
       })
     }
   }
   const handleReefSlopeChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'reef_slope',
+    markFieldValidationsStale({
       validationPath: REEF_SLOPE_VALIDATION_PATH,
     })
   }
   const handleRelativeDepthChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'relative_depth',
+    markFieldValidationsStale({
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
     })
   }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'visibility',
+    markFieldValidationsStale({
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
   }
   const handleCurrentChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'current',
+    markFieldValidationsStale({
       validationPath: CURRENT_VALIDATION_PATH,
     })
   }
   const handleTideChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'tide',
+    markFieldValidationsStale({
       validationPath: TIDE_VALIDATION_PATH,
     })
   }
   const handleNotesChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'notes',
+    markFieldValidationsStale({
       validationPath: NOTES_VALIDATION_PATH,
     })
   }
 
   const handleSampleTimeChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'sample_time',
+    markFieldValidationsStale({
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
     })
   }
 
   const handleDepthChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'depth',
+    markFieldValidationsStale({
       validationPath: DEPTH_VALIDATION_PATH,
     })
   }
 
   const handleResetSizeValues = () => {
     onSizeBinChange()
-    resetNonObservationFieldValidations({
-      inputName: 'size_bin',
+    markFieldValidationsStale({
       validationPath: SIZE_BIN_VALIDATION_PATH,
     })
     observationsDispatch({
@@ -274,20 +259,10 @@ const FishBeltTransectInputs = ({
           id="number"
           testId="transect-number"
           type="number"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({
-              validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
-            })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({
-              validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
-            })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            transectNumberValidationProperties,
-            'number',
-          )}
+          validationPath={TRANSECT_NUMBER_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...transectNumberValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.number}
           onChange={handleTransectNumberChange}
@@ -298,13 +273,10 @@ const FishBeltTransectInputs = ({
           id="label"
           testId="label"
           type="text"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(labelValidationProperties, 'label')}
+          validationPath={LABEL_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...labelValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
@@ -315,16 +287,10 @@ const FishBeltTransectInputs = ({
           id="sample_time"
           testId="sample-time"
           type="time"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            sampleTimeValidationProperties,
-            'sample_time',
-          )}
+          validationPath={SAMPLE_TIME_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...sampleTimeValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
@@ -336,15 +302,12 @@ const FishBeltTransectInputs = ({
           required={true}
           id="depth"
           unit="m"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
+          validationPath={DEPTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           testId="depth"
           type="number"
-          {...validationPropertiesWithDirtyResetOnInputChange(depthValidationProperties, 'depth')}
+          {...depthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
@@ -357,20 +320,10 @@ const FishBeltTransectInputs = ({
           testId="len-surveyed"
           type="number"
           unit="m"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({
-              validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
-            })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({
-              validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
-            })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            lengthSurveyedValidationProperties,
-            'len_surveyed',
-          )}
+          validationPath={LENGHT_SURVEYED_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...lengthSurveyedValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
@@ -382,14 +335,10 @@ const FishBeltTransectInputs = ({
           id="width"
           testId="width"
           options={transectWidthOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
-          }}
+          validationPath={WIDTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...widthValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(widthValidationProperties, 'width')}
           onBlur={formik.handleBlur}
           value={formik.values.width}
           onChange={handleWidthChange}
@@ -401,17 +350,10 @@ const FishBeltTransectInputs = ({
           id="size_bin"
           testId="size-bin"
           options={fishSizeBinOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
-          }}
+          validationPath={SIZE_BIN_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...sizeBinValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            sizeBinValidationProperties,
-            'size_bin',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.size_bin}
           onChange={handleSizeBinChange}
@@ -423,17 +365,10 @@ const FishBeltTransectInputs = ({
           id="reef_slope"
           testId="reef-slope"
           options={reefSlopeOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
-          }}
+          validationPath={REEF_SLOPE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...reefSlopeValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            reefSlopeValidationProperties,
-            'reef_slope',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
           onChange={handleReefSlopeChange}
@@ -458,17 +393,10 @@ const FishBeltTransectInputs = ({
           id="visibility"
           testId="visibility"
           options={visibilityOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
-          }}
+          validationPath={VISIBILITY_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...visibilityValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            visibilityValidationProperties,
-            'visibility',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
@@ -480,17 +408,10 @@ const FishBeltTransectInputs = ({
           id="current"
           testId="current"
           options={currentOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
-          }}
+          validationPath={CURRENT_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...currentValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            currentValidationProperties,
-            'current',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
@@ -502,19 +423,10 @@ const FishBeltTransectInputs = ({
           id="relative_depth"
           testId="relative-depth"
           options={relativeDepthOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({
-              validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
-            })
-          }}
+          validationPath={RELATIVE_DEPTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...relativeDepthValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            relativeDepthValidationProperties,
-            'relative_depth',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
@@ -526,14 +438,10 @@ const FishBeltTransectInputs = ({
           id="tide"
           testId="tide"
           options={tideOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
-          }}
+          validationPath={TIDE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...tideValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
@@ -556,13 +464,10 @@ const FishBeltTransectInputs = ({
           label={t('notes')}
           id="notes"
           testId="notes"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(notesValidationProperties, 'notes')}
+          validationPath={NOTES_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...notesValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
@@ -585,10 +490,9 @@ FishBeltTransectInputs.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   observationsState: PropTypes.arrayOf(PropTypes.shape({ fish_attribute: PropTypes.string })),
   observationsDispatch: PropTypes.func,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  markFieldValidationsStale: PropTypes.func.isRequired,
   unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ fishbelt_transect: fishbeltValidationPropType }).isRequired,
-  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 export default FishBeltTransectInputs

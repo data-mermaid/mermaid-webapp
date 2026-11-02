@@ -1,6 +1,10 @@
 import type { ValidationStatus } from '../../../../types/constants'
 import getRecordLevelValidationsToDisplay from '../getRecordLevelValidationsToDisplay'
-import { getValidationsToDisplay, type RowValidations } from '../getValidationPropertiesForInput'
+import {
+  getValidationsToDisplay,
+  isGreyed,
+  type RowValidations,
+} from '../getValidationPropertiesForInput'
 import getDuplicateValuesObservationIds, {
   isDuplicateValuesValidation,
 } from './getDuplicateValuesObservationIds'
@@ -62,13 +66,6 @@ interface ValidationSummary {
 }
 
 /**
- * Answers "has the user edited this input since the last validate?", keyed by formik property
- * name. An edited input hides its inline badge, so it has to drop out of the chips too. The
- * caller owns the comparison, so badges and chips stay driven by one rule.
- */
-type IsFieldValueDirty = (formikProperty: string) => boolean
-
-/**
  * The observation rows on the page, or null before the tables have loaded. Deleting a row
  * leaves its validations on the record, so a target can outlive the row it names.
  */
@@ -108,7 +105,7 @@ const addRow = (summary: ValidationSummary, rowValidations: unknown, target: Nav
   for (const validation of displayedValidations) {
     const status = getStatus(validation)
 
-    if (!status || validation.isStale) {
+    if (!status || isGreyed(validation)) {
       continue
     }
 
@@ -132,12 +129,7 @@ const addRow = (summary: ValidationSummary, rowValidations: unknown, target: Nav
  *   - array:         data.<section>.<field> = [{ status }], the shape the switchboard writes
  *     back after an ignore or an edit (see _mapFieldValidations in CollectRecordsMixin).
  */
-const walkFieldSubtree = (
-  path: string,
-  node: unknown,
-  summary: ValidationSummary,
-  isFieldValueDirty: IsFieldValueDirty,
-) => {
+const walkFieldSubtree = (path: string, node: unknown, summary: ValidationSummary) => {
   if (!node || typeof node !== 'object') {
     return
   }
@@ -147,15 +139,12 @@ const walkFieldSubtree = (
   ) as Validation[]
 
   if (children.some((child) => getStatus(child))) {
-    // A validation path's last segment is the formik property name for that input, which is
-    // also the input's `id`: `data.fishbelt_transect.depth` is edited as `formik.values.depth`
-    // and rendered by an input with `id="depth"`. That one name is how a validation is matched
-    // to both the value the user is editing and the row to scroll to.
-    const formikProperty = path.slice(path.lastIndexOf('.') + 1)
-
-    if (!isFieldValueDirty(formikProperty)) {
-      addRow(summary, node, { attribute: 'data-validation-field', value: formikProperty })
-    }
+    // A validation path's last segment is the input's `id`: `data.fishbelt_transect.depth` is
+    // rendered by an input with `id="depth"`, which is the row to scroll to.
+    addRow(summary, node, {
+      attribute: 'data-validation-field',
+      value: path.slice(path.lastIndexOf('.') + 1),
+    })
     return
   }
 
@@ -163,12 +152,12 @@ const walkFieldSubtree = (
   // path), so children reuse the parent's path; keyed objects extend the path.
   if (Array.isArray(node)) {
     for (const child of node) {
-      walkFieldSubtree(path, child, summary, isFieldValueDirty)
+      walkFieldSubtree(path, child, summary)
     }
     return
   }
   for (const [key, child] of Object.entries(node as Record<string, unknown>)) {
-    walkFieldSubtree(`${path}.${key}`, child, summary, isFieldValueDirty)
+    walkFieldSubtree(`${path}.${key}`, child, summary)
   }
 }
 
@@ -232,7 +221,6 @@ const addDuplicateValuesToRows = (
 
 const getValidationSummary = (
   results: ValidationsResults | undefined,
-  isFieldValueDirty: IsFieldValueDirty = () => false,
   observationIdsOnPage: ObservationIdsOnPage = null,
 ): ValidationSummary => {
   const summary: ValidationSummary = {
@@ -274,7 +262,7 @@ const getValidationSummary = (
       if (section.startsWith('obs_')) {
         collectObservationValidations(sectionValue, validationsByObsId)
       } else {
-        walkFieldSubtree(`data.${section}`, sectionValue, summary, isFieldValueDirty)
+        walkFieldSubtree(`data.${section}`, sectionValue, summary)
       }
     }
   }

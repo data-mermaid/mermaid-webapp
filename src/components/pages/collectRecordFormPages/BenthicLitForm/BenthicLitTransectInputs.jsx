@@ -34,10 +34,9 @@ const BenthicLitTransectInputs = ({
   choices,
   formik,
   ignoreNonObservationFieldValidations,
-  resetNonObservationFieldValidations,
+  markFieldValidationsStale,
   unignoreNonObservationFieldValidations,
   validationsApiData,
-  validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const { t } = useTranslation()
   const { reefslopes, relativedepths, visibilities, currents, tides } = choices
@@ -101,84 +100,73 @@ const BenthicLitTransectInputs = ({
 
   const handleTransectNumberChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'number',
+    markFieldValidationsStale({
       validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
     })
   }
 
   const handleLabelChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'label',
+    markFieldValidationsStale({
       validationPath: LABEL_VALIDATION_PATH,
     })
   }
 
   const handleLengthSurveyedChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'len_surveyed',
+    markFieldValidationsStale({
       validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
     })
   }
 
   const handleReefSlopeChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'reef_slope',
+    markFieldValidationsStale({
       validationPath: REEF_SLOPE_VALIDATION_PATH,
     })
   }
   const handleRelativeDepthChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'relative_depth',
+    markFieldValidationsStale({
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
     })
   }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'visibility',
+    markFieldValidationsStale({
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
   }
   const handleCurrentChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'current',
+    markFieldValidationsStale({
       validationPath: CURRENT_VALIDATION_PATH,
     })
   }
 
   const handleNotesChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'notes',
+    markFieldValidationsStale({
       validationPath: NOTES_VALIDATION_PATH,
     })
   }
   const handleTideChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'tide',
+    markFieldValidationsStale({
       validationPath: TIDE_VALIDATION_PATH,
     })
   }
 
   const handleSampleTimeChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'sample_time',
+    markFieldValidationsStale({
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
     })
   }
 
   const handleDepthChange = (event) => {
     formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'depth',
+    markFieldValidationsStale({
       validationPath: DEPTH_VALIDATION_PATH,
     })
   }
@@ -193,20 +181,10 @@ const BenthicLitTransectInputs = ({
           id="number"
           testId="transect-number"
           type="number"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({
-              validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
-            })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({
-              validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
-            })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            transectNumberValidationProperties,
-            'number',
-          )}
+          validationPath={TRANSECT_NUMBER_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...transectNumberValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.number}
           onChange={handleTransectNumberChange}
@@ -217,13 +195,10 @@ const BenthicLitTransectInputs = ({
           id="label"
           testId="label"
           type="text"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(labelValidationProperties, 'label')}
+          validationPath={LABEL_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...labelValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
@@ -234,16 +209,10 @@ const BenthicLitTransectInputs = ({
           id="sample_time"
           testId="sample-time"
           type="time"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            sampleTimeValidationProperties,
-            'sample_time',
-          )}
+          validationPath={SAMPLE_TIME_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...sampleTimeValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
@@ -253,15 +222,12 @@ const BenthicLitTransectInputs = ({
           label={t('sample_units.depth')}
           required={true}
           id="depth"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
+          validationPath={DEPTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           testId="depth"
           type="number"
-          {...validationPropertiesWithDirtyResetOnInputChange(depthValidationProperties, 'depth')}
+          {...depthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
@@ -274,20 +240,10 @@ const BenthicLitTransectInputs = ({
           id="len_surveyed"
           testId="len-surveyed"
           type="number"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({
-              validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
-            })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({
-              validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
-            })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            lengthSurveyedValidationProperties,
-            'len_surveyed',
-          )}
+          validationPath={LENGHT_SURVEYED_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...lengthSurveyedValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
@@ -300,17 +256,10 @@ const BenthicLitTransectInputs = ({
           id="reef_slope"
           testId="reef-slope"
           options={reefSlopeOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
-          }}
+          validationPath={REEF_SLOPE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...reefSlopeValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            reefSlopeValidationProperties,
-            'reef_slope',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
           onChange={handleReefSlopeChange}
@@ -335,17 +284,10 @@ const BenthicLitTransectInputs = ({
           id="visibility"
           testId="visibility"
           options={visibilityOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
-          }}
+          validationPath={VISIBILITY_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...visibilityValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            visibilityValidationProperties,
-            'visibility',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
           onChange={handleVisibilityChange}
@@ -357,17 +299,10 @@ const BenthicLitTransectInputs = ({
           id="current"
           testId="current"
           options={currentOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
-          }}
+          validationPath={CURRENT_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...currentValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            currentValidationProperties,
-            'current',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.current}
           onChange={handleCurrentChange}
@@ -379,19 +314,10 @@ const BenthicLitTransectInputs = ({
           id="relative_depth"
           testId="relative-depth"
           options={relativeDepthOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({
-              validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
-            })
-          }}
+          validationPath={RELATIVE_DEPTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...relativeDepthValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            relativeDepthValidationProperties,
-            'relative_depth',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
           onChange={handleRelativeDepthChange}
@@ -403,14 +329,10 @@ const BenthicLitTransectInputs = ({
           id="tide"
           testId="tide"
           options={tideOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
-          }}
+          validationPath={TIDE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...tideValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
           onBlur={formik.handleBlur}
           value={formik.values.tide}
           onChange={handleTideChange}
@@ -433,13 +355,10 @@ const BenthicLitTransectInputs = ({
           label={t('notes')}
           id="notes"
           testId="notes"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
-          }}
-          unignoreNonObservationFieldValidations={() => {
-            unignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(notesValidationProperties, 'notes')}
+          validationPath={NOTES_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...notesValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.notes}
           onChange={handleNotesChange}
@@ -454,10 +373,9 @@ BenthicLitTransectInputs.propTypes = {
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  markFieldValidationsStale: PropTypes.func.isRequired,
   unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,
-  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 export { BenthicLitTransectInputs }

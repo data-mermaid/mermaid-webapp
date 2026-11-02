@@ -73,7 +73,6 @@ const getIsValidationResultCurrent = (collectRecord) =>
 const useCollectRecordValidation = ({
   collectRecordBeingEdited,
   databaseSwitchboardInstance,
-  formikInstance,
   handleCollectRecordChange,
   isParentDataLoading,
   observationIdsOnPage,
@@ -231,25 +230,6 @@ const useCollectRecordValidation = ({
       })
   }
 
-  // Has the user edited this input since the record was last validated? Formik reinitialises
-  // from the record on save and on validate, so initialValues is always the last validated
-  // state. Both the inline badge below and the status indicator chips read this one function,
-  // so a field that stops showing a badge also stops being counted and navigated to.
-  const isFieldValueDirty = (property) =>
-    formikInstance.values[property] !== formikInstance.initialValues[property]
-
-  const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
-    // for UX purpose only, validation is cleared when input is on change after page is validated
-    const validationDirtyCheck = isFieldValueDirty(property)
-      ? null
-      : validationProperties.validationType
-
-    return {
-      ...validationProperties,
-      validationType: validationDirtyCheck,
-    }
-  }
-
   // Bleaching is the only protocol with two observation tables, so the validation's `fields`
   // decide which one to scroll to.
   const handleScrollToObservation = (fields = []) => {
@@ -389,11 +369,8 @@ const useCollectRecordValidation = ({
     [applyValidationChange, databaseSwitchboardInstance, validationResetText],
   )
 
-  // Rebuilt every render on purpose: isFieldValueDirty reads formik values, so an edited
-  // field has to drop out of the counts on the next keystroke.
   const validationSummary = getValidationSummary(
     collectRecordBeingEdited?.validations?.results,
-    isFieldValueDirty,
     observationIdsOnPage,
   )
   const validationCounts = {
@@ -453,7 +430,6 @@ const useCollectRecordValidation = ({
     unignoreNonObservationFieldValidations,
     unignoreObservationValidations,
     unignoreRecordLevelValidation,
-    validationPropertiesWithDirtyResetOnInputChange,
     validationCounts,
     goToNextValidation,
     nextAnnouncement,

@@ -101,7 +101,7 @@ test("Ignoring one warning by id leaves the row's other warning, and the same id
   expect(getRows(unignoredRecord)).toEqual([['warning', 'warning', 'error', 'ok'], ['warning']])
 })
 
-test('Editing a row greys its errors and warnings, keeps its ignored warning, and restores an un-ignored warning as greyed', async () => {
+test('Editing a row marks every result, so an ignored warning keeps its status but comes back greyed when unticked', async () => {
   const dbSwitchboardInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
   const ids = { recordId: recordWithTwoWarningsOnARow.id, observationId: 'obs-1' }
 
@@ -112,20 +112,20 @@ test('Editing a row greys its errors and warnings, keeps its ignored warning, an
 
   const editedRecord = await dbSwitchboardInstance.markObservationValidationsStale(ids)
 
-  expect(getRows(editedRecord)).toEqual([['ignore', 'warning*', 'error*', 'ok'], ['warning']])
+  expect(getRows(editedRecord)).toEqual([['ignore*', 'warning*', 'error*', 'ok*'], ['warning']])
 
   const unignoredRecord = await dbSwitchboardInstance.unignoreObservationValidations({
     ...ids,
     validationId: 'size',
   })
 
-  expect(getRows(unignoredRecord)).toEqual([['warning*', 'warning*', 'error*', 'ok'], ['warning']])
+  expect(getRows(unignoredRecord)).toEqual([['warning*', 'warning*', 'error*', 'ok*'], ['warning']])
 
-  // Ignoring a greyed warning makes it live again: an ignore is never stale.
+  // Re-ignoring keeps the mark, so a later untick still brings the warning back greyed.
   const reignoredRecord = await dbSwitchboardInstance.ignoreObservationValidations({
     ...ids,
     validationId: 'size',
   })
 
-  expect(getRows(reignoredRecord)).toEqual([['ignore', 'warning*', 'error*', 'ok'], ['warning']])
+  expect(getRows(reignoredRecord)).toEqual([['ignore*', 'warning*', 'error*', 'ok*'], ['warning']])
 })

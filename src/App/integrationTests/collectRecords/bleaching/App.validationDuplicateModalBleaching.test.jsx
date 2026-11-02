@@ -104,11 +104,17 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-site-modal'))
 
+  // Merging changed the site, so its warning greys until the next Validate.
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
-    ).not.toBeInTheDocument(),
+      within(screen.getByTestId('site')).getByText('validations.edited_revalidate'),
+    ).toBeInTheDocument(),
   )
+  expect(
+    within(screen.getByTestId('site'))
+      .getByText('validation_messages.not_unique_site')
+      .closest('[data-stale]'),
+  ).toHaveAttribute('data-stale', 'true')
 }, 50000)
 
 test('Validate Bleaching collect record, get site duplicate warning, show resolve button, keep duplicate site, and merge original site to duplicate site', async () => {
@@ -183,11 +189,17 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-site-modal'))
 
+  // Merging changed the site, so its warning greys until the next Validate.
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('site')).queryByText('validation_messages.not_unique_site'),
-    ).not.toBeInTheDocument(),
+      within(screen.getByTestId('site')).getByText('validations.edited_revalidate'),
+    ).toBeInTheDocument(),
   )
+  expect(
+    within(screen.getByTestId('site'))
+      .getByText('validation_messages.not_unique_site')
+      .closest('[data-stale]'),
+  ).toHaveAttribute('data-stale', 'true')
 }, 50000)
 
 test('Validate Bleaching collect record, get site duplicate warning, show resolve button, edit original site', async () => {
@@ -471,11 +483,17 @@ test('Validate Bleaching collect record, get management similar name warning, sh
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-management-modal'))
 
+  // Merging changed the management, so its warning greys until the next Validate.
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('management')).queryByText('validation_messages.similar_name'),
-    ).not.toBeInTheDocument(),
+      within(screen.getByTestId('management')).getByText('validations.edited_revalidate'),
+    ).toBeInTheDocument(),
   )
+  expect(
+    within(screen.getByTestId('management'))
+      .getByText('validation_messages.similar_name')
+      .closest('[data-stale]'),
+  ).toHaveAttribute('data-stale', 'true')
 }, 50000)
 
 test('Validate Bleaching collect record, get management similar name warning, show resolve button, keep duplicate management, and merge original management to duplicate management', async () => {
@@ -558,11 +576,17 @@ test('Validate Bleaching collect record, get management similar name warning, sh
 
   await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-management-modal'))
 
+  // Merging changed the management, so its warning greys until the next Validate.
   await waitFor(() =>
     expect(
-      within(screen.getByTestId('management')).queryByText('validation_messages.similar_name'),
-    ).not.toBeInTheDocument(),
+      within(screen.getByTestId('management')).getByText('validations.edited_revalidate'),
+    ).toBeInTheDocument(),
   )
+  expect(
+    within(screen.getByTestId('management'))
+      .getByText('validation_messages.similar_name')
+      .closest('[data-stale]'),
+  ).toHaveAttribute('data-stale', 'true')
 }, 50000)
 
 test('Validate Bleaching collect record, get management duplicate warning, show resolve button, edit original management', async () => {

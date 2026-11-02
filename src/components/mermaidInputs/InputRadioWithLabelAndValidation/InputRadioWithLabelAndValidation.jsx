@@ -12,8 +12,9 @@ const InputRadioWithLabelAndValidation = ({
   label,
   options,
   validationMessages = [],
-  ignoreNonObservationFieldValidations = () => {},
-  unignoreNonObservationFieldValidations = () => {},
+  ignoreNonObservationFieldValidations = undefined,
+  unignoreNonObservationFieldValidations = undefined,
+  validationPath = undefined,
   validationType = undefined,
   testId = undefined,
   additionalText = null,
@@ -42,6 +43,7 @@ const InputRadioWithLabelAndValidation = ({
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+        validationPath={validationPath}
         validationMessages={validationMessages}
         validationType={validationType}
         additionalText={additionalText}
@@ -58,6 +60,7 @@ InputRadioWithLabelAndValidation.propTypes = {
   name: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
   unignoreNonObservationFieldValidations: PropTypes.func,
+  validationPath: PropTypes.string,
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,

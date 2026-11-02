@@ -190,55 +190,6 @@ describe('getValidationSummary counts', () => {
   })
 })
 
-describe('getValidationSummary with edited fields', () => {
-  // An input the user has edited hides its validation badge, so it must also drop out of
-  // the counts. The formik property name is the last segment of the validation path.
-  const results = {
-    $record: [{ status: 'error', validation_id: 'r1' }],
-    data: {
-      fishbelt_transect: {
-        depth: { v1: { status: 'error' } },
-        len_surveyed: { v2: { status: 'warning' } },
-      },
-      observers: { v3: { status: 'warning' } },
-      obs_belt_fishes: [[{ status: 'error', context: { observation_id: 'obs1' } }]],
-    },
-  }
-
-  test('drops a field target once its input is edited', () => {
-    const { counts, targets } = getValidationSummary(results, (property) => property === 'depth')
-
-    // The depth field target is gone; the record and observation errors are untouched.
-    expect(targets.error).toEqual([recordTarget('r1'), observationTarget('obs1')])
-    expect(targets.warning).toEqual([fieldTarget('len_surveyed'), fieldTarget('observers')])
-    expect(counts).toEqual({ error: 2, warning: 2, ignore: 0 })
-  })
-
-  test('derives the formik property from the last path segment, at any depth', () => {
-    const editedProperties: string[] = []
-
-    getValidationSummary(results, (property) => {
-      editedProperties.push(property)
-
-      return false
-    })
-
-    expect(editedProperties).toEqual(['depth', 'len_surveyed', 'observers'])
-  })
-
-  test('keeps record and observation targets, which have no input to edit', () => {
-    const { counts, targets } = getValidationSummary(results, () => true)
-
-    expect(targets.error).toEqual([recordTarget('r1'), observationTarget('obs1')])
-    expect(targets.warning).toEqual([])
-    expect(counts).toEqual({ error: 2, warning: 0, ignore: 0 })
-  })
-
-  test('counts every field target when no inputs have been edited', () => {
-    expect(getValidationSummary(results, () => false)).toEqual(getValidationSummary(results))
-  })
-})
-
 describe('getValidationSummary with deleted observation rows', () => {
   // Third argument is the rows still on the page. Deleting one leaves its validations behind.
   const results = {
@@ -251,7 +202,7 @@ describe('getValidationSummary with deleted observation rows', () => {
   }
 
   test('drops validations for rows that are no longer on the page', () => {
-    const { counts, targets } = getValidationSummary(results, () => false, new Set(['obs2']))
+    const { counts, targets } = getValidationSummary(results, new Set(['obs2']))
 
     expect(targets.error).toEqual([])
     expect(targets.warning).toEqual([observationTarget('obs2')])
@@ -259,20 +210,20 @@ describe('getValidationSummary with deleted observation rows', () => {
   })
 
   test('keeps validations for rows that are still on the page', () => {
-    const { targets } = getValidationSummary(results, () => false, new Set(['obs1', 'obs2']))
+    const { targets } = getValidationSummary(results, new Set(['obs1', 'obs2']))
 
     expect(targets.error).toEqual([observationTarget('obs1')])
     expect(targets.warning).toEqual([observationTarget('obs2')])
   })
 
   test('drops the last row on the page when it is deleted', () => {
-    const summary = getValidationSummary(results, () => false, new Set())
+    const summary = getValidationSummary(results, new Set())
 
     expect(summary).toEqual({ counts: noCounts, targets: noTargets })
   })
 
   test('counts everything while the observation tables are still loading', () => {
-    const { targets } = getValidationSummary(results, () => false, null)
+    const { targets } = getValidationSummary(results, null)
 
     expect(targets.error).toEqual([observationTarget('obs1')])
     expect(targets.warning).toEqual([observationTarget('obs2')])
@@ -351,7 +302,6 @@ describe('getValidationSummary with duplicate_values', () => {
   test('respects rows that are no longer on the page', () => {
     const { counts, targets } = getValidationSummary(
       { $record: [duplicateValues('warning')] },
-      () => false,
       new Set(['obs2']),
     )
 
@@ -406,7 +356,7 @@ describe('getValidationSummary with greyed messages', () => {
           [
             { status: 'error', isStale: true, context: { observation_id: 'obs1' } },
             { status: 'warning', isStale: true, context: { observation_id: 'obs1' } },
-            { status: 'ignore', context: { observation_id: 'obs1' } },
+            { status: 'ignore', isStale: true, context: { observation_id: 'obs1' } },
           ],
         ],
       },
@@ -459,7 +409,7 @@ describe('getValidationSummary with image classification rows', () => {
   const { results } = mockImageClassificationValidations
 
   test('counts and targets each annotation row the table reports', () => {
-    const { counts, targets } = getValidationSummary(results, undefined, new Set(annotationRowIds))
+    const { counts, targets } = getValidationSummary(results, new Set(annotationRowIds))
 
     expect(targets.error).toEqual(annotationRowIds.map(observationTarget))
     expect(counts).toEqual({ error: 8, warning: 0, ignore: 0 })
