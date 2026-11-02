@@ -622,9 +622,7 @@ const ImageClassificationObservationTable = ({
                   isObservationValid,
                   hasObservationWarningValidation,
                   hasObservationErrorValidation,
-                  hasObservationIgnoredValidation,
                   observationValidationMessages,
-                  observationValidationType,
                 } = getObservationValidationInfo({
                   observationId: obsId,
                   collectRecord,
@@ -649,15 +647,11 @@ const ImageClassificationObservationTable = ({
                   areValidationsShowing &&
                   (shouldDisplayObservationValidation ? (
                     <ObservationValidationInfo
-                      hasObservationErrorValidation={hasObservationErrorValidation}
-                      hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-                      hasObservationWarningValidation={hasObservationWarningValidation}
                       ignoreObservationValidations={ignoreObservationValidations}
                       unignoreObservationValidations={unignoreObservationValidations}
                       isObservationValid={isObservationValid}
                       observationId={obsId}
                       observationValidationMessages={observationValidationMessages}
-                      observationValidationType={observationValidationType}
                     />
                   ) : (
                     <StyledTd />
@@ -763,15 +757,6 @@ const ImageClassificationObservationTable = ({
                   {areValidationsShowing &&
                     (unclassifiedValidation.hasObservationErrorValidation ? (
                       <ObservationValidationInfo
-                        hasObservationErrorValidation={
-                          unclassifiedValidation.hasObservationErrorValidation
-                        }
-                        hasObservationIgnoredValidation={
-                          unclassifiedValidation.hasObservationIgnoredValidation
-                        }
-                        hasObservationWarningValidation={
-                          unclassifiedValidation.hasObservationWarningValidation
-                        }
                         ignoreObservationValidations={ignoreObservationValidations}
                         unignoreObservationValidations={unignoreObservationValidations}
                         isObservationValid={unclassifiedValidation.isObservationValid}
@@ -779,7 +764,6 @@ const ImageClassificationObservationTable = ({
                         observationValidationMessages={
                           unclassifiedValidation.observationValidationMessages
                         }
-                        observationValidationType={unclassifiedValidation.observationValidationType}
                       />
                     ) : (
                       <StyledTd />

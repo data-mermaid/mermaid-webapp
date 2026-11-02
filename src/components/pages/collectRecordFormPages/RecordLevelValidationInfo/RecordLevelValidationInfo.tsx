@@ -26,7 +26,7 @@ interface RecordValidationInfo {
 interface RecordLevelValidationInfoProps {
   areValidationsShowing: boolean
   ignoreRecordLevelValidation: (args: { validationId: string }) => void
-  resetRecordLevelValidation: (args: { validationId: string }) => void
+  unignoreRecordLevelValidation: (args: { validationId: string }) => void
   validations: RecordValidationInfo[]
   handleScrollToObservation: (fields?: string[]) => void
 }
@@ -58,7 +58,7 @@ const checkScrollToObservation = ({ status, fields }: RecordValidationInfo): boo
 const RecordLevelValidationInfo = ({
   areValidationsShowing,
   ignoreRecordLevelValidation,
-  resetRecordLevelValidation,
+  unignoreRecordLevelValidation,
   validations,
   handleScrollToObservation,
 }: RecordLevelValidationInfoProps) => {
@@ -75,7 +75,7 @@ const RecordLevelValidationInfo = ({
       ignoreRecordLevelValidation({ validationId })
     }
     if (!isIgnoreChecked) {
-      resetRecordLevelValidation({ validationId })
+      unignoreRecordLevelValidation({ validationId })
     }
   }
 
@@ -88,8 +88,6 @@ const RecordLevelValidationInfo = ({
         const isWarning = status === 'warning'
         const isError = status === 'error'
         const isIgnored = status === 'ignore'
-        const isReset = status === 'reset'
-        const statusForStyling = isReset ? 'warning' : status
 
         const validationMessage =
           code === 'duplicate_images' ? (
@@ -102,17 +100,15 @@ const RecordLevelValidationInfo = ({
           )
         const isScrollToViewAvailable = checkScrollToObservation(validation)
 
-        return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
+        return (isError || isWarning || isIgnored) && areValidationsShowing ? (
           <InlineValidationItem key={validation_id} data-record-validation-id={validation_id}>
-            <InlineMessage type={statusForStyling as MessageType}>
-              {validationMessage}
-            </InlineMessage>
+            <InlineMessage type={status as MessageType}>{validationMessage}</InlineMessage>
             {isScrollToViewAvailable && (
               <ScrollToButton onClick={() => handleScrollToObservation(fields)}>
                 {t('sample_units.scroll_to_observations')}
               </ScrollToButton>
             )}
-            {isWarning || isReset || isIgnored ? (
+            {isWarning || isIgnored ? (
               <InputIgnoreValidationWarningCheckboxWithLabel
                 onChange={(event) => {
                   handleIgnoreWarningChange({ event, validationId: validation.validation_id })

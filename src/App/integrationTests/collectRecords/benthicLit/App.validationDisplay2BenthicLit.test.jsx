@@ -123,13 +123,13 @@ test('Validating an empty benthic LIT collect record shows validations (proof of
   const observationsTable = screen.getByTestId('observations-section')
 
   expect(within(observationsTable).getByText('observation error')).toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation warning')).not.toBeInTheDocument()
+  expect(within(observationsTable).getByText('observation warning')).toBeInTheDocument()
   expect(
     within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
   ).not.toBeInTheDocument()
 })
 
-test('benthic LIT validations will show only the first error when there are multiple errors and warnings', async () => {
+test('benthic LIT validations will show every error and warning when there are several', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -215,8 +215,8 @@ test('benthic LIT validations will show only the first error when there are mult
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
   expect(screen.getByText('observation error 1')).toBeInTheDocument()
-  expect(screen.queryByText('observation error 2')).not.toBeInTheDocument()
-  expect(screen.queryByText('observation warning 1')).not.toBeInTheDocument()
-  expect(screen.queryByText('observation warning 2')).not.toBeInTheDocument()
+  expect(screen.getByText('observation error 2')).toBeInTheDocument()
+  expect(screen.getByText('observation warning 1')).toBeInTheDocument()
+  expect(screen.getByText('observation warning 2')).toBeInTheDocument()
   expect(screen.queryByText(`OK validation shouldn't show`)).not.toBeInTheDocument()
 })

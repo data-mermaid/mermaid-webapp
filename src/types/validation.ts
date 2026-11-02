@@ -30,9 +30,12 @@ export interface ValidationContext {
   value_range?: [number, number]
 }
 
-// One entry in a collect record's `validations.results`, as the API sends it.
+// One entry in a collect record's `validations.results`, as the API sends it. `isStale` is
+// Collect's own mark: the field or row was edited after this result, so it is shown greyed and
+// not counted until the next Validate replaces it.
 export interface Validation {
   status: ValidationStatus
+  isStale?: boolean
   code?: string
   name?: string
   validation_id?: string

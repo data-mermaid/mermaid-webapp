@@ -61,14 +61,12 @@ describe('getValidationSummary targets', () => {
     expect(targets.ignore).toEqual([observationTarget('obs3')])
   })
 
-  test('per-row error preempts warning/ignore (matches getValidationsToDisplay)', () => {
+  test('a row with an error and a warning counts both and is a target for both chips', () => {
     const { counts, targets } = getValidationSummary({
       data: {
-        // Field row with both an error and a warning: only the error should count.
         sample_event: {
           site: { v1: { status: 'error' }, v2: { status: 'warning' } },
         },
-        // Observation row with both an error and a warning: only the error should count.
         obs_belt_fishes: [
           [
             { status: 'error', context: { observation_id: 'obs1' } },
@@ -79,9 +77,9 @@ describe('getValidationSummary targets', () => {
     })
 
     expect(targets.error).toEqual([fieldTarget('site'), observationTarget('obs1')])
-    expect(targets.warning).toEqual([])
+    expect(targets.warning).toEqual([fieldTarget('site'), observationTarget('obs1')])
     expect(targets.ignore).toEqual([])
-    expect(counts).toEqual({ error: 2, warning: 0, ignore: 0 })
+    expect(counts).toEqual({ error: 2, warning: 2, ignore: 0 })
   })
 
   test('combines record, field, and observation targets across buckets', () => {
@@ -127,9 +125,9 @@ describe('getValidationSummary targets', () => {
       },
     })
 
-    // Error preempts warning on the same row.
+    // An error never hides a warning, so the row is a target for both chips.
     expect(targets.error).toEqual([fieldTarget('observers')])
-    expect(targets.warning).toEqual([])
+    expect(targets.warning).toEqual([fieldTarget('observers')])
   })
 
   test('accepts context.id as well as context.observation_id, as the row lookup does', () => {
@@ -179,8 +177,7 @@ describe('getValidationSummary counts', () => {
     expect(targets.warning).toEqual([observationTarget('obs1')])
   })
 
-  test('counts one error for a row with several, matching the single message it shows', () => {
-    // getValidationsToDisplay renders one error and hides the rest of the row.
+  test('counts every error a row shows', () => {
     const { counts } = getValidationSummary({
       data: {
         sample_event: {
@@ -189,7 +186,7 @@ describe('getValidationSummary counts', () => {
       },
     })
 
-    expect(counts.error).toBe(1)
+    expect(counts.error).toBe(2)
   })
 })
 
@@ -334,7 +331,7 @@ describe('getValidationSummary with duplicate_values', () => {
     ])
   })
 
-  test('a named row showing its own error is not also counted as a duplicate warning', () => {
+  test('a named row with its own error still shows the duplicate warning, counted once', () => {
     const { counts, targets } = getValidationSummary({
       $record: [duplicateValues('warning')],
       data: {
@@ -343,7 +340,11 @@ describe('getValidationSummary with duplicate_values', () => {
     })
 
     expect(targets.error).toEqual([observationTarget('obs1')])
-    expect(targets.warning).toEqual([recordTarget('dupes'), observationTarget('obs2')])
+    expect(targets.warning).toEqual([
+      recordTarget('dupes'),
+      observationTarget('obs1'),
+      observationTarget('obs2'),
+    ])
     expect(counts).toEqual({ error: 1, warning: 1, ignore: 0 })
   })
 
@@ -387,35 +388,36 @@ describe('getValidationSummary with duplicate_values', () => {
   })
 })
 
-describe('getValidationSummary record level statuses', () => {
-  test('counts a record level reset as a warning, since the panel still renders it as one', () => {
-    const { counts, targets } = getValidationSummary({
-      $record: [{ status: 'reset', validation_id: 'r1' }],
-    })
-
-    expect(targets.warning).toEqual([recordTarget('r1')])
-    expect(targets.ignore).toEqual([])
-    expect(counts).toEqual({ error: 0, warning: 1, ignore: 0 })
-  })
-
-  test('leaves a field reset uncounted, since the input renders nothing for it', () => {
+// A greyed message (edited since the last Validate) stays on screen, so a diver can see what the
+// last Validate said, but it is out of their hands until the next one: not counted, not a stop.
+describe('getValidationSummary with greyed messages', () => {
+  test('leaves a greyed field message uncounted and untargeted', () => {
     const summary = getValidationSummary({
-      data: { fishbelt_transect: { depth: [{ status: 'reset' }] } },
+      data: { fishbelt_transect: { depth: [{ status: 'error', isStale: true }] } },
     })
 
     expect(summary).toEqual({ counts: noCounts, targets: noTargets })
   })
 
-  test('leaves an observation reset uncounted', () => {
-    const summary = getValidationSummary({
+  test('counts only the live messages on an edited row', () => {
+    const { counts, targets } = getValidationSummary({
       data: {
-        obs_belt_fishes: [[{ status: 'reset', context: { observation_id: 'obs1' } }]],
+        obs_belt_fishes: [
+          [
+            { status: 'error', isStale: true, context: { observation_id: 'obs1' } },
+            { status: 'warning', isStale: true, context: { observation_id: 'obs1' } },
+            { status: 'ignore', context: { observation_id: 'obs1' } },
+          ],
+        ],
       },
     })
 
-    expect(summary).toEqual({ counts: noCounts, targets: noTargets })
+    expect(counts).toEqual({ error: 0, warning: 0, ignore: 1 })
+    expect(targets).toEqual({ error: [], warning: [], ignore: [observationTarget('obs1')] })
   })
+})
 
+describe('getValidationSummary record level statuses', () => {
   test('skips the dry submit summary while other record level errors are unresolved', () => {
     const { counts, targets } = getValidationSummary({
       $record: [
