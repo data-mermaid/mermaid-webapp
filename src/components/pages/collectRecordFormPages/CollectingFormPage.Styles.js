@@ -25,10 +25,22 @@ export const NewOptionButton = styled(ButtonThatLooksLikeLink)`
   `)}
 `
 
+const CELL_MARK_TYPES = ['error', 'warning', 'ignore', 'info']
+
 export const ObservationTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
   border-color: ${(props) => theme.color.getBorderColor(props.$messageType)};
+
+  /* The cell a row message is about (see getCellMarkProps). An inset outline, so it shows on a
+     striped row and does not shift the layout. A greyed message marks its cell as info. */
+  ${CELL_MARK_TYPES.map(
+    (type) => css`
+      & > td[data-validation-mark='${type}'] {
+        box-shadow: inset 0 0 0 2px ${theme.color.getBorderColor(type)};
+      }
+    `,
+  )}
 `
 
 export const InputAutocompleteContainer = styled.div`

@@ -159,6 +159,56 @@ export const getRequiredColumn = (validatorName = ''): string | undefined =>
     ? validatorName.slice(0, -LIST_REQUIRED_VALIDATOR_SUFFIX.length)
     : undefined
 
+// The name cell of every observation table. The API's required check calls it `attribute`,
+// `fish_attribute` or `invert_attribute` depending on the protocol.
+export const ATTRIBUTE_COLUMN = 'attribute'
+
+// A bleaching row's total. Its cells are every count or percentage in the row, so each of those
+// cells answers to this column as well as its own.
+export const ROW_TOTAL_COLUMN = 'total'
+
+const COLUMN_ALIASES: Record<string, string> = {
+  fish_attribute: ATTRIBUTE_COLUMN,
+  invert_attribute: ATTRIBUTE_COLUMN,
+}
+
+const COLUMNS_BY_ROW_CODE: Record<string, string> = {
+  invalid_fish_count: 'count',
+  invalid_fish_size: 'size',
+  invalid_invert_count: 'count',
+  invalid_score: 'score',
+  invalid_total: ROW_TOTAL_COLUMN,
+  invert_count_high: 'count',
+  invert_size_exceeds_maximum: 'size',
+  max_fish_size: 'size',
+  no_region_match: ATTRIBUTE_COLUMN,
+  not_part_of_fish_family_subset: ATTRIBUTE_COLUMN,
+  not_positive_integer: 'quadrat_number',
+  size_bin_required: 'size',
+}
+
+// Bleaching names the offending cells itself, by observation key (`count_pale`, `percent_hard`).
+const CODES_NAMING_THEIR_CELLS = ['invalid_count', 'invalid_percent_value']
+
+// The observation columns a row message is about, so the table can mark those cells. A message
+// about the whole row, such as duplicate_values, or a code missing here marks no cell.
+export const getMessageColumns = (
+  validation: Pick<Validation, 'code' | 'name' | 'context'>,
+): string[] => {
+  const { code = '', name, context } = validation
+
+  if (code === 'required') {
+    const column = getRequiredColumn(name)
+
+    return column ? [COLUMN_ALIASES[column] ?? column] : []
+  }
+  if (CODES_NAMING_THEIR_CELLS.includes(code)) {
+    return context?.invalid_paths ?? []
+  }
+
+  return COLUMNS_BY_ROW_CODE[code] ? [COLUMNS_BY_ROW_CODE[code]] : []
+}
+
 const getRequiredMessage = (validatorName = '') => {
   const column = getRequiredColumn(validatorName)
   const key = REQUIRED_MESSAGE_KEYS_BY_OBSERVATION_COLUMN[column] ?? 'validation_messages.required'
