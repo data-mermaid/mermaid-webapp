@@ -6,7 +6,7 @@ const GfcrMixin = (Base) =>
   class extends Base {
     getIndicatorSets = async function getIndicatorSets(projectId) {
       if (!projectId) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       if (!this._isOnlineAuthenticatedAndReady) {
