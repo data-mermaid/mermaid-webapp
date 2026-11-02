@@ -28,6 +28,7 @@ describe('getValidationPropertiesForInput', () => {
       validationMessages: [
         {
           status: 'error',
+          isStale: false,
           code: 'required',
           name: 'size_list_required_validator',
           id: 'v1',
@@ -127,10 +128,21 @@ describe('getValidationPropertiesForInput colour', () => {
     )
 
     expect(validationType).toBe('warning')
-    expect(validationMessages?.map(({ isStale }) => isStale)).toEqual([true, undefined])
+    expect(validationMessages?.map(({ isStale }) => isStale)).toEqual([true, false])
   })
 
   test('is info when every message is greyed', () => {
     expect(getValidationPropertiesForInput([staleError], true).validationType).toBe('info')
+  })
+
+  test('never greys an ignored warning, even on an edited field', () => {
+    const editedIgnore = { ...validation('ignore', 'max_depth'), isStale: true }
+    const { validationType, validationMessages } = getValidationPropertiesForInput(
+      [staleError, editedIgnore],
+      true,
+    )
+
+    expect(validationType).toBe('ignore')
+    expect(validationMessages?.[1].isStale).toBe(false)
   })
 })
