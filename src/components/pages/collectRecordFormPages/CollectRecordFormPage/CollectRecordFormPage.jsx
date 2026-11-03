@@ -713,39 +713,41 @@ const CollectRecordFormPage = ({
         isToolbarSticky={true}
         subNavNode={subNavNode}
         content={contentViewByRole}
-        headerTitle={renderCollectRecordTitle()}
         toolbar={
-          <CollectFormToolbarWrapper>
-            <FormStatusIndicators
-              areValidationsShowing={areValidationsShowing}
-              errorCount={validationCounts.errorCount}
-              warningCount={validationCounts.warningCount}
-              ignoredCount={validationCounts.ignoredCount}
-              nextAnnouncement={nextAnnouncement}
-              onNext={goToNextValidation}
-            />
-            <ButtonGroupWithCallout>
-              {!isReadOnlyUser && (
-                <SaveValidateSubmitButtonGroup
-                  isNewRecord={isNewRecord}
-                  saveButtonState={saveButtonState}
-                  validateButtonState={validateButtonState}
-                  submitButtonState={submitButtonState}
-                  onValidate={handleValidate}
-                  onSave={handleSave}
-                  onSubmit={handleSubmit}
-                />
-              )}
-              <ErrorBoxSubmit>
-                <ErrorTextSubmit $isErrorShown={isSubmitWarningVisible}>
-                  {t('sample_units.errors.submit_disabled')}
-                  <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
-                    x
-                  </ErrorTextButton>
-                </ErrorTextSubmit>
-              </ErrorBoxSubmit>
-            </ButtonGroupWithCallout>
-          </CollectFormToolbarWrapper>
+          <>
+            {renderCollectRecordTitle()}
+            <CollectFormToolbarWrapper>
+              <FormStatusIndicators
+                areValidationsShowing={areValidationsShowing}
+                errorCount={validationCounts.errorCount}
+                warningCount={validationCounts.warningCount}
+                ignoredCount={validationCounts.ignoredCount}
+                nextAnnouncement={nextAnnouncement}
+                onNext={goToNextValidation}
+              />
+              <ButtonGroupWithCallout>
+                {!isReadOnlyUser && (
+                  <SaveValidateSubmitButtonGroup
+                    isNewRecord={isNewRecord}
+                    saveButtonState={saveButtonState}
+                    validateButtonState={validateButtonState}
+                    submitButtonState={submitButtonState}
+                    onValidate={handleValidate}
+                    onSave={handleSave}
+                    onSubmit={handleSubmit}
+                  />
+                )}
+                <ErrorBoxSubmit>
+                  <ErrorTextSubmit $isErrorShown={isSubmitWarningVisible}>
+                    {t('sample_units.errors.submit_disabled')}
+                    <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
+                      x
+                    </ErrorTextButton>
+                  </ErrorTextSubmit>
+                </ErrorBoxSubmit>
+              </ButtonGroupWithCallout>
+            </CollectFormToolbarWrapper>
+          </>
         }
       />
 

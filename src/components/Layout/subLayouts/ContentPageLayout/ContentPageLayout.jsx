@@ -66,27 +66,12 @@ const ContentPageToolbarWrapper = styled('div')`
   `)}
 `
 
-const ProjectHeaderRow = styled('div')`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: ${theme.color.white};
-`
-
-const HeaderTitleSlot = styled('div')`
-  padding: ${theme.spacing.medium};
-  h2 {
-    margin: 0;
-  }
-`
-
 const ContentPageLayout = ({
   content,
   toolbar = undefined,
   isPageContentLoading = false,
   isToolbarSticky = false,
   subNavNode = null,
-  headerTitle = null,
 }) => {
   const { isSyncInProgress } = useSyncStatus()
 
@@ -94,14 +79,7 @@ const ContentPageLayout = ({
     <>
       <ErrorBoundary>
         <MainContentPageLayout>
-          {headerTitle ? (
-            <ProjectHeaderRow>
-              <ProjectName />
-              <HeaderTitleSlot>{headerTitle}</HeaderTitleSlot>
-            </ProjectHeaderRow>
-          ) : (
-            <ProjectName />
-          )}
+          <ProjectName />
           <ErrorBoundary>
             <NavAndContentLayout>
               <ErrorBoundary>
@@ -141,7 +119,6 @@ ContentPageLayout.propTypes = {
   toolbar: PropTypes.node,
   isToolbarSticky: PropTypes.bool,
   subNavNode: subNavNodePropTypes,
-  headerTitle: PropTypes.node,
 }
 
 export default ContentPageLayout
