@@ -1,57 +1,33 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
-// Which fields and rows have their collapsed validation messages open. Two things open one: the
-// diver, one at a time, and the Next button, which opens what it lands on and closes it when it
-// moves on. A field or row the diver opened stays open when Next moves.
+// Which field or row has its collapsed validation messages open. Only one is open at a time
+// across the form, so opening one closes the last, whether the diver clicked Show or the Next
+// button opened what it landed on. Keys name a field (`field:<validationPath>`) or an
+// observation row (`row:<observationId>`).
 export interface ValidationDisclosureStore {
-  isOpen: (key: string) => boolean
+  openKey: string | null
   open: (key: string) => void
+  close: () => void
   toggle: (key: string) => void
-  openForNext: (key: string | null) => void
 }
 
 export const fieldDisclosureKey = (validationPath: string) => `field:${validationPath}`
 export const rowDisclosureKey = (observationId: string) => `row:${observationId}`
-
-interface OpenKeys {
-  byHand: string | null
-  byNext: string | null
-}
 
 const ValidationDisclosureContext = createContext<ValidationDisclosureStore | null>(null)
 
 // Owned by the page rather than by the provider, so the page's own hooks (such as the one
 // behind the Next button) can open and close the same field or row the user toggles.
 export const useValidationDisclosureStore = (): ValidationDisclosureStore => {
-  const [openKeys, setOpenKeys] = useState<OpenKeys>({ byHand: null, byNext: null })
-
-  const isOpen = useCallback(
-    (key: string) => key === openKeys.byHand || key === openKeys.byNext,
-    [openKeys],
-  )
-  // Returning the current keys when nothing changes lets React skip the render.
-  const open = useCallback(
-    (key: string) =>
-      setOpenKeys((current) => (current.byHand === key ? current : { ...current, byHand: key })),
-    [],
-  )
-  const openForNext = useCallback(
-    (key: string | null) =>
-      setOpenKeys((current) => (current.byNext === key ? current : { ...current, byNext: key })),
-    [],
-  )
-  // Hide closes the group whichever way it was opened.
+  const [openKey, setOpenKey] = useState<string | null>(null)
+  const open = useCallback((key: string) => setOpenKey(key), [])
+  const close = useCallback(() => setOpenKey(null), [])
   const toggle = useCallback(
-    (key: string) =>
-      setOpenKeys(({ byHand, byNext }) =>
-        key === byHand || key === byNext
-          ? { byHand: byHand === key ? null : byHand, byNext: byNext === key ? null : byNext }
-          : { byHand: key, byNext },
-      ),
+    (key: string) => setOpenKey((current) => (current === key ? null : key)),
     [],
   )
 
-  return useMemo(() => ({ isOpen, open, toggle, openForNext }), [isOpen, open, toggle, openForNext])
+  return useMemo(() => ({ openKey, open, close, toggle }), [openKey, open, close, toggle])
 }
 
 export const ValidationDisclosureProvider = ({
@@ -76,7 +52,7 @@ export const useValidationDisclosure = (key: string | undefined) => {
 
   return {
     canCollapse: true,
-    isOpen: store.isOpen(key),
+    isOpen: store.openKey === key,
     open: () => store.open(key),
     toggle: () => store.toggle(key),
   }

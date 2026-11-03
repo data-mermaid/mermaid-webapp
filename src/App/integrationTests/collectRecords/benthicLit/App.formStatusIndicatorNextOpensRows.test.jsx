@@ -37,7 +37,7 @@ const validations = {
 const getRow = (observationId) =>
   within(document.querySelector(`[data-observation-id="${observationId}"]`))
 
-test('Next opens the row it lands on and closes it when it moves, leaving a row opened by hand open', async () => {
+test('Next opens the row it lands on and closes it when it moves, including a row opened by hand', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   vi.spyOn(window.HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {})
@@ -72,15 +72,16 @@ test('Next opens the row it lands on and closes it when it moves, leaving a row 
 
   await user.click(getRow('3').getByRole('button', { name: SHOW }))
 
-  // jsdom has no layout, so Next keeps the rows in table order.
+  // jsdom has no layout, so Next keeps the rows in table order. Only one row is open at a time,
+  // so the row opened by hand closes when Next opens the first.
   await user.click(nextButton)
 
   expect(getRow('1').getByRole('button', { name: HIDE })).toBeInTheDocument()
-  expect(getRow('3').getByRole('button', { name: HIDE })).toBeInTheDocument()
+  expect(getRow('3').getByRole('button', { name: SHOW })).toBeInTheDocument()
 
   await user.click(nextButton)
 
   expect(getRow('1').getByRole('button', { name: SHOW })).toBeInTheDocument()
   expect(getRow('2').getByRole('button', { name: HIDE })).toBeInTheDocument()
-  expect(getRow('3').getByRole('button', { name: HIDE })).toBeInTheDocument()
+  expect(getRow('3').getByRole('button', { name: SHOW })).toBeInTheDocument()
 }, 50000)

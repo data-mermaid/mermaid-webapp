@@ -60,7 +60,7 @@ const useCollectRecordValidation = ({
   const [nextAnnouncement, setNextAnnouncement] = useState('')
 
   const selectedElementRef = useRef(null)
-  const { openForNext } = disclosureStore
+  const { open: openDisclosure, close: closeDisclosure } = disclosureStore
 
   const clearSelection = useCallback(() => {
     selectedElementRef.current?.removeAttribute(SELECTED_ATTRIBUTE)
@@ -78,9 +78,9 @@ const useCollectRecordValidation = ({
   useEffect(
     function clearNextStop() {
       clearSelection()
-      openForNext(null)
+      closeDisclosure()
     },
-    [areValidationsShowing, recordId, clearSelection, openForNext],
+    [areValidationsShowing, recordId, clearSelection, closeDisclosure],
   )
 
   const getValidationButtonStatus = useCallback((collectRecord) => {
@@ -140,7 +140,7 @@ const useCollectRecordValidation = ({
     setAreValidationsShowing(true)
     resetNextCursors()
     clearSelection()
-    openForNext(null)
+    closeDisclosure()
     handleCollectRecordChange(validatedRecord)
     setValidateButtonState(getValidationButtonStatus(validatedRecord))
     setIsSubmitWarningVisible(getIsErrorOrWarning(validatedRecord))
@@ -333,8 +333,11 @@ const useCollectRecordValidation = ({
 
     const { element, target } = resolved[cursor]
 
-    // Committed before scrolling, so the scroll measures the field or row open.
-    flushSync(() => openForNext(target.disclosureKey ?? null))
+    // Committed before scrolling, so the scroll measures the field or row open. A record-level
+    // message has nothing to open, so landing on one closes whatever was open.
+    flushSync(() =>
+      target.disclosureKey ? openDisclosure(target.disclosureKey) : closeDisclosure(),
+    )
     element.scrollIntoView({
       behavior: prefersReducedMotion() ? 'auto' : 'smooth',
       block: 'center',

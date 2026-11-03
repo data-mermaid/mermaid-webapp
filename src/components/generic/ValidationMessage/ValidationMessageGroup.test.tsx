@@ -161,38 +161,39 @@ describe('ValidationMessageGroup', () => {
 
       return {
         user,
-        openForNext: (key: string | null) => act(() => exposedStore?.openForNext(key)),
+        open: (key: string) => act(() => exposedStore?.open(key)),
+        close: () => act(() => exposedStore?.close()),
       }
     }
 
     test('opens the group Next lands on, and closes it when Next moves', () => {
-      const { openForNext } = renderWithStore()
+      const { open, close } = renderWithStore()
 
-      openForNext('row:1')
+      open('row:1')
       expect(getGroup('row:1').getByRole('button', { name: HIDE })).toBeInTheDocument()
 
-      openForNext('field:a')
+      open('field:a')
       expect(getGroup('field:a').getByRole('button', { name: HIDE })).toBeInTheDocument()
       expect(getGroup('row:1').getByRole('button', { name: SHOW })).toBeInTheDocument()
 
-      openForNext(null)
+      close()
       expect(getGroup('field:a').getByRole('button', { name: SHOW })).toBeInTheDocument()
     })
 
-    test('leaves a group the diver opened open when Next moves', async () => {
-      const { user, openForNext } = renderWithStore()
+    test('closes a group the diver opened when Next opens another', async () => {
+      const { user, open } = renderWithStore()
 
       await user.click(getGroup('field:a').getByRole('button', { name: SHOW }))
-      openForNext('row:1')
-      openForNext(null)
+      open('row:1')
 
-      expect(getGroup('field:a').getByRole('button', { name: HIDE })).toBeInTheDocument()
+      expect(getGroup('field:a').getByRole('button', { name: SHOW })).toBeInTheDocument()
+      expect(getGroup('row:1').getByRole('button', { name: HIDE })).toBeInTheDocument()
     })
 
     test('Hide closes a group Next opened', async () => {
-      const { user, openForNext } = renderWithStore()
+      const { user, open } = renderWithStore()
 
-      openForNext('row:1')
+      open('row:1')
       await user.click(getGroup('row:1').getByRole('button', { name: HIDE }))
 
       expect(getGroup('row:1').getByRole('button', { name: SHOW })).toBeInTheDocument()
