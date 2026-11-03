@@ -40,10 +40,11 @@ jobs:
           always_pull_base: true
           skip_include_tags: true
           override_branch_name: chore/lokalise-translations
-          # Replace the branch history with a single fresh commit on every run
-          # instead of appending. Nobody edits this branch (all corrections are
-          # made back in Lokalise), so the PR should mirror Lokalise's current
-          # export rather than accumulate weekly commits. Keeps the same PR/thread.
+          # Lets a run overwrite the remote branch. The action reuses the branch
+          # if it exists and commits on top of it; it never rebuilds it from
+          # develop. To rebase it, delete the branch and rerun (see
+          # docs/TranslationSyncWorkflow.md, Troubleshooting). Nobody edits this
+          # branch: all corrections are made back in Lokalise.
           force_push: true
           override_base_branch: develop
           git_commit_message: "chore(i18n): pull latest translations from Lokalise"
