@@ -407,14 +407,24 @@ describe('getValidationSummary with the invalid transect fields message', () => 
     expect(targets.error).toEqual([fieldTarget('data.sample_event.site')])
   })
 
-  test('treats a greyed message as a mark', () => {
+  test('is counted again once its only mark is greyed by an edit', () => {
     const { counts, targets } = getValidationSummary({
       $record: [invalidTransect],
       data: { fishbelt_transect: { depth: [{ status: 'error', isStale: true }] } },
     })
 
-    expect(counts.error).toBe(0)
-    expect(targets.error).toEqual([])
+    expect(counts.error).toBe(1)
+    expect(targets.error).toEqual([recordTarget('transect')])
+  })
+
+  test('is not explained by a warning on one of its fields', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [invalidTransect],
+      data: { sample_event: { site: [{ status: 'warning' }] } },
+    })
+
+    expect(counts).toEqual({ error: 1, warning: 1, ignore: 0 })
+    expect(targets.error).toEqual([recordTarget('transect')])
   })
 
   test('is counted and targeted when none of its fields shows a message', () => {
@@ -461,7 +471,7 @@ describe('getValidationSummary with the dry submit summary', () => {
     ])
   })
 
-  test('treats a greyed or ignored message as a mark', () => {
+  test('is counted again when a field it names shows only a greyed or ignored message', () => {
     const { counts, targets } = getValidationSummary({
       $record: [drySubmit('site', 'depth')],
       data: {
@@ -470,8 +480,8 @@ describe('getValidationSummary with the dry submit summary', () => {
       },
     })
 
-    expect(counts).toEqual({ error: 0, warning: 0, ignore: 1 })
-    expect(targets.error).toEqual([])
+    expect(counts).toEqual({ error: 1, warning: 0, ignore: 1 })
+    expect(targets.error).toEqual([recordTarget('summary')])
   })
 
   test('matches an observation column a row marks, by the column key the table uses', () => {

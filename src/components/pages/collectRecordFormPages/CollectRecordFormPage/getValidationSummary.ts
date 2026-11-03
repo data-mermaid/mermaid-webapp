@@ -34,7 +34,9 @@ import getDuplicateValuesObservationIds, {
  * since the last Validate) is shown but is neither counted nor a target.
  *
  * Some record-level messages repeat what the form marks elsewhere. Each is counted and is a
- * target only when nothing else on the page shows it. A greyed or ignored message is still a mark.
+ * target only when nothing else on the page shows it as a live error. A warning, an ignore or a
+ * greyed message is not a mark: these summaries are errors, and none of those explains one, so
+ * the summary counts again until the next Validate replaces it.
  *
  *   - duplicate_values is also shown on every row it names, and counts once per row on the page.
  *   - The "One or more invalid fields" message (invalid_fishbelt_transect and its siblings) means
@@ -93,9 +95,9 @@ type ObservationIdsOnPage = ReadonlySet<string> | null
 
 /**
  * What the fields and rows on the page show, for the record-level messages that repeat them:
- *   - fieldPaths: each field that shows a message, by validation path
- *   - names: each field that shows a message, by input id, and each observation column a row
- *     message marks. The dry submit names both kinds the same way.
+ *   - fieldPaths: each field that shows a live error, by validation path
+ *   - names: each field that shows a live error, by input id, and each observation column a
+ *     live row error marks. The dry submit names both kinds the same way.
  *   - duplicatesOnRows: the duplicate_values validations shown on at least one row
  */
 interface PageMarks {
@@ -122,6 +124,9 @@ const getStatus = (validation?: Validation): CountableStatus | undefined => {
 
   return status === 'error' || status === 'warning' || status === 'ignore' ? status : undefined
 }
+
+const isLiveError = (validation: Validation) =>
+  validation.status === 'error' && !isGreyed(validation)
 
 // ---- Emit helpers -----------------------------------------------------------
 
@@ -197,7 +202,7 @@ const walkFieldSubtree = (
       disclosureKey: fieldDisclosureKey(path),
     })
 
-    if (displayedValidations.length) {
+    if (displayedValidations.some(isLiveError)) {
       marks.fieldPaths.add(path)
       marks.names.add(inputId)
     }
@@ -339,7 +344,7 @@ const getValidationSummary = (
     for (const validation of displayedValidations) {
       if (isDuplicateValuesValidation(validation)) {
         marks.duplicatesOnRows.add(validation)
-      } else {
+      } else if (isLiveError(validation)) {
         getMessageColumns(validation).forEach((column) => marks.names.add(column))
       }
     }
