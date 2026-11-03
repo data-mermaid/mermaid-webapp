@@ -1282,8 +1282,10 @@
   },
   "validations": {
     "edited_revalidate": "Edited. Save and validate again to recheck.",
+    "hide": "Hide",
     "ignored": "Ignored",
     "passed": "Passed validation",
+    "show": "Show",
     "validations": "Validations"
   },
   "view_fish_info": "View fish name information",

@@ -1,13 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 
 import { TableValidationList } from './CollectingFormPage.Styles'
 import ValidationMessage, { EditedNote } from '../../generic/ValidationMessage/ValidationMessage'
+import ValidationMessageGroup from '../../generic/ValidationMessage/ValidationMessageGroup'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 import { getValidationMessage } from '../../../library/validationMessageHelpers'
 import { isDuplicateValuesValidation } from './CollectRecordFormPage/getDuplicateValuesObservationIds'
 import { Td } from '../../generic/Table/table'
+
+// Wide enough for a pill, a short message and its Ignore box on one line, so a table with many
+// input columns does not squeeze each word of a message onto its own line.
+const ValidationsTd = styled(Td)`
+  min-width: 36rem;
+`
 
 const ObservationValidationInfo = ({
   ignoreObservationValidations,
@@ -45,29 +53,34 @@ const ObservationValidationInfo = ({
   }
 
   return (
-    <Td>
+    <ValidationsTd>
       {isObservationValid ? (
         <span aria-label={t('validations.passed')} data-testid="passed-validation-indicator">
           &nbsp;
         </span>
       ) : null}
       {observationValidationMessages.length ? (
-        <TableValidationList>
-          {observationValidationMessages.map((message) => (
-            <li className={`${message.status}-indicator`} key={message.id}>
-              <ValidationMessage
-                status={message.status}
-                isStale={message.isStale}
-                action={getIgnoreCheckbox(message)}
-              >
-                {getValidationMessage(message)}
-              </ValidationMessage>
-            </li>
-          ))}
-        </TableValidationList>
+        <ValidationMessageGroup
+          disclosureKey={`row:${observationId}`}
+          messages={observationValidationMessages}
+        >
+          <TableValidationList>
+            {observationValidationMessages.map((message) => (
+              <li className={`${message.status}-indicator`} key={message.id}>
+                <ValidationMessage
+                  status={message.status}
+                  isStale={message.isStale}
+                  action={getIgnoreCheckbox(message)}
+                >
+                  {getValidationMessage(message)}
+                </ValidationMessage>
+              </li>
+            ))}
+          </TableValidationList>
+        </ValidationMessageGroup>
       ) : null}
       {isEdited ? <EditedNote>{t('validations.edited_revalidate')}</EditedNote> : null}
-    </Td>
+    </ValidationsTd>
   )
 }
 

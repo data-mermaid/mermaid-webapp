@@ -19,7 +19,9 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
@@ -107,13 +109,17 @@ const PercentCoverObservationTable = ({
         quadrat_number,
       } = observation
 
-      const { isObservationValid, observationValidationMessages, observationValidationType } =
-        getObservationValidationInfo({
-          observationId,
-          collectRecord,
-          areValidationsShowing,
-          observationsPropertyName: getObservationsPropertyNames(collectRecord)[1],
-        })
+      const {
+        cellMarks,
+        isObservationValid,
+        observationValidationMessages,
+        observationValidationType,
+      } = getObservationValidationInfo({
+        observationId,
+        collectRecord,
+        areValidationsShowing,
+        observationsPropertyName: getObservationsPropertyNames(collectRecord)[1],
+      })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -152,9 +158,11 @@ const PercentCoverObservationTable = ({
           $messageType={observationValidationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="center">{quadrat_number}</Td>
+          <Td {...getCellMarkProps(cellMarks, 'quadrat_number')} $align="center">
+            {quadrat_number}
+          </Td>
 
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'percent_hard', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="hard-coral-percent-cover-label"
               value={percent_hard}
@@ -169,7 +177,7 @@ const PercentCoverObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'percent_soft', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="soft-coral-percent-cover-label"
               value={percent_soft}
@@ -182,7 +190,7 @@ const PercentCoverObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'percent_algae', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="microalgae-percent-cover-label"
               value={percent_algae}

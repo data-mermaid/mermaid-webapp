@@ -27,7 +27,9 @@ import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import { HelperTextLink } from '../../../generic/links'
 
@@ -170,13 +172,17 @@ const BenthicPhotoQuadratObservationTable = ({
       const growthFormOrEmptyStringToAvoidInputValueErrors = growth_form ?? ''
       const numberOfPointsOrEmptyStringToAvoidInputValueErrors = num_points ?? ''
 
-      const { isObservationValid, observationValidationMessages, observationValidationType } =
-        getObservationValidationInfo({
-          observationId,
-          collectRecord,
-          areValidationsShowing,
-          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-        })
+      const {
+        cellMarks,
+        isObservationValid,
+        observationValidationMessages,
+        observationValidationType,
+      } = getObservationValidationInfo({
+        observationId,
+        collectRecord,
+        areValidationsShowing,
+        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+      })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -256,7 +262,7 @@ const BenthicPhotoQuadratObservationTable = ({
           $messageType={observationValidationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'quadrat_number')} $align="right">
             <InputNumberNumericCharactersOnly
               type="number"
               // eslint-disable-next-line jsx-a11y/no-autofocus
@@ -269,7 +275,7 @@ const BenthicPhotoQuadratObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -304,7 +310,7 @@ const BenthicPhotoQuadratObservationTable = ({
               ))}
             </Select>
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'num_points')} $align="right">
             <InputNumberNumericCharactersOnly
               value={numberOfPointsOrEmptyStringToAvoidInputValueErrors}
               step="any"

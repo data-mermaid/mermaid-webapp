@@ -26,7 +26,9 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
@@ -129,13 +131,17 @@ const ColoniesBleachedObservationTable = ({
         growth_form = '',
       } = observation
 
-      const { isObservationValid, observationValidationMessages, observationValidationType } =
-        getObservationValidationInfo({
-          observationId,
-          collectRecord,
-          areValidationsShowing,
-          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-        })
+      const {
+        cellMarks,
+        isObservationValid,
+        observationValidationMessages,
+        observationValidationType,
+      } = getObservationValidationInfo({
+        observationId,
+        collectRecord,
+        areValidationsShowing,
+        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+      })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -211,7 +217,7 @@ const ColoniesBleachedObservationTable = ({
         >
           <Td $align="center">{rowNumber}</Td>
 
-          <Td $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {benthicAttributeSelectOptions?.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -253,7 +259,7 @@ const ColoniesBleachedObservationTable = ({
               ))}
             </Select>
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_normal', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="normal-label"
               value={count_normal}
@@ -266,7 +272,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_pale', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="pale-label"
               value={count_pale}
@@ -279,7 +285,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_20', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="20-bleached-label"
               value={count_20}
@@ -292,7 +298,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_50', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="50-bleached-label"
               value={count_50}
@@ -305,7 +311,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_80', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="80-bleached-label"
               value={count_80}
@@ -318,7 +324,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_100', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="100-bleached-label"
               value={count_100}
@@ -331,7 +337,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_dead', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="recently-dead-label"
               value={count_dead}

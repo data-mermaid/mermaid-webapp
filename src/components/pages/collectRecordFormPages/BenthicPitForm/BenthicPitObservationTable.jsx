@@ -25,7 +25,9 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { HelperTextLink } from '../../../generic/links'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -140,13 +142,17 @@ const BenthicPitObservationsTable = ({
       const rowNumber = index + 1
       const { id: observationId, attribute, growth_form = '', interval } = observation
 
-      const { isObservationValid, observationValidationMessages, observationValidationType } =
-        getObservationValidationInfo({
-          observationId,
-          collectRecord,
-          areValidationsShowing,
-          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-        })
+      const {
+        cellMarks,
+        isObservationValid,
+        observationValidationMessages,
+        observationValidationType,
+      } = getObservationValidationInfo({
+        observationId,
+        collectRecord,
+        areValidationsShowing,
+        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+      })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -201,10 +207,15 @@ const BenthicPitObservationsTable = ({
           $messageType={observationValidationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="right" aria-labelledby="interval-label" data-testid="interval-cell">
+          <Td
+            {...getCellMarkProps(cellMarks, 'interval')}
+            $align="right"
+            aria-labelledby="interval-label"
+            data-testid="interval-cell"
+          >
             {interval}m
           </Td>
-          <Td $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete

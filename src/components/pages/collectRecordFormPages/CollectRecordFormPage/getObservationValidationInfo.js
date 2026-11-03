@@ -1,4 +1,5 @@
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+import { getMessageColumns } from '../../../../library/validationMessageHelpers'
 import getDuplicateValuesObservationIds, {
   isDuplicateValuesValidation,
 } from './getDuplicateValuesObservationIds'
@@ -39,6 +40,40 @@ const getObservationValidations = ({ observationId, collectRecord, observationsP
   return justThisObservationsValidations
 }
 
+const STATUS_SEVERITY = { ignore: 1, warning: 2, error: 3 }
+
+// When two messages are about one cell, the more severe status marks it.
+const isStrongerMark = (mark, current) =>
+  !current || STATUS_SEVERITY[mark.status] > STATUS_SEVERITY[current.status]
+
+// The mark for each observation column a row's messages are about, keyed by column.
+const getCellMarks = (validationMessages) =>
+  validationMessages.reduce((marks, message) => {
+    const mark = { status: message.status, isStale: Boolean(message.isStale) }
+
+    getMessageColumns(message).forEach((column) => {
+      if (isStrongerMark(mark, marks[column])) {
+        marks[column] = mark
+      }
+    })
+
+    return marks
+  }, {})
+
+// Props for an observation cell that answers to one or more columns, such as a bleaching count
+// that is both its own column and part of the row's total.
+export const getCellMarkProps = (cellMarks, ...columns) => {
+  const mark = columns
+    .map((column) => cellMarks[column])
+    .reduce(
+      (strongest, candidate) =>
+        candidate && isStrongerMark(candidate, strongest) ? candidate : strongest,
+      undefined,
+    )
+
+  return mark ? { 'data-validation-mark': mark.isStale ? 'info' : mark.status } : {}
+}
+
 const getObservationValidationInfo = ({
   observationId,
   collectRecord,
@@ -69,6 +104,7 @@ const getObservationValidationInfo = ({
     isObservationValid: observationValidationType === 'ok',
     observationValidationMessages: validationMessages,
     observationValidationType,
+    cellMarks: getCellMarks(validationMessages),
   }
 }
 
