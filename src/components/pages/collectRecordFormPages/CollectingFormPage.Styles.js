@@ -70,19 +70,9 @@ export const StyledOverflowWrapper = styled(TableOverflowWrapper)`
   overflow-y: visible;
 `
 
-// Rows are added and removed here constantly, which is where a page translator's <font> wrappers
-// break React's view of the DOM and crash the commit phase (MERMAID-WEBAPP-N).
-//
-// This has a real cost, chosen deliberately. Column headers are i18next tokens and were never at
-// risk, but these rows also carry text that has no i18next path at all: growth forms and
-// habitat-complexity descriptions come from the API choices payload, and getInvalidBleachingObsMessage
-// interpolates literals such as 'hard coral' and 'pale'. Browser translation is the only thing that
-// ever translated those, for any user in any environment, and this turns it off. The alternative was
-// leaving the crash in place.
-//
-// Scoping to <tbody> was considered and rejected: it recovers nothing, because every <thead> cell is
-// already tokenised and every untranslated string lives in the row body.
-export const StickyObservationTable = styled(GenericStickyTable).attrs({ translate: 'no' })`
+// translate="no" is inherited from GenericStickyTable; see the rationale on it in
+// src/components/generic/Table/table.js.
+export const StickyObservationTable = styled(GenericStickyTable)`
   thead tr:nth-child(1) th {
     position: sticky;
     top: calc(
