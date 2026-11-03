@@ -27,6 +27,7 @@ import { getObservationsPropertyNames } from '../../../../App/mermaidData/record
 import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -244,6 +245,7 @@ const PercentCoverObservationTable = ({
     <>
       <InputWrapper data-testid={testId}>
         <H2 id="percent-cover-label">{t('observations.percent_cover')}</H2>
+        <ObservationsHeadingValidations />
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable

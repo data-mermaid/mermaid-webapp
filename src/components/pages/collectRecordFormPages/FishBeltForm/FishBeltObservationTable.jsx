@@ -49,6 +49,7 @@ import { getFishNameTable } from '../../../../App/mermaidData/fishNameHelpers'
 import { useTranslation, Trans } from 'react-i18next'
 import { HelperTextLink } from '../../../generic/links'
 import { links } from '../../../../link_constants'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -458,6 +459,7 @@ const FishBeltObservationTable = ({
   return (
     <InputWrapper data-testid={testId}>
       <H2 id="table-label">{t('observations.observations')}</H2>
+      <ObservationsHeadingValidations />
       <StyledOverflowWrapper>
         <StickyObservationTable
           data-testid="fish-observations-table"

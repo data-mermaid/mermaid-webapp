@@ -34,6 +34,7 @@ import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 import { HelperTextLink } from '../../../generic/links'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -300,6 +301,7 @@ const BenthicLitObservationsTable = ({
     <>
       <InputWrapper data-testid={testId}>
         <H2 id="observations-label">{t('observations.observations')}</H2>
+        <ObservationsHeadingValidations />
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable aria-labelledby="observations-label">

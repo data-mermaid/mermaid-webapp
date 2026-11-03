@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import PropTypes from 'prop-types'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -44,6 +44,8 @@ import ObserversInput from '../ObserversInput'
 import PageUnavailable from '../../PageUnavailable'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo'
+import { ObservationsHeadingValidationsContext } from '../ObservationsHeadingValidations'
+import splitRecordLevelValidations from '../splitRecordLevelValidations'
 import SampleEventInputs from '../SampleEventInputs'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCollectRecordValidation from './useCollectRecordValidation'
@@ -160,6 +162,11 @@ const CollectRecordFormPage = ({
     submitButtonState === buttonGroupStates.submitting
   const isLoading = isParentDataLoading || isCommonProtocolDataLoading
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+  const observationTableNames = getObservationsPropertyNames(collectRecordBeingEdited)
+  const splitValidations = splitRecordLevelValidations(
+    recordLevelValidations,
+    observationTableNames,
+  )
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
   const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
 
@@ -173,7 +180,6 @@ const CollectRecordFormPage = ({
   const location = useLocation()
   const isMounted = useIsMounted()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
-  const observationTableRef = useRef(null)
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new record is saved (and that triggers a navigation to its new page)
   const isBenthicPQTNewRecordWithImageClassificationEnabled =
     isImageClassificationEnabledForUser && isNewRecord && sampleUnitName === 'benthicpqt'
@@ -385,7 +391,6 @@ const CollectRecordFormPage = ({
     : tableStateObservationIds
 
   const {
-    handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,
     ignoreObservationValidations,
@@ -405,7 +410,6 @@ const CollectRecordFormPage = ({
     handleCollectRecordChange,
     isParentDataLoading,
     observationIdsOnPage,
-    observationTableRef,
     projectId,
     recordId,
     setAreValidationsShowing,
@@ -557,14 +561,20 @@ const CollectRecordFormPage = ({
     </ErrorBox>
   )
 
+  const getObservationsHeadingValidations = (tableName) => ({
+    validations: splitValidations.byTable[tableName] ?? [],
+    areValidationsShowing,
+    ignoreRecordLevelValidation,
+    unignoreRecordLevelValidation,
+  })
+
   const contentViewByRole = !isReadOnlyUser ? (
     <>
       <RecordLevelInputValidationInfo
-        validations={recordLevelValidations}
+        validations={splitValidations.top}
         areValidationsShowing={areValidationsShowing}
         unignoreRecordLevelValidation={unignoreRecordLevelValidation}
         ignoreRecordLevelValidation={ignoreRecordLevelValidation}
-        handleScrollToObservation={handleScrollToObservation}
       />
       <form
         id="collect-record-form"
@@ -609,9 +619,8 @@ const CollectRecordFormPage = ({
             validationsApiData={validationsApiData}
           />
         )}
-        <div
-          ref={observationTableRef}
-          data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[0]}
+        <ObservationsHeadingValidationsContext
+          value={getObservationsHeadingValidations(observationTableNames[0])}
         >
           <ObservationTable1
             {...observationTable1Props}
@@ -629,9 +638,11 @@ const CollectRecordFormPage = ({
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
           />
-        </div>
+        </ObservationsHeadingValidationsContext>
         {ObservationTable2 ? (
-          <div data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[1]}>
+          <ObservationsHeadingValidationsContext
+            value={getObservationsHeadingValidations(observationTableNames[1])}
+          >
             <ObservationTable2
               testId="observations2-section"
               areValidationsShowing={areValidationsShowing}
@@ -648,7 +659,7 @@ const CollectRecordFormPage = ({
                 setObservationIdToAddNewBenthicAttributeTo
               }
             />
-          </div>
+          </ObservationsHeadingValidationsContext>
         ) : null}
       </form>
       {!isBenthicPQTNewRecordWithImageClassificationEnabled && (

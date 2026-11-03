@@ -34,6 +34,7 @@ import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 import { HelperTextLink } from '../../../generic/links'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const WORMS_LINK = 'https://www.marinespecies.org/'
 
@@ -397,6 +398,7 @@ const ColoniesBleachedObservationTable = ({
     <>
       <InputWrapper data-testid={testId}>
         <H2 id="colonies-bleached-label">{t('observations.colonies_bleached')}</H2>
+        <ObservationsHeadingValidations />
         <>
           <StyledOverflowWrapper>
             <StickyObservationTableWrapTh
