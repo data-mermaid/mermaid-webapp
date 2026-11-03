@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { styled, css } from 'styled-components'
 import { subNavNodePropTypes } from '../../../SubNavMenuRecordName/subNavNodePropTypes'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -15,6 +15,11 @@ import ProjectName from '../../../ProjectName'
 import ErrorBoundary from '../../../ErrorBoundary'
 
 const contentPadding = theme.spacing.xsmall
+
+// The toolbar's rendered height, in px, set on the content wrapper so anything sticky below the
+// toolbar can sit under it. The height varies: a collect record's toolbar holds the title and
+// the status indicator chips, which come and go.
+export const CONTENT_TOOLBAR_HEIGHT_VAR = '--content-toolbar-height'
 const MainContentPageLayout = styled('div')`
   display: grid;
   grid-template-rows: auto 1fr;
@@ -74,6 +79,36 @@ const ContentPageLayout = ({
   subNavNode = null,
 }) => {
   const { isSyncInProgress } = useSyncStatus()
+  const toolbarRef = useRef(null)
+  const isToolbarRendered = Boolean(toolbar) && !isPageContentLoading && !isSyncInProgress
+
+  useEffect(
+    function publishToolbarHeight() {
+      const toolbarElement = toolbarRef.current
+
+      if (!isToolbarRendered || !toolbarElement) {
+        return undefined
+      }
+
+      const wrapper = toolbarElement.parentElement
+      const publish = () =>
+        wrapper.style.setProperty(CONTENT_TOOLBAR_HEIGHT_VAR, `${toolbarElement.offsetHeight}px`)
+
+      publish()
+
+      // jsdom has no ResizeObserver; the first measurement is enough there.
+      if (typeof ResizeObserver === 'undefined') {
+        return undefined
+      }
+
+      const observer = new ResizeObserver(publish)
+
+      observer.observe(toolbarElement)
+
+      return () => observer.disconnect()
+    },
+    [isToolbarRendered],
+  )
 
   return (
     <>
@@ -94,7 +129,7 @@ const ContentPageLayout = ({
                   ) : (
                     <>
                       {toolbar && (
-                        <ContentToolbar $isToolbarSticky={isToolbarSticky}>
+                        <ContentToolbar ref={toolbarRef} $isToolbarSticky={isToolbarSticky}>
                           {toolbar}
                         </ContentToolbar>
                       )}
