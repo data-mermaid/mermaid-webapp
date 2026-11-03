@@ -139,7 +139,7 @@ Translations of this highly depends on the context, as 'Add' can be synonymous w
 
 # Changing an Existing Token
 
-Adding, renaming and removing tokens in code is normal. **Rewording an existing token in code is not.** Lokalise owns the English text of tokens that already exist, and the weekly pull overwrites `src/locales/en/translation.json` with its export, so an edit made in code is reverted rather than shipped. The `Guard English Translation Source` PR check enforces this.
+Adding and renaming tokens in code is normal, and removing one starts in code (see [Removing a Token](#removing-a-token)). **Rewording an existing token in code is not.** Lokalise owns the English text of tokens that already exist, and the weekly pull overwrites `src/locales/en/translation.json` with its export, so an edit made in code is reverted rather than shipped. The `Guard English Translation Source` PR check enforces this.
 
 - **Rewording, typo or punctuation fix** - make it in Lokalise, not in code.
 - **Changing `{{interpolation}}` or inline markup** - add a **new** token and point the code at it. Editing the existing token leaves the app rendering a string whose placeholders no longer match what the code passes, as soon as Lokalise reasserts the old value.
@@ -154,7 +154,7 @@ Adding, renaming and removing tokens in code is normal. **Rewording an existing 
 }
 ```
 
-**Add a new one** and leave the old token for removal in Lokalise:
+**Add a new one** and point the code at it. Once nothing references the old token, remove it from `en` and delete it in Lokalise after the merge:
 
 ```json
 {
@@ -166,6 +166,10 @@ Adding, renaming and removing tokens in code is normal. **Rewording an existing 
 ```
 
 See [TranslationSyncWorkflow.md](./TranslationSyncWorkflow.md#changing-the-english-text-of-an-existing-token) for the full rules.
+
+# Removing a Token
+
+A token exists in code and in Lokalise, and the sync never deletes it from either. Delete it from `src/locales/en/translation.json` in the PR that stops using it, then delete it in Lokalise after the merge. Deleting in one place only does not stick: the push re-creates any key that is still in `en`, and the pull re-adds any key that is still in Lokalise. See [TranslationSyncWorkflow.md](./TranslationSyncWorkflow.md#removing-a-token).
 
 # Namespaces
 
