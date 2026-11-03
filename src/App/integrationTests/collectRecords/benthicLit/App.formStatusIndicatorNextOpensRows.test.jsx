@@ -37,12 +37,15 @@ const validations = {
 const getRow = (observationId) =>
   within(document.querySelector(`[data-observation-id="${observationId}"]`))
 
-test('Next opens the row it lands on and closes it when it moves, including a row opened by hand', async () => {
+const openRecordWithStoredValidations = async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   vi.spyOn(window.HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {})
 
   mockMermaidApiAllSuccessful.use(
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () =>
+      HttpResponse.json({}, { status: 200 }),
+    ),
     http.post(`${apiBaseUrl}/pull/`, () =>
       HttpResponse.json({
         benthic_attributes: { updates: mockMermaidData.benthic_attributes },
@@ -70,6 +73,12 @@ test('Next opens the row it lands on and closes it when it moves, including a ro
     await screen.findByTestId('form-status-chip-warning', {}, { timeout: 10000 }),
   ).getByRole('button')
 
+  return { user, nextButton }
+}
+
+test('Next opens the row it lands on and closes it when it moves, including a row opened by hand', async () => {
+  const { user, nextButton } = await openRecordWithStoredValidations()
+
   await user.click(getRow('3').getByRole('button', { name: SHOW }))
 
   // jsdom has no layout, so Next keeps the rows in table order. Only one row is open at a time,
@@ -84,4 +93,22 @@ test('Next opens the row it lands on and closes it when it moves, including a ro
   expect(getRow('1').getByRole('button', { name: SHOW })).toBeInTheDocument()
   expect(getRow('2').getByRole('button', { name: HIDE })).toBeInTheDocument()
   expect(getRow('3').getByRole('button', { name: SHOW })).toBeInTheDocument()
+}, 50000)
+
+test('Save closes the row Next opened, so the next Validate starts with every row closed', async () => {
+  const { user, nextButton } = await openRecordWithStoredValidations()
+
+  await user.click(nextButton)
+  expect(getRow('1').getByRole('button', { name: HIDE })).toBeInTheDocument()
+
+  await user.type(within(screen.getByTestId('label')).getByRole('textbox'), ' edited')
+  await user.click(screen.getByTestId('save-button'))
+  await screen.findByTestId('saved-button')
+
+  // Saving hides the findings, and a Validate shows them again from the pull above.
+  await user.click(screen.getByTestId('validate-button'))
+  await screen.findByTestId('form-status-chip-warning', {}, { timeout: 10000 })
+
+  expect(getRow('1').getByRole('button', { name: SHOW })).toBeInTheDocument()
+  expect(document.querySelector('[data-validation-selected]')).toBeNull()
 }, 50000)

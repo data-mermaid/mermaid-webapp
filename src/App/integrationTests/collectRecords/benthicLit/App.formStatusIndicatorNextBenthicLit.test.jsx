@@ -142,3 +142,16 @@ test('The selection stays until Next selects another message', async () => {
   expect(depthRow).not.toHaveAttribute('data-validation-selected')
   expect(sampleTimeRow).toHaveAttribute('data-validation-selected', 'warning')
 }, 50000)
+
+test('Save clears the selection, since it hides every finding', async () => {
+  const { depthRow, user } = await validateThenClickNext()
+
+  expect(depthRow).toHaveAttribute('data-validation-selected', 'error')
+
+  await user.type(within(screen.getByTestId('label')).getByRole('textbox'), ' edited')
+  await user.click(screen.getByTestId('save-button'))
+  await screen.findByTestId('saved-button')
+
+  expect(depthRow).not.toHaveAttribute('data-validation-selected')
+  expect(document.querySelector('[data-validation-selected]')).toBeNull()
+}, 50000)
