@@ -999,7 +999,6 @@
     "sample_time": "Temps d'échantillonnage",
     "sample_time_info": "Date et heure de la collecte des données.",
     "sample_unit_number": "Unité d'échantillon n°",
-    "scroll_to_observations": "Défilez jusqu'aux observations",
     "size": "Taille",
     "status": "Statut",
     "submitted": "Soumis",
@@ -1281,8 +1280,10 @@
     "zero_or_greater": "La valeur doit être nulle ou supérieure à"
   },
   "validations": {
-    "ignored": "Ignoré",
+    "edited_revalidate": "Modifié. Enregistrez et validez à nouveau pour revérifier.",
+    "hide": "Cacher",
     "passed": "Validation réussie",
+    "show": "Montrer",
     "validations": "Validations"
   },
   "view_fish_info": "Voir les informations sur le nom du poisson",

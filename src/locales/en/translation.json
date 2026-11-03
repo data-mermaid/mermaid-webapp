@@ -999,7 +999,6 @@
     "sample_time": "Sample time",
     "sample_time_info": "Time when data was collected.",
     "sample_unit_number": "Sample unit #",
-    "scroll_to_observations": "Scroll to observations",
     "size": "Size",
     "status": "Status",
     "submitted": "Submitted",
@@ -1283,7 +1282,6 @@
   "validations": {
     "edited_revalidate": "Edited. Save and validate again to recheck.",
     "hide": "Hide",
-    "ignored": "Ignored",
     "passed": "Passed validation",
     "show": "Show",
     "validations": "Validations"

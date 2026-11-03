@@ -999,7 +999,6 @@
     "sample_time": "Oras ng Sample",
     "sample_time_info": "Panahon kung kailan nakolekta ang datos.",
     "sample_unit_number": "Sample unit #",
-    "scroll_to_observations": "Mag-scroll papunta sa mga obserbasyon",
     "size": "Sukat",
     "status": "Katayuan",
     "submitted": "Naisumite",
@@ -1281,8 +1280,10 @@
     "zero_or_greater": "Dapat sero o mas mataas ang halaga"
   },
   "validations": {
-    "ignored": "Hindi pinansin",
+    "edited_revalidate": "Na-edit na. I-save at patunayan muli para masuri muli.",
+    "hide": "Itago",
     "passed": "Nakapasa sa pagpapatunay",
+    "show": "Ipakita",
     "validations": "Mga Pagpapatunay"
   },
   "view_fish_info": "Tingnan ang impormasyon ng pangalan ng isda",
