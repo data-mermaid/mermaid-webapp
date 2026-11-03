@@ -86,3 +86,46 @@ describe('getCellMarkProps', () => {
     expect(getCellMarkProps(cellMarks, 'count_dead')).toEqual({})
   })
 })
+
+describe('duplicate observations', () => {
+  const duplicateValues = (validationId, observationIds) => ({
+    code: 'duplicate_values',
+    status: 'error',
+    validation_id: validationId,
+    context: { duplicates: [observationIds.map((id, index) => ({ id, index }))] },
+  })
+
+  // Bleaching runs one duplicate check per table.
+  const collectRecord = {
+    validations: {
+      results: {
+        $record: [
+          duplicateValues('colonies', ['colony-1', 'colony-2']),
+          duplicateValues('quadrats', ['quadrat-1', 'quadrat-2']),
+        ],
+      },
+    },
+  }
+
+  test('a row shows only the duplicate check that names it', () => {
+    const { observationValidationMessages } = getObservationValidationInfo({
+      observationId: 'colony-1',
+      observationsPropertyName: 'obs_colonies_bleached',
+      areValidationsShowing: true,
+      collectRecord,
+    })
+
+    expect(observationValidationMessages.map(({ id }) => id)).toEqual(['colonies'])
+  })
+
+  test('a row no duplicate check names shows none', () => {
+    const { observationValidationMessages } = getObservationValidationInfo({
+      observationId: 'colony-3',
+      observationsPropertyName: 'obs_colonies_bleached',
+      areValidationsShowing: true,
+      collectRecord,
+    })
+
+    expect(observationValidationMessages).toEqual([])
+  })
+})

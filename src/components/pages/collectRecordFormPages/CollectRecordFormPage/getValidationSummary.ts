@@ -1,5 +1,9 @@
 import type { ValidationStatus } from '../../../../types/constants'
-import getRecordLevelValidationsToDisplay from '../getRecordLevelValidationsToDisplay'
+import type { ValidationContext } from '../../../../types/validation'
+import { getMessageColumns, toColumnKey } from '../../../../library/validationMessageHelpers'
+import getRecordLevelValidationsToDisplay, {
+  DRY_SUBMIT_CODE,
+} from '../getRecordLevelValidationsToDisplay'
 import {
   getValidationsToDisplay,
   isGreyed,
@@ -25,9 +29,15 @@ import getDuplicateValuesObservationIds, {
  * therefore cannot claim a message the row is not showing. A greyed message (`isStale`, edited
  * since the last Validate) is shown but is neither counted nor a target.
  *
- * duplicate_values is the one validation that reaches the screen twice, as a record-level
- * message and as a mark on every row it names. It is counted once, at the record level, and
- * still yields a target per row so Next can reach them.
+ * Some record-level messages repeat what the form marks elsewhere. Each is counted and is a
+ * target only when nothing else on the page shows it. A greyed or ignored message is still a mark.
+ *
+ *   - duplicate_values is also shown on every row it names, and counts once per row on the page.
+ *   - The "One or more invalid fields" message (invalid_fishbelt_transect and its siblings) means
+ *     the API's duplicate transect check could not read one of its `fields`. It counts only while
+ *     none of those fields shows a message.
+ *   - unsuccessful_dry_submit ("System validation error") names fields and observation columns
+ *     in `context.dry_submit_results`. It counts only while one of them shows no message.
  */
 
 // ---- Types ------------------------------------------------------------------
@@ -35,10 +45,13 @@ import getDuplicateValuesObservationIds, {
 interface Validation {
   status?: ValidationStatus
   isStale?: boolean
+  code?: string
+  name?: string
   validation_id?: string
-  // The API is inconsistent about which of the two it sends, so the row lookup in
-  // getObservationValidationInfo reads both and so must this.
-  context?: { observation_id?: string; id?: string }
+  fields?: string[]
+  // The API is inconsistent about whether a row is named by `observation_id` or `id`, so the row
+  // lookup in getObservationValidationInfo reads both and so must this.
+  context?: ValidationContext | null
 }
 
 interface ValidationsResults {
@@ -48,7 +61,7 @@ interface ValidationsResults {
 
 /**
  * A row to scroll to, named by the data attribute it carries:
- *   - data-record-validation-id, on an <li> in the record-level info panel
+ *   - data-record-validation-id, on an <li> in a record-level list
  *   - data-validation-field, on a sample event / transect / observers row. Emitted by the
  *     shared input components from their own id, so no protocol form has to opt in.
  *   - data-observation-id, on a row in an observation table
@@ -70,6 +83,28 @@ interface ValidationSummary {
  * leaves its validations on the record, so a target can outlive the row it names.
  */
 type ObservationIdsOnPage = ReadonlySet<string> | null
+
+/**
+ * What the fields and rows on the page show, for the record-level messages that repeat them:
+ *   - fieldPaths: each field that shows a message, by validation path
+ *   - names: each field that shows a message, by input id, and each observation column a row
+ *     message marks. The dry submit names both kinds the same way.
+ *   - duplicatesOnRows: the duplicate_values validations shown on at least one row
+ */
+interface PageMarks {
+  fieldPaths: Set<string>
+  names: Set<string>
+  duplicatesOnRows: Set<Validation>
+}
+
+// The "One or more invalid fields" message, one code per transect type.
+const TRANSECT_CHECK_CODES = new Set([
+  'invalid_benthic_transect',
+  'invalid_fishbelt_transect',
+  'invalid_invert_belt_transect',
+  'invalid_quadrat_collection',
+  'invalid_quadrat_transect',
+])
 
 // ---- Status ------------------------------------------------------------------
 
@@ -95,9 +130,14 @@ const addTarget = (bucket: NavigationTarget[], target: NavigationTarget) => {
 }
 
 /**
- * Add one row of the form: a count for every message it shows, and one target to scroll to.
+ * Add one row of the form: a count for every live message it shows, and one target to scroll
+ * to. Returns every message it shows, greyed ones included.
  */
-const addRow = (summary: ValidationSummary, rowValidations: unknown, target: NavigationTarget) => {
+const addRow = (
+  summary: ValidationSummary,
+  rowValidations: unknown,
+  target: NavigationTarget,
+): Validation[] => {
   const displayedValidations: Validation[] = getValidationsToDisplay(
     rowValidations as RowValidations,
   )
@@ -110,13 +150,10 @@ const addRow = (summary: ValidationSummary, rowValidations: unknown, target: Nav
     }
 
     addTarget(summary.targets[status], target)
-
-    // A row only ever carries a duplicate_values through the fan-out below, and the record
-    // level has already counted it as the single message it is.
-    if (!isDuplicateValuesValidation(validation)) {
-      summary.counts[status] += 1
-    }
+    summary.counts[status] += 1
   }
+
+  return displayedValidations
 }
 
 // ---- Walkers ----------------------------------------------------------------
@@ -129,7 +166,12 @@ const addRow = (summary: ValidationSummary, rowValidations: unknown, target: Nav
  *   - array:         data.<section>.<field> = [{ status }], the shape the switchboard writes
  *     back after an ignore or an edit (see _mapFieldValidations in CollectRecordsMixin).
  */
-const walkFieldSubtree = (path: string, node: unknown, summary: ValidationSummary) => {
+const walkFieldSubtree = (
+  path: string,
+  node: unknown,
+  summary: ValidationSummary,
+  marks: PageMarks,
+) => {
   if (!node || typeof node !== 'object') {
     return
   }
@@ -141,10 +183,16 @@ const walkFieldSubtree = (path: string, node: unknown, summary: ValidationSummar
   if (children.some((child) => getStatus(child))) {
     // A validation path's last segment is the input's `id`: `data.fishbelt_transect.depth` is
     // rendered by an input with `id="depth"`, which is the row to scroll to.
-    addRow(summary, node, {
+    const inputId = path.slice(path.lastIndexOf('.') + 1)
+    const displayedValidations = addRow(summary, node, {
       attribute: 'data-validation-field',
-      value: path.slice(path.lastIndexOf('.') + 1),
+      value: inputId,
     })
+
+    if (displayedValidations.length) {
+      marks.fieldPaths.add(path)
+      marks.names.add(inputId)
+    }
     return
   }
 
@@ -152,12 +200,12 @@ const walkFieldSubtree = (path: string, node: unknown, summary: ValidationSummar
   // path), so children reuse the parent's path; keyed objects extend the path.
   if (Array.isArray(node)) {
     for (const child of node) {
-      walkFieldSubtree(path, child, summary)
+      walkFieldSubtree(path, child, summary, marks)
     }
     return
   }
   for (const [key, child] of Object.entries(node as Record<string, unknown>)) {
-    walkFieldSubtree(`${path}.${key}`, child, summary)
+    walkFieldSubtree(`${path}.${key}`, child, summary, marks)
   }
 }
 
@@ -217,6 +265,25 @@ const addDuplicateValuesToRows = (
   }
 }
 
+// Whether every field and column the dry submit summary names already shows a message. A
+// summary that names nothing (an empty or missing `dry_submit_results`) is not shown elsewhere.
+const isDrySubmitShownElsewhere = (validation: Validation, marks: PageMarks) => {
+  const names = Object.keys(validation.context?.dry_submit_results ?? {})
+
+  return names.length > 0 && names.every((name) => marks.names.has(toColumnKey(name)))
+}
+
+const isShownElsewhere = (validation: Validation, marks: PageMarks) => {
+  if (TRANSECT_CHECK_CODES.has(validation.code ?? '')) {
+    return (validation.fields ?? []).some((path) => marks.fieldPaths.has(path))
+  }
+  if (validation.code === DRY_SUBMIT_CODE) {
+    return isDrySubmitShownElsewhere(validation, marks)
+  }
+
+  return marks.duplicatesOnRows.has(validation)
+}
+
 // ---- Entry point ------------------------------------------------------------
 
 const getValidationSummary = (
@@ -232,13 +299,51 @@ const getValidationSummary = (
     return summary
   }
 
-  // $record entries are not grouped. Each renders as its own <li>, so each is one message and
-  // one target.
+  const marks: PageMarks = { fieldPaths: new Set(), names: new Set(), duplicatesOnRows: new Set() }
+
+  // `data.obs_*` = observation tables; everything else = form fields. A duplicate_values row
+  // has no entry here, so the map is still filled when `data` is missing entirely.
+  const validationsByObsId = new Map<string, Validation[]>()
+
+  if (results.data && typeof results.data === 'object') {
+    for (const [section, sectionValue] of Object.entries(results.data as Record<string, unknown>)) {
+      if (section.startsWith('obs_')) {
+        collectObservationValidations(sectionValue, validationsByObsId)
+      } else {
+        walkFieldSubtree(`data.${section}`, sectionValue, summary, marks)
+      }
+    }
+  }
+
+  addDuplicateValuesToRows(results.$record, validationsByObsId)
+
+  for (const [observationId, rowValidations] of validationsByObsId) {
+    if (observationIdsOnPage && !observationIdsOnPage.has(observationId)) {
+      continue
+    }
+
+    const displayedValidations = addRow(summary, rowValidations, {
+      attribute: 'data-observation-id',
+      value: observationId,
+    })
+
+    for (const validation of displayedValidations) {
+      if (isDuplicateValuesValidation(validation)) {
+        marks.duplicatesOnRows.add(validation)
+      } else {
+        getMessageColumns(validation).forEach((column) => marks.names.add(column))
+      }
+    }
+  }
+
+  // Last, because whether a record-level message counts depends on what the fields and rows
+  // show. Each one renders as its own <li>, so each is one message and one target. Targets are
+  // ordered by page position when Next runs, so the order they are added in doesn't matter.
   if (Array.isArray(results.$record)) {
     for (const validation of getRecordLevelValidationsToDisplay<Validation>(results.$record)) {
       const status = getStatus(validation)
 
-      if (!status) {
+      if (!status || isShownElsewhere(validation, marks)) {
         continue
       }
 
@@ -251,30 +356,6 @@ const getValidationSummary = (
         })
       }
     }
-  }
-
-  // `data.obs_*` = observation tables; everything else = form fields. A duplicate_values row
-  // has no entry here, so the map is still filled when `data` is missing entirely.
-  const validationsByObsId = new Map<string, Validation[]>()
-
-  if (results.data && typeof results.data === 'object') {
-    for (const [section, sectionValue] of Object.entries(results.data as Record<string, unknown>)) {
-      if (section.startsWith('obs_')) {
-        collectObservationValidations(sectionValue, validationsByObsId)
-      } else {
-        walkFieldSubtree(`data.${section}`, sectionValue, summary)
-      }
-    }
-  }
-
-  addDuplicateValuesToRows(results.$record, validationsByObsId)
-
-  for (const [observationId, rowValidations] of validationsByObsId) {
-    if (observationIdsOnPage && !observationIdsOnPage.has(observationId)) {
-      continue
-    }
-
-    addRow(summary, rowValidations, { attribute: 'data-observation-id', value: observationId })
   }
 
   return summary
