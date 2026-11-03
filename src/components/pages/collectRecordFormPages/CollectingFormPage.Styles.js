@@ -11,10 +11,9 @@ import { TableOverflowWrapper, Tr, GenericStickyTable } from '../../generic/Tabl
 import { inputTextareaSelectStyles } from '../../generic/form'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 
+// The status indicator bar is absent until a record is validated, so the buttons anchor
+// themselves rather than relying on a second flex child being present.
 export const CollectFormToolbarWrapper = styled(ContentPageToolbarWrapper)`
-  min-height: ${theme.spacing.toolbarHeight};
-  /* The status indicator bar is absent until a record is validated, so the buttons anchor
-     themselves rather than relying on a second flex child being present. */
   justify-content: flex-end;
 `
 
