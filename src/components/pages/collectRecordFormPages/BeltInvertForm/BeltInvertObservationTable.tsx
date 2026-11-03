@@ -22,7 +22,9 @@ import { Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
@@ -250,12 +252,13 @@ const BeltInvertObservationRow = ({
     setIsNewInvertAttributeModalOpen(true)
   }
 
-  const { isObservationValid, observationValidationMessages } = getObservationValidationInfo({
-    observationId,
-    collectRecord,
-    areValidationsShowing,
-    observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-  })
+  const { cellMarks, isObservationValid, observationValidationMessages } =
+    getObservationValidationInfo({
+      observationId,
+      collectRecord,
+      areValidationsShowing,
+      observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+    })
 
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
@@ -288,7 +291,7 @@ const BeltInvertObservationRow = ({
   return (
     <ObservationTr key={observationId} data-observation-id={observationId}>
       <Td $align="center">{rowNumber}</Td>
-      <Td $align="left">
+      <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
         <InputAutocompleteContainer>
           <ObservationAutocomplete
             id={`observation-${observationId}`}
@@ -313,8 +316,12 @@ const BeltInvertObservationRow = ({
           />
         </InputAutocompleteContainer>
       </Td>
-      {sizeBinSelectedLabel && <Td $align="right">{sizeInput}</Td>}
-      <Td>
+      {sizeBinSelectedLabel && (
+        <Td {...getCellMarkProps(cellMarks, 'size')} $align="right">
+          {sizeInput}
+        </Td>
+      )}
+      <Td {...getCellMarkProps(cellMarks, 'count')}>
         <InputNumberNumericCharactersOnly
           $textAlign="right"
           value={count ?? ''}

@@ -36,7 +36,9 @@ import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -323,12 +325,13 @@ const FishBeltObservationTable = ({
         setIsNewBenthicAttributeModalOpen(true)
       }
 
-      const { isObservationValid, observationValidationMessages } = getObservationValidationInfo({
-        observationId,
-        collectRecord,
-        areValidationsShowing,
-        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-      })
+      const { cellMarks, isObservationValid, observationValidationMessages } =
+        getObservationValidationInfo({
+          observationId,
+          collectRecord,
+          areValidationsShowing,
+          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+        })
 
       return (
         <ObservationTr
@@ -337,7 +340,7 @@ const FishBeltObservationTable = ({
           $messageType={validationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {fishNameOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -388,8 +391,10 @@ const FishBeltObservationTable = ({
               </InputAutocompleteContainer>
             )}
           </Td>
-          <Td $align="right">{sizeInput}</Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'size')} $align="right">
+            {sizeInput}
+          </Td>
+          <Td {...getCellMarkProps(cellMarks, 'count')} $align="right">
             <InputNumberNumericCharactersOnly
               value={countOrEmptyStringToAvoidInputValueErrors}
               step="any"

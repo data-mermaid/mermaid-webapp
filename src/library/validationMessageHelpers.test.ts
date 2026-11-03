@@ -2,7 +2,7 @@ import type { ReactElement } from 'react'
 import { describe, expect, test, vi } from 'vitest'
 import i18n from '../../i18n'
 import en from '../locales/en/translation.json'
-import { getValidationMessage } from './validationMessageHelpers'
+import { getMessageColumns, getValidationMessage } from './validationMessageHelpers'
 
 describe('getValidationMessage for required', () => {
   test('names the observation column the API validator name carries', () => {
@@ -195,4 +195,39 @@ test('every validation message key the helper uses exists in the English transla
 
   expect(usedKeys.length).toBeGreaterThan(50)
   expect(missing).toEqual([])
+})
+
+describe('getMessageColumns', () => {
+  test.each([
+    [{ code: 'required', name: 'size_list_required_validator' }, ['size']],
+    [{ code: 'required', name: 'fish_attribute_list_required_validator' }, ['attribute']],
+    [{ code: 'required', name: 'invert_attribute_list_required_validator' }, ['attribute']],
+    [{ code: 'required', name: 'quadrat_number_list_required_validator' }, ['quadrat_number']],
+    [{ code: 'max_fish_size' }, ['size']],
+    [{ code: 'invalid_fish_count' }, ['count']],
+    [{ code: 'invert_count_high' }, ['count']],
+    [{ code: 'no_region_match' }, ['attribute']],
+    [{ code: 'invalid_score' }, ['score']],
+    [{ code: 'not_positive_integer' }, ['quadrat_number']],
+    [{ code: 'invalid_total' }, ['total']],
+    [
+      { code: 'invalid_count', context: { invalid_paths: ['count_pale', 'count_20'] } },
+      ['count_pale', 'count_20'],
+    ],
+    [
+      { code: 'invalid_percent_value', context: { invalid_paths: ['percent_soft'] } },
+      ['percent_soft'],
+    ],
+  ])('maps %o to %o', (validation, columns) => {
+    expect(getMessageColumns(validation)).toEqual(columns)
+  })
+
+  test.each([
+    [{ code: 'duplicate_values' }],
+    [{ code: 'some_code_with_no_column' }],
+    [{ code: 'required', name: 'required_validator' }],
+    [{ code: 'invalid_count' }],
+  ])('marks no cell for %o', (validation) => {
+    expect(getMessageColumns(validation)).toEqual([])
+  })
 })

@@ -49,6 +49,10 @@ import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCollectRecordValidation from './useCollectRecordValidation'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
+import {
+  ValidationDisclosureProvider,
+  useValidationDisclosureStore,
+} from '../../../generic/ValidationMessage/ValidationDisclosure'
 
 function loadObservationsFromCollectRecordIntoTableState({
   collectRecordBeingEdited,
@@ -129,6 +133,7 @@ const CollectRecordFormPage = ({
   isImageClassificationEnabledForUser = false,
 }) => {
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
+  const validationDisclosureStore = useValidationDisclosureStore()
   const [imageClassificationObservationIds, setImageClassificationObservationIds] = useState(null)
   const [choices, setChoices] = useState({})
   const [isCommonProtocolDataLoading, setIsCommonProtocolDataLoading] = useState(true)
@@ -689,7 +694,7 @@ const CollectRecordFormPage = ({
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <>
+    <ValidationDisclosureProvider store={validationDisclosureStore}>
       <ContentPageLayout
         isPageContentLoading={isLoading}
         isToolbarSticky={true}
@@ -733,7 +738,7 @@ const CollectRecordFormPage = ({
 
       {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
-    </>
+    </ValidationDisclosureProvider>
   )
 }
 
