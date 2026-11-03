@@ -36,8 +36,8 @@ flowchart LR
 - **Adds new keys only.** `replace_modified: false` means the English text of keys that already exist in Lokalise is left untouched. This is the whole point of the push: new tokens go up, and nothing a translator has written comes down. See [Critical configuration](#critical-configuration-and-why).
 - `convert_placeholders: false` keeps i18next `{{interpolation}}` and custom tags (`<helperTextLink>`, `$t(...)`) intact.
 - `use_tag_tracking: true` (creates a `lokalise-upload-complete` git tag) so multi-commit pushes detect every changed file.
-- **Never deletes keys.** Removing stale keys is done manually in Lokalise.
-- Because the push uploads the whole file, it is a no-op for existing keys: Lokalise reports them as *skipped*, not *updated*. A push triggered by merging the pull PR is therefore harmless.
+- **Never deletes keys.** It also re-creates any key that is in `en` but missing from Lokalise, so deleting a key in Lokalise while it is still in code does not stick. See [Removing a token](#removing-a-token).
+- Because the push uploads the whole file, it is a no-op for existing keys: Lokalise reports them as _skipped_, not _updated_. A push triggered by merging the pull PR is therefore harmless.
 
 ## Pull: Lokalise → code
 
@@ -50,13 +50,13 @@ flowchart LR
 
 ### Reviewed-only filter (currently disabled)
 
-The intended design is to export **reviewed-only** strings (`filter_data: ["reviewed_only"]`), so only translations a human has marked **Reviewed** reach the code. Because the pull overwrites, that also means any string *not* marked Reviewed would be dropped from the repo (the app then shows English).
+The intended design is to export **reviewed-only** strings (`filter_data: ["reviewed_only"]`), so only translations a human has marked **Reviewed** reach the code. Because the pull overwrites, that also means any string _not_ marked Reviewed would be dropped from the repo (the app then shows English).
 
 **The filter is currently disabled** - the `filter_data` option has been removed from the pull config, so the pull brings back **all** translations regardless of review status. This is deliberate: while the languages are still being reviewed, turning the filter on would strip the app of every not-yet-reviewed string. The filter will be **re-enabled once all relevant languages are fully reviewed**, by re-adding `"filter_data": ["reviewed_only"]` to the pull's `additional_params` - at which point nothing is dropped because everything is reviewed.
 
 ## Critical configuration (and why)
 
-- **`replace_modified: false`** (push config) - the push action **defaults this to `true`**, which overwrites the English text of *every* key already in Lokalise with this repo's value. Because the whole file is uploaded, a single new token added by a developer was enough to reset every punctuation and wording edit a translator had made since the last pull. Setting it to `false` restores Lokalise's default behaviour: new keys are inserted, existing keys are skipped. Do **not** use the action's `skip_default_flags` input to achieve this - that would also drop `include_path` and `distinguish_by_file`, breaking the key-filename mapping below.
+- **`replace_modified: false`** (push config) - the push action **defaults this to `true`**, which overwrites the English text of _every_ key already in Lokalise with this repo's value. Because the whole file is uploaded, a single new token added by a developer was enough to reset every punctuation and wording edit a translator had made since the last pull. Setting it to `false` restores Lokalise's default behaviour: new keys are inserted, existing keys are skipped. Do **not** use the action's `skip_default_flags` input to achieve this - that would also drop `include_path` and `distinguish_by_file`, breaking the key-filename mapping below.
 - **Key filenames must be `src/locales/%LANG_ISO%/translation.json`.** This is what maps Lokalise files to the repo. Bare filenames (e.g. `translation.json`) silently break the pull with "No changes detected". Set in Lokalise via bulk **File: assign**.
 - **`always_pull_base: true`** (pull config) - the pull action **defaults this to `false`**, which silently drops base-language (English) changes: target languages sync but `en/translation.json` is never updated. It **must** be set to `true` for Lokalise's English source-of-truth edits on existing keys to flow back (see [Pull](#pull-lokalise--code)).
 - **`force_push: true`** (pull config) - each run replaces the `chore/lokalise-translations` branch with one fresh commit instead of appending. Safe because the branch is never hand-edited (corrections are made in Lokalise), and it keeps the PR a clean, always-current mirror of Lokalise rather than a growing stack of weekly commits (see [Pull](#pull-lokalise--code)).
@@ -67,7 +67,7 @@ The intended design is to export **reviewed-only** strings (`filter_data: ["revi
 
 ## Changing the English text of an existing token
 
-Adding, renaming and removing tokens in code is business as usual. **Rewording an existing token in code is not**, because the pull overwrites `en/translation.json` with Lokalise's export: the edit would be reverted the following Monday rather than shipped.
+Adding and renaming tokens in code is business as usual, and removing one starts in code (see [Removing a token](#removing-a-token)). **Rewording an existing token in code is not**, because the pull overwrites `en/translation.json` with Lokalise's export: the edit would be reverted the following Monday rather than shipped.
 
 The `Guard English Translation Source` check (`.github/workflows/i18n-source-guard.yml`) fails any PR that rewords an existing token, and prints the offending keys. Run it locally with:
 
@@ -77,14 +77,28 @@ yarn check:i18n-source "$(git merge-base origin/develop HEAD)"
 
 Pick whichever case applies:
 
-| Situation | What to do |
-| --- | --- |
-| Rewording, typo or punctuation fix | Make the change **in Lokalise**. The weekly pull brings it back, and target languages get re-reviewed at the same time. |
-| Changing `{{interpolation}}` or inline markup (`<br />`, `<strong>`) | **Add a new token** and point the code at it. Never edit the old one: a token whose placeholders no longer match the code renders broken text as soon as Lokalise reasserts the old string. The stale token can be removed in Lokalise once nothing references it. |
+| Situation                                                            | What to do                                                                                                                                                                                                                                                                                                                                                   |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Rewording, typo or punctuation fix                                   | Make the change **in Lokalise**. The weekly pull brings it back, and target languages get re-reviewed at the same time.                                                                                                                                                                                                                                      |
+| Changing `{{interpolation}}` or inline markup (`<br />`, `<strong>`) | **Add a new token** and point the code at it. Never edit the old one: a token whose placeholders no longer match the code renders broken text as soon as Lokalise reasserts the old string. Once nothing references the old token, remove it from `en` in the same PR and delete it in Lokalise after the merge (see [Removing a token](#removing-a-token)). |
 
 **There is deliberately no override.** The push has no mode that sends a reworded value up, so every case is covered by one of the two rows above. The only exemption is the `chore/lokalise-translations` branch, which is how Lokalise's own rewording is meant to arrive.
 
 Note that the check is currently **advisory**: `develop`'s branch protection has no required status checks, so a failing run shows a red mark but does not hard-block the merge. Add `check-en-source-edits` to the required checks if you want it enforced.
+
+## Removing a token
+
+A token exists in two places, and the sync never deletes it from either. Remove it from both, in this order:
+
+1. **Code first.** Delete the key from `src/locales/en/translation.json` in the PR that stops using it. Leave the other language files alone: the next pull rewrites them.
+2. **Lokalise second, after the merge.** Delete the key in Lokalise. The next pull then drops it from every language file.
+
+The order matters because each direction restores a key the other side still has:
+
+- Deleted in Lokalise while still in `en`: the next merge that touches `src/locales/en/**` uploads the whole file, Lokalise re-creates the key, and its automations machine-translate it again.
+- Deleted in `en` while still in Lokalise: the next pull PR adds it back to `en`. A key the pull PR adds is an orphan: delete it in Lokalise and re-run the pull.
+
+Never leave a replaced key in `en` "for removal in Lokalise later". It survives every deletion made there.
 
 ## Triggering manually
 
@@ -103,6 +117,7 @@ gh workflow run lokalise-push.yml --ref develop
 - **A just-reviewed string isn't in the pull** - Lokalise export can lag a few minutes after the Reviewed flag is set; re-run the pull.
 - **English edits made in Lokalise don't reach the repo (but target languages do)** - the pull's `always_pull_base` is `false` (its default). It must be `true`, or the action silently drops all base-language changes.
 - **English edits made in Lokalise get reset to the old wording** - the push's `replace_modified` is `true` (the action's default). It must be `false`. With it on, any merge to `develop` that touches `src/locales/en/**` re-uploads the whole file and overwrites every English value in Lokalise, so edits made since the last pull are lost before they can be pulled back.
+- **A key I deleted keeps coming back** - it was deleted in one place only. The push re-creates any key in `en` that Lokalise lacks, and the pull re-adds any key Lokalise has that `en` lacks. See [Removing a token](#removing-a-token).
 - **A copy fix made in code disappeared after the weekly pull** - expected: Lokalise owns the English wording of existing tokens. See [Changing the English text of an existing token](#changing-the-english-text-of-an-existing-token).
 - **The `Guard English Translation Source` check is failing** - the PR rewords a token that already exists. The job log lists the offending keys. Either make the change in Lokalise instead, or add a new token; there is no bypass.
 
