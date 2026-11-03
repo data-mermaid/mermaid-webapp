@@ -7,6 +7,7 @@ import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import ValidationMessage, { EditedNote } from '../../generic/ValidationMessage/ValidationMessage'
 import ValidationMessageGroup from '../../generic/ValidationMessage/ValidationMessageGroup'
+import { fieldDisclosureKey } from '../../generic/ValidationMessage/ValidationDisclosure'
 import { getValidationMessage } from '../../../library/validationMessageHelpers'
 import ResolveDuplicateSiteButtonAndModal from '../../ResolveDuplicateSiteButtonAndModal/ResolveDuplicateSiteButtonAndModal'
 import ResolveDuplicateMRButtonAndModal from '../../ResolveDuplicateMRButtonAndModal/ResolveDuplicateMRButtonAndModal'
@@ -96,7 +97,7 @@ const InputValidationInfo = ({
       {messages.length ? (
         <MessageList>
           <ValidationMessageGroup
-            disclosureKey={validationPath ? `field:${validationPath}` : undefined}
+            disclosureKey={validationPath ? fieldDisclosureKey(validationPath) : undefined}
             messages={messages}
           >
             {messages.map((message) => (

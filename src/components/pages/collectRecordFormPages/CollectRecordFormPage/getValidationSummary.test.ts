@@ -1,10 +1,22 @@
 import { describe, expect, test } from 'vitest'
 import getValidationSummary from './getValidationSummary'
+import {
+  fieldDisclosureKey,
+  rowDisclosureKey,
+} from '../../../generic/ValidationMessage/ValidationDisclosure'
 import mockImageClassificationValidations from '../../../../testUtilities/mockBenthicPhotoQuadratImageClassificationValidationsObject'
 
 const recordTarget = (value: string) => ({ attribute: 'data-record-validation-id', value })
-const fieldTarget = (value: string) => ({ attribute: 'data-validation-field', value })
-const observationTarget = (value: string) => ({ attribute: 'data-observation-id', value })
+const fieldTarget = (validationPath: string) => ({
+  attribute: 'data-validation-field',
+  value: validationPath.slice(validationPath.lastIndexOf('.') + 1),
+  disclosureKey: fieldDisclosureKey(validationPath),
+})
+const observationTarget = (value: string) => ({
+  attribute: 'data-observation-id',
+  value,
+  disclosureKey: rowDisclosureKey(value),
+})
 
 const noCounts = { error: 0, warning: 0, ignore: 0 }
 const noTargets = { error: [], warning: [], ignore: [] }
@@ -38,8 +50,8 @@ describe('getValidationSummary targets', () => {
       },
     })
 
-    expect(targets.error).toEqual([fieldTarget('site')])
-    expect(targets.warning).toEqual([fieldTarget('management')])
+    expect(targets.error).toEqual([fieldTarget('data.sample_event.site')])
+    expect(targets.warning).toEqual([fieldTarget('data.sample_event.management')])
   })
 
   test('emits one observation target per observation_id per status', () => {
@@ -76,8 +88,14 @@ describe('getValidationSummary targets', () => {
       },
     })
 
-    expect(targets.error).toEqual([fieldTarget('site'), observationTarget('obs1')])
-    expect(targets.warning).toEqual([fieldTarget('site'), observationTarget('obs1')])
+    expect(targets.error).toEqual([
+      fieldTarget('data.sample_event.site'),
+      observationTarget('obs1'),
+    ])
+    expect(targets.warning).toEqual([
+      fieldTarget('data.sample_event.site'),
+      observationTarget('obs1'),
+    ])
     expect(targets.ignore).toEqual([])
     expect(counts).toEqual({ error: 2, warning: 2, ignore: 0 })
   })
@@ -93,7 +111,7 @@ describe('getValidationSummary targets', () => {
       },
     })
 
-    expect(targets.error).toEqual([fieldTarget('site'), recordTarget('r1')])
+    expect(targets.error).toEqual([fieldTarget('data.sample_event.site'), recordTarget('r1')])
     expect(targets.warning).toEqual([observationTarget('obs1')])
   })
 
@@ -110,9 +128,9 @@ describe('getValidationSummary targets', () => {
       },
     })
 
-    expect(targets.error).toEqual([fieldTarget('depth')])
-    expect(targets.warning).toEqual([fieldTarget('width')])
-    expect(targets.ignore).toEqual([fieldTarget('width')])
+    expect(targets.error).toEqual([fieldTarget('data.fishbelt_transect.depth')])
+    expect(targets.warning).toEqual([fieldTarget('data.fishbelt_transect.width')])
+    expect(targets.ignore).toEqual([fieldTarget('data.fishbelt_transect.width')])
   })
 
   test('handles shallow field shape where data.<section> contains validations directly (e.g. observers)', () => {
@@ -126,8 +144,8 @@ describe('getValidationSummary targets', () => {
     })
 
     // An error never hides a warning, so the row is a target for both chips.
-    expect(targets.error).toEqual([fieldTarget('observers')])
-    expect(targets.warning).toEqual([fieldTarget('observers')])
+    expect(targets.error).toEqual([fieldTarget('data.observers')])
+    expect(targets.warning).toEqual([fieldTarget('data.observers')])
   })
 
   test('accepts context.id as well as context.observation_id, as the row lookup does', () => {
@@ -386,7 +404,7 @@ describe('getValidationSummary with the invalid transect fields message', () => 
     })
 
     expect(counts.error).toBe(1)
-    expect(targets.error).toEqual([fieldTarget('site')])
+    expect(targets.error).toEqual([fieldTarget('data.sample_event.site')])
   })
 
   test('treats a greyed message as a mark', () => {
@@ -406,7 +424,10 @@ describe('getValidationSummary with the invalid transect fields message', () => 
     })
 
     expect(counts.error).toBe(2)
-    expect(targets.error).toEqual([fieldTarget('width'), recordTarget('transect')])
+    expect(targets.error).toEqual([
+      fieldTarget('data.fishbelt_transect.width'),
+      recordTarget('transect'),
+    ])
   })
 })
 
@@ -434,7 +455,10 @@ describe('getValidationSummary with the dry submit summary', () => {
     })
 
     expect(counts.error).toBe(2)
-    expect(targets.error).toEqual([fieldTarget('site'), fieldTarget('depth')])
+    expect(targets.error).toEqual([
+      fieldTarget('data.sample_event.site'),
+      fieldTarget('data.fishbelt_transect.depth'),
+    ])
   })
 
   test('treats a greyed or ignored message as a mark', () => {
@@ -484,7 +508,10 @@ describe('getValidationSummary with the dry submit summary', () => {
     })
 
     expect(counts.error).toBe(2)
-    expect(targets.error).toEqual([fieldTarget('depth'), recordTarget('summary')])
+    expect(targets.error).toEqual([
+      fieldTarget('data.fishbelt_transect.depth'),
+      recordTarget('summary'),
+    ])
   })
 })
 

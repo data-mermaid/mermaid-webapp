@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
@@ -6,58 +7,16 @@ import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import getValidationSummary from './getValidationSummary'
 import { VALIDATION_STATUS } from '../../Collect/collectConstants'
-import theme from '../../../../theme'
 
-const HIGHLIGHT_CLASS = 'validation-target-highlight'
-const HIGHLIGHT_COLOR_VAR = '--validation-target-highlight-color'
-
-// A pale wash of the validation type's colour. Ignored uses the row's own stripe colour, not
-// the ignored chip fill, which is a solid grey and too heavy across a full-width row.
-const highlightColorByType = {
-  error: theme.color.chipErrorBackground,
-  warning: theme.color.chipWarningBackground,
-  ignore: theme.color.ignore,
-}
+// Marks the item Next last landed on, valued by the chip's type, until Next selects another (see
+// globalStyles). An attribute rather than a class, because React rewrites a styled row's class
+// when its validations change.
+const SELECTED_ATTRIBUTE = 'data-validation-selected'
 
 const findTargetElement = (target) =>
   document.querySelector(`[${target.attribute}="${target.value}"]`)
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-const STILL_FRAMES_REQUIRED = 3
-const MAX_SETTLE_FRAMES = 60
-
-/**
- * Calls back once `element` has stopped moving. Smooth scrolling is asynchronous and `scrollend`
- * is too new to rely on, so this watches the element's position instead. The frame cap stops a
- * user who is scrolling by hand from holding the callback off indefinitely.
- */
-const whenScrollSettles = (element, onSettled) => {
-  let previousTop = null
-  let stillFrames = 0
-  let framesWaited = 0
-  let frameId
-
-  const check = () => {
-    const { top } = element.getBoundingClientRect()
-
-    stillFrames = top === previousTop ? stillFrames + 1 : 0
-    previousTop = top
-    framesWaited += 1
-
-    if (stillFrames >= STILL_FRAMES_REQUIRED || framesWaited >= MAX_SETTLE_FRAMES) {
-      onSettled()
-
-      return
-    }
-
-    frameId = requestAnimationFrame(check)
-  }
-
-  frameId = requestAnimationFrame(check)
-
-  return () => cancelAnimationFrame(frameId)
-}
 
 // Focus stays on the chip, so this text is the only way a screen reader learns where the
 // page went. The cap stops a wide observation row reciting every cell.
@@ -71,8 +30,10 @@ const getIsValidationResultCurrent = (collectRecord) =>
   collectRecord.validations?.status === VALIDATION_STATUS.ok || getIsErrorOrWarning(collectRecord)
 
 const useCollectRecordValidation = ({
+  areValidationsShowing,
   collectRecordBeingEdited,
   databaseSwitchboardInstance,
+  disclosureStore,
   handleCollectRecordChange,
   isParentDataLoading,
   observationIdsOnPage,
@@ -98,53 +59,30 @@ const useCollectRecordValidation = ({
 
   const [nextAnnouncement, setNextAnnouncement] = useState('')
 
-  // The highlight in flight. Tracked so a second Next restarts the fade instead of letting
-  // the previous timer strip the class part way through, and so nothing fires after unmount.
-  const highlightRef = useRef({ element: null, timeoutId: null, cancelScrollWatch: null })
+  const selectedElementRef = useRef(null)
+  const { openForNext } = disclosureStore
 
-  const clearHighlight = useCallback(() => {
-    const { element, timeoutId, cancelScrollWatch } = highlightRef.current
-
-    cancelScrollWatch?.()
-    clearTimeout(timeoutId)
-
-    if (element) {
-      element.classList.remove(HIGHLIGHT_CLASS)
-      element.style.removeProperty(HIGHLIGHT_COLOR_VAR)
-    }
-
-    highlightRef.current = { element: null, timeoutId: null, cancelScrollWatch: null }
+  const clearSelection = useCallback(() => {
+    selectedElementRef.current?.removeAttribute(SELECTED_ATTRIBUTE)
+    selectedElementRef.current = null
   }, [])
 
-  useEffect(() => clearHighlight, [clearHighlight])
-
-  const scrollToAndHighlight = (element, type) => {
-    clearHighlight()
-
-    element.scrollIntoView({
-      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      block: 'center',
-    })
-
-    element.style.setProperty(HIGHLIGHT_COLOR_VAR, highlightColorByType[type])
-
-    // The fade starts once the page has arrived, so a jump the length of the record cannot
-    // finish before the row it is marking comes into view.
-    const startFade = () => {
-      void element.offsetWidth // restart the CSS animation
-      element.classList.add(HIGHLIGHT_CLASS)
-      highlightRef.current.timeoutId = setTimeout(
-        clearHighlight,
-        theme.timing.validationTargetHighlightMs,
-      )
-    }
-
-    highlightRef.current = {
-      element,
-      timeoutId: null,
-      cancelScrollWatch: whenScrollSettles(element, startFade),
-    }
+  const select = (element, type) => {
+    clearSelection()
+    element.setAttribute(SELECTED_ATTRIBUTE, type)
+    selectedElementRef.current = element
   }
+
+  // Saving hides every finding, and another record (same route, same page) brings its own, so
+  // neither leaves anything for Next's stop to point at.
+  useEffect(
+    function clearNextStop() {
+      clearSelection()
+      openForNext(null)
+    },
+    [areValidationsShowing, recordId, clearSelection, openForNext],
+  )
+
   const getValidationButtonStatus = useCallback((collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
       ? buttonGroupStates.validated
@@ -201,6 +139,8 @@ const useCollectRecordValidation = ({
   const showValidationResult = (validatedRecord) => {
     setAreValidationsShowing(true)
     resetNextCursors()
+    clearSelection()
+    openForNext(null)
     handleCollectRecordChange(validatedRecord)
     setValidateButtonState(getValidationButtonStatus(validatedRecord))
     setIsSubmitWarningVisible(getIsErrorOrWarning(validatedRecord))
@@ -391,9 +331,15 @@ const useCollectRecordValidation = ({
     const cursor = nextCursorsRef.current[type] % resolved.length
     nextCursorsRef.current[type] = cursor + 1
 
-    const { element } = resolved[cursor]
+    const { element, target } = resolved[cursor]
 
-    scrollToAndHighlight(element, type)
+    // Committed before scrolling, so the scroll measures the field or row open.
+    flushSync(() => openForNext(target.disclosureKey ?? null))
+    element.scrollIntoView({
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      block: 'center',
+    })
+    select(element, type)
     setNextAnnouncement(
       t('sample_units.validation_status.next_announcement', {
         position: cursor + 1,

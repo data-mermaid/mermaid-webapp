@@ -405,8 +405,10 @@ const CollectRecordFormPage = ({
     goToNextValidation,
     nextAnnouncement,
   } = useCollectRecordValidation({
+    areValidationsShowing,
     collectRecordBeingEdited,
     databaseSwitchboardInstance,
+    disclosureStore: validationDisclosureStore,
     handleCollectRecordChange,
     isParentDataLoading,
     observationIdsOnPage,

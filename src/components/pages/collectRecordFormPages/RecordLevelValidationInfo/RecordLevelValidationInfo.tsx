@@ -31,7 +31,7 @@ export interface RecordLevelValidationInfoProps {
 const InlineValidationItem = styled.li`
   max-width: ${theme.spacing.maxWidth};
   ${hoverState(css`
-    background: ${theme.color.tableRowHover};
+    background-color: ${theme.color.tableRowHover};
   `)}
 `
 

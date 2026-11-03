@@ -24,6 +24,7 @@ const validations = {
     data: {
       benthic_transect: {
         depth: [{ code: 'required', status: 'error', validation_id: 'depth-error' }],
+        sample_time: [{ code: 'value_not_set', status: 'warning', validation_id: 'time-warning' }],
       },
     },
   },
@@ -76,17 +77,17 @@ const validateThenClickNext = async () => {
 
   await user.click(nextButton)
 
-  return { depthRow, nextButton, scrollIntoView }
+  return { depthRow, nextButton, scrollIntoView, user }
 }
 
-test('Next on the error chip scrolls to and highlights a Benthic LIT transect field', async () => {
+test('Next on the error chip scrolls to and selects a Benthic LIT transect field', async () => {
   const { depthRow, scrollIntoView } = await validateThenClickNext()
 
   expect(depthRow).toHaveAttribute('data-validation-field', 'depth')
   expect(scrollIntoView).toHaveBeenCalledTimes(1)
   expect(scrollIntoView.mock.instances[0]).toBe(depthRow)
   expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' })
-  await waitFor(() => expect(depthRow).toHaveClass('validation-target-highlight'))
+  expect(depthRow).toHaveAttribute('data-validation-selected', 'error')
 }, 50000)
 
 test('Next keeps focus on the chip and announces where it went', async () => {
@@ -126,29 +127,18 @@ test('Next jumps instead of gliding when the user prefers reduced motion', async
 
   expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'auto', block: 'center' })
 
-  // The row is still marked; only the movement is dropped.
-  await waitFor(() => expect(depthRow).toHaveClass('validation-target-highlight'))
+  // The row is still selected; only the movement is dropped.
+  expect(depthRow).toHaveAttribute('data-validation-selected', 'error')
 }, 50000)
 
-test('The highlight waits for the page to stop moving', async () => {
-  // The fade must not start until the target has stopped moving, or a long jump finishes
-  // after the colour has gone. jsdom has no layout, so a moving rect stands in for the scroll.
-  let top = 400
-  let isTravelling = true
+test('The selection stays until Next selects another message', async () => {
+  const { user, depthRow } = await validateThenClickNext()
+  const sampleTimeRow = screen.getByTestId('sample-time').closest('[data-validation-field]')
 
-  vi.spyOn(window.HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(() => {
-    if (isTravelling) {
-      top -= 10
-    }
+  expect(depthRow).toHaveAttribute('data-validation-selected', 'error')
 
-    return { top }
-  })
+  await user.click(within(screen.getByTestId('form-status-chip-warning')).getByRole('button'))
 
-  const { depthRow } = await validateThenClickNext()
-
-  expect(depthRow).not.toHaveClass('validation-target-highlight')
-
-  isTravelling = false
-
-  await waitFor(() => expect(depthRow).toHaveClass('validation-target-highlight'))
+  expect(depthRow).not.toHaveAttribute('data-validation-selected')
+  expect(sampleTimeRow).toHaveAttribute('data-validation-selected', 'warning')
 }, 50000)

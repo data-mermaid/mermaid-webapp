@@ -1,6 +1,10 @@
 import type { ValidationStatus } from '../../../../types/constants'
 import type { ValidationContext } from '../../../../types/validation'
 import { getMessageColumns, toColumnKey } from '../../../../library/validationMessageHelpers'
+import {
+  fieldDisclosureKey,
+  rowDisclosureKey,
+} from '../../../generic/ValidationMessage/ValidationDisclosure'
 import getRecordLevelValidationsToDisplay, {
   DRY_SUBMIT_CODE,
 } from '../getRecordLevelValidationsToDisplay'
@@ -65,10 +69,13 @@ interface ValidationsResults {
  *   - data-validation-field, on a sample event / transect / observers row. Emitted by the
  *     shared input components from their own id, so no protocol form has to opt in.
  *   - data-observation-id, on a row in an observation table
+ *
+ * A field or row target also names the field or row for Next to open (see ValidationDisclosure).
  */
 interface NavigationTarget {
   attribute: 'data-record-validation-id' | 'data-validation-field' | 'data-observation-id'
   value: string
+  disclosureKey?: string
 }
 
 type CountableStatus = 'error' | 'warning' | 'ignore'
@@ -187,6 +194,7 @@ const walkFieldSubtree = (
     const displayedValidations = addRow(summary, node, {
       attribute: 'data-validation-field',
       value: inputId,
+      disclosureKey: fieldDisclosureKey(path),
     })
 
     if (displayedValidations.length) {
@@ -325,6 +333,7 @@ const getValidationSummary = (
     const displayedValidations = addRow(summary, rowValidations, {
       attribute: 'data-observation-id',
       value: observationId,
+      disclosureKey: rowDisclosureKey(observationId),
     })
 
     for (const validation of displayedValidations) {
