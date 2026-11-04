@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { styled, css } from 'styled-components'
 import { subNavNodePropTypes } from '../../../SubNavMenuRecordName/subNavNodePropTypes'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -15,6 +15,11 @@ import ProjectName from '../../../ProjectName'
 import ErrorBoundary from '../../../ErrorBoundary'
 
 const contentPadding = theme.spacing.xsmall
+
+// The toolbar's rendered height, in px, set on the content wrapper so anything sticky below the
+// toolbar can sit under it. The height varies: a collect record's toolbar holds the title and
+// the status indicator chips, which come and go.
+export const CONTENT_TOOLBAR_HEIGHT_VAR = '--content-toolbar-height'
 const MainContentPageLayout = styled('div')`
   display: grid;
   grid-template-rows: auto 1fr;
@@ -66,42 +71,50 @@ const ContentPageToolbarWrapper = styled('div')`
   `)}
 `
 
-const ProjectHeaderRow = styled('div')`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: ${theme.color.white};
-`
-
-const HeaderTitleSlot = styled('div')`
-  padding: ${theme.spacing.medium};
-  h2 {
-    margin: 0;
-  }
-`
-
 const ContentPageLayout = ({
   content,
   toolbar = undefined,
   isPageContentLoading = false,
   isToolbarSticky = false,
   subNavNode = null,
-  headerTitle = null,
 }) => {
   const { isSyncInProgress } = useSyncStatus()
+  const toolbarRef = useRef(null)
+  const isToolbarRendered = Boolean(toolbar) && !isPageContentLoading && !isSyncInProgress
+
+  useEffect(
+    function publishToolbarHeight() {
+      const toolbarElement = toolbarRef.current
+
+      if (!isToolbarRendered || !toolbarElement) {
+        return undefined
+      }
+
+      const wrapper = toolbarElement.parentElement
+      const publish = () =>
+        wrapper.style.setProperty(CONTENT_TOOLBAR_HEIGHT_VAR, `${toolbarElement.offsetHeight}px`)
+
+      publish()
+
+      // jsdom has no ResizeObserver; the first measurement is enough there.
+      if (typeof ResizeObserver === 'undefined') {
+        return undefined
+      }
+
+      const observer = new ResizeObserver(publish)
+
+      observer.observe(toolbarElement)
+
+      return () => observer.disconnect()
+    },
+    [isToolbarRendered],
+  )
 
   return (
     <>
       <ErrorBoundary>
         <MainContentPageLayout>
-          {headerTitle ? (
-            <ProjectHeaderRow>
-              <ProjectName />
-              <HeaderTitleSlot>{headerTitle}</HeaderTitleSlot>
-            </ProjectHeaderRow>
-          ) : (
-            <ProjectName />
-          )}
+          <ProjectName />
           <ErrorBoundary>
             <NavAndContentLayout>
               <ErrorBoundary>
@@ -116,7 +129,7 @@ const ContentPageLayout = ({
                   ) : (
                     <>
                       {toolbar && (
-                        <ContentToolbar $isToolbarSticky={isToolbarSticky}>
+                        <ContentToolbar ref={toolbarRef} $isToolbarSticky={isToolbarSticky}>
                           {toolbar}
                         </ContentToolbar>
                       )}
@@ -141,7 +154,6 @@ ContentPageLayout.propTypes = {
   toolbar: PropTypes.node,
   isToolbarSticky: PropTypes.bool,
   subNavNode: subNavNodePropTypes,
-  headerTitle: PropTypes.node,
 }
 
 export default ContentPageLayout

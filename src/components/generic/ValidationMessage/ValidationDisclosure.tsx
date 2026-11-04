@@ -1,14 +1,18 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 // Which field or row has its collapsed validation messages open. Only one is open at a time
-// across the form, so opening one closes the last. Keys name a field (`field:<validationPath>`)
-// or an observation row (`row:<observationId>`).
+// across the form, so opening one closes the last, whether the diver clicked Show or the Next
+// button opened what it landed on. Keys name a field (`field:<validationPath>`) or an
+// observation row (`row:<observationId>`).
 export interface ValidationDisclosureStore {
   openKey: string | null
   open: (key: string) => void
   close: () => void
   toggle: (key: string) => void
 }
+
+export const fieldDisclosureKey = (validationPath: string) => `field:${validationPath}`
+export const rowDisclosureKey = (observationId: string) => `row:${observationId}`
 
 const ValidationDisclosureContext = createContext<ValidationDisclosureStore | null>(null)
 

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { TableValidationList } from './CollectingFormPage.Styles'
 import ValidationMessage, { EditedNote } from '../../generic/ValidationMessage/ValidationMessage'
 import ValidationMessageGroup from '../../generic/ValidationMessage/ValidationMessageGroup'
+import { rowDisclosureKey } from '../../generic/ValidationMessage/ValidationDisclosure'
 import InputIgnoreValidationWarningCheckboxWithLabel from '../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 import { getValidationMessage } from '../../../library/validationMessageHelpers'
 import { isDuplicateValuesValidation } from './CollectRecordFormPage/getDuplicateValuesObservationIds'
@@ -61,7 +62,7 @@ const ObservationValidationInfo = ({
       ) : null}
       {observationValidationMessages.length ? (
         <ValidationMessageGroup
-          disclosureKey={`row:${observationId}`}
+          disclosureKey={rowDisclosureKey(observationId)}
           messages={observationValidationMessages}
         >
           <TableValidationList>

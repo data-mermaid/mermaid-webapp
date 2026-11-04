@@ -159,12 +159,15 @@ export const getRequiredColumn = (validatorName = ''): string | undefined =>
     ? validatorName.slice(0, -LIST_REQUIRED_VALIDATOR_SUFFIX.length)
     : undefined
 
-// Every observation table calls its name cell `attribute`. The API's required check calls it
-// `attribute`, `fish_attribute` or `invert_attribute` depending on the protocol.
+// Every observation table calls its name cell `attribute`. The API calls it `attribute`,
+// `fish_attribute` or `invert_attribute` depending on the protocol.
 const COLUMN_ALIASES: Record<string, string> = {
   fish_attribute: 'attribute',
   invert_attribute: 'attribute',
 }
+
+// The column key a table marks, for an observation field name as the API spells it.
+export const toColumnKey = (fieldName: string): string => COLUMN_ALIASES[fieldName] ?? fieldName
 
 // `total` is a bleaching row's total: every count or percentage cell in the row answers to it as
 // well as to its own column.
@@ -195,7 +198,7 @@ export const getMessageColumns = (
   if (code === 'required') {
     const column = getRequiredColumn(name)
 
-    return column ? [COLUMN_ALIASES[column] ?? column] : []
+    return column ? [toColumnKey(column)] : []
   }
   if (CODES_NAMING_THEIR_CELLS.includes(code)) {
     return context?.invalid_paths ?? []

@@ -1,43 +1,24 @@
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { getMessageColumns } from '../../../../library/validationMessageHelpers'
-import getDuplicateValuesObservationIds, {
-  isDuplicateValuesValidation,
-} from './getDuplicateValuesObservationIds'
+import getDuplicateValuesObservationIds from './getDuplicateValuesObservationIds'
 
+// A row's own validations, then each record-level duplicate_values that names the row. Bleaching
+// has one duplicate check per table, so a row shows only the one about its own table.
 const getObservationValidations = ({ observationId, collectRecord, observationsPropertyName }) => {
-  const allObservationsValidations =
-    collectRecord?.validations?.results?.data?.[observationsPropertyName] ?? []
+  const results = collectRecord?.validations?.results
 
-  const duplicateRecordValidator = collectRecord?.validations?.results?.$record?.filter(
-    isDuplicateValuesValidation,
-  )
-
-  const isObservationIdIncludedInDuplicateRecordValidator = duplicateRecordValidator?.some(
-    (validator) => getDuplicateValuesObservationIds(validator).includes(observationId),
-  )
-
-  const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
-    // api is inconsistent between id and observation_id
-
-    return (
+  const rowValidations = (results?.data?.[observationsPropertyName] ?? []).flat().filter(
+    // The API names the row in either property.
+    (validation) =>
       validation.context?.observation_id === observationId ||
-      validation.context?.id === observationId
-    )
-  })
+      validation.context?.id === observationId,
+  )
 
-  // if there are duplicate values, in context, there is an array of objects with the duplicate observations ids
-  // here we add an id property to the context object so that we can use the same function to get the validation properties for the input
+  const duplicatesNamingRow = (results?.$record ?? []).filter((validation) =>
+    getDuplicateValuesObservationIds(validation).includes(observationId),
+  )
 
-  if (isObservationIdIncludedInDuplicateRecordValidator) {
-    duplicateRecordValidator[0].context.id = observationId
-
-    const observationValidationsWithDuplicateValidator =
-      justThisObservationsValidations.concat(duplicateRecordValidator)
-
-    return observationValidationsWithDuplicateValidator
-  }
-
-  return justThisObservationsValidations
+  return [...rowValidations, ...duplicatesNamingRow]
 }
 
 const STATUS_SEVERITY = { ignore: 1, warning: 2, error: 3 }

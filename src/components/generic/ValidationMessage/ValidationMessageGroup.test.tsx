@@ -147,23 +147,57 @@ describe('ValidationMessageGroup', () => {
     expect(getGroup('field:a').getByRole('button', { name: SHOW })).toBeInTheDocument()
   })
 
-  test('the store can open and close a group from outside it', () => {
-    let exposedStore: ValidationDisclosureStore | undefined
+  describe('opened by Next', () => {
+    const renderWithStore = () => {
+      let exposedStore: ValidationDisclosureStore | undefined
+      const { user } = renderUnauthenticatedOffline(
+        <Form
+          groups={{ 'field:a': twoWarningsAndAnError, 'row:1': twoWarningsAndAnError }}
+          onStore={(store) => {
+            exposedStore = store
+          }}
+        />,
+      )
 
-    renderUnauthenticatedOffline(
-      <Form
-        groups={{ 'field:a': twoWarningsAndAnError, 'row:1': twoWarningsAndAnError }}
-        onStore={(store) => {
-          exposedStore = store
-        }}
-      />,
-    )
+      return {
+        user,
+        open: (key: string) => act(() => exposedStore?.open(key)),
+        close: () => act(() => exposedStore?.close()),
+      }
+    }
 
-    act(() => exposedStore?.open('row:1'))
-    expect(getGroup('row:1').getByRole('button', { name: HIDE })).toBeInTheDocument()
+    test('opens the group Next lands on, and closes it when Next moves', () => {
+      const { open, close } = renderWithStore()
 
-    act(() => exposedStore?.close())
-    expect(getGroup('row:1').getByRole('button', { name: SHOW })).toBeInTheDocument()
+      open('row:1')
+      expect(getGroup('row:1').getByRole('button', { name: HIDE })).toBeInTheDocument()
+
+      open('field:a')
+      expect(getGroup('field:a').getByRole('button', { name: HIDE })).toBeInTheDocument()
+      expect(getGroup('row:1').getByRole('button', { name: SHOW })).toBeInTheDocument()
+
+      close()
+      expect(getGroup('field:a').getByRole('button', { name: SHOW })).toBeInTheDocument()
+    })
+
+    test('closes a group the diver opened when Next opens another', async () => {
+      const { user, open } = renderWithStore()
+
+      await user.click(getGroup('field:a').getByRole('button', { name: SHOW }))
+      open('row:1')
+
+      expect(getGroup('field:a').getByRole('button', { name: SHOW })).toBeInTheDocument()
+      expect(getGroup('row:1').getByRole('button', { name: HIDE })).toBeInTheDocument()
+    })
+
+    test('Hide closes a group Next opened', async () => {
+      const { user, open } = renderWithStore()
+
+      open('row:1')
+      await user.click(getGroup('row:1').getByRole('button', { name: HIDE }))
+
+      expect(getGroup('row:1').getByRole('button', { name: SHOW })).toBeInTheDocument()
+    })
   })
 
   test('keeps a group with a greyed message open, with no toggle', () => {
