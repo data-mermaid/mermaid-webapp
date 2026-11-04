@@ -15,6 +15,7 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import IntervalCheckbox from '../../../mermaidInputs/IntervalCheckbox'
+import IncludeBleachingInput from '../../../mermaidInputs/IncludeBleachingInput'
 import { HelperTextLink } from '../../../generic/links'
 
 const CURRENT_VALIDATION_PATH = 'data.benthic_transect.current'
@@ -345,6 +346,14 @@ const BenthicPitTransectInputs = ({
             />
           }
           isInputDisabled={isIntervalSizeAsStartChecked}
+        />
+        <IncludeBleachingInput
+          areValidationsShowing={areValidationsShowing}
+          formik={formik}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          markFieldValidationsStale={markFieldValidationsStale}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          validationsApiData={validationsApiData}
         />
         <InputSelectWithLabelAndValidation
           label={t('reef_slope')}

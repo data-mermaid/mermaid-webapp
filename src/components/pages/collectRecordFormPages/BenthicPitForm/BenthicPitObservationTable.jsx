@@ -34,6 +34,8 @@ import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
+import BleachingStatusCell from '../BleachingStatusCell'
+import { getCoralAttributeIds, isIncludeBleachingOn } from '../../../../library/bleachingStatus'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -51,6 +53,10 @@ const StyledColgroup = styled('colgroup')`
 
     &.growthForm {
       width: 20%;
+    }
+
+    &.bleaching {
+      width: auto;
     }
 
     &.validation {
@@ -87,7 +93,16 @@ const BenthicPitObservationsTable = ({
   const proposeNewBenthicAttributeText = t('benthic_observations.add_benthic_attribute')
   const deleteObservationLabelText = t('delete_observation')
 
-  const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
+  const {
+    interval_start: intervalStart,
+    interval_size: intervalSize,
+    include_bleaching: includeBleaching,
+  } = formik.values
+  const isBleachingOn = isIncludeBleachingOn(includeBleaching)
+  const coralAttributeIds = useMemo(
+    () => getCoralAttributeIds(benthicAttributeSelectOptions),
+    [benthicAttributeSelectOptions],
+  )
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -105,15 +120,39 @@ const BenthicPitObservationsTable = ({
     [intervalSize, intervalStart, observationsDispatch],
   )
 
+  // Filling only adds Normal to coral rows with no status, so it can run on every change. Clearing
+  // waits for the diver to switch the field off: formik holds the default No until the record's
+  // values arrive, and clearing on that would wipe the saved statuses.
+  useEffect(
+    function fillBleachingStatusesWhileIncluded() {
+      if (isBleachingOn) {
+        observationsDispatch({ type: 'fillBleachingStatuses', payload: { coralAttributeIds } })
+      }
+    },
+    [coralAttributeIds, isBleachingOn, observationsDispatch, observationsState],
+  )
+
+  const wasBleachingOnRef = useRef(isBleachingOn)
+
+  useEffect(
+    function clearBleachingStatusesWhenSwitchedOff() {
+      if (wasBleachingOnRef.current && !isBleachingOn) {
+        observationsDispatch({ type: 'clearBleachingStatuses' })
+      }
+      wasBleachingOnRef.current = isBleachingOn
+    },
+    [isBleachingOn, observationsDispatch],
+  )
+
   const observationsRows = useMemo(() => {
     const growthFormOptions = getOptions(choices.growthforms.data)
 
-    const handleKeyDown = ({ event, index, observation, isGrowthForm }) => {
+    const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
 
-      if (isTabKey && isLastRow && isGrowthForm) {
+      if (isTabKey && isLastRow && isLastCell) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -140,7 +179,15 @@ const BenthicPitObservationsTable = ({
 
     return observationsState.map((observation, index) => {
       const rowNumber = index + 1
-      const { id: observationId, attribute, growth_form = '', interval } = observation
+      const {
+        id: observationId,
+        attribute,
+        bleaching_status: bleachingStatus,
+        growth_form = '',
+        interval,
+      } = observation
+      const isCoral = coralAttributeIds.has(attribute)
+      const isBleachingCellEditable = isBleachingOn && isCoral
 
       const {
         cellMarks,
@@ -174,6 +221,14 @@ const BenthicPitObservationsTable = ({
             observationId,
           },
         })
+        // A row that stops being coral is no longer assessed. One that becomes coral is filled
+        // with Normal by fillBleachingStatuses.
+        if (isBleachingCellEditable && !coralAttributeIds.has(newBenthicAttribute)) {
+          observationsDispatch({
+            type: 'updateBleachingStatus',
+            payload: { newValue: null, observationId },
+          })
+        }
         markObservationValidationsStale({
           observationId,
         })
@@ -187,6 +242,20 @@ const BenthicPitObservationsTable = ({
           type: 'updateGrowthForm',
           payload: {
             newGrowthForm,
+            observationId,
+          },
+        })
+        markObservationValidationsStale({
+          observationId,
+        })
+      }
+
+      const handleBleachingStatusChange = (event) => {
+        setAreObservationsInputsDirty(true)
+        observationsDispatch({
+          type: 'updateBleachingStatus',
+          payload: {
+            newValue: Number(event.target.value),
             observationId,
           },
         })
@@ -247,7 +316,7 @@ const BenthicPitObservationsTable = ({
               data-testid="growth-form-select"
               onChange={handleGrowthFormChange}
               onKeyDown={(event) => {
-                handleKeyDown({ event, index, observation, isGrowthForm: true })
+                handleKeyDown({ event, index, observation, isLastCell: !isBleachingCellEditable })
               }}
               value={growth_form}
               aria-labelledby="growth-form-label"
@@ -260,6 +329,16 @@ const BenthicPitObservationsTable = ({
               ))}
             </Select>
           </Td>
+          {isBleachingOn ? (
+            <BleachingStatusCell
+              bleachingStatus={bleachingStatus}
+              isCoral={isCoral}
+              onChange={handleBleachingStatusChange}
+              onKeyDown={(event) => {
+                handleKeyDown({ event, index, observation, isLastCell: true })
+              }}
+            />
+          ) : null}
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
@@ -290,11 +369,13 @@ const BenthicPitObservationsTable = ({
     benthicAttributeSelectOptions,
     choices,
     collectRecord,
+    coralAttributeIds,
     deleteObservationLabelText,
     ignoreObservationValidations,
     unignoreObservationValidations,
     intervalSize,
     intervalStart,
+    isBleachingOn,
     proposeNewBenthicAttributeText,
     noResultsText,
     observationsDispatch,
@@ -318,6 +399,7 @@ const BenthicPitObservationsTable = ({
                 <col className="interval" />
                 <col className="benthicAttribute" />
                 <col className="growthForm" />
+                {isBleachingOn ? <col className="bleaching" /> : null}
                 {areValidationsShowing ? <col className="validations" /> : null}
                 <col className="remove" />
               </StyledColgroup>
@@ -359,6 +441,15 @@ const BenthicPitObservationsTable = ({
                       groupRef={tooltipGroupRef}
                     />
                   </Th>
+                  {isBleachingOn ? (
+                    <Th $align="right" id="bleaching-label">
+                      <LabelWithTooltip
+                        label={t('observations.bleaching')}
+                        tooltipText={t('observations.bleaching_info')}
+                        groupRef={tooltipGroupRef}
+                      />
+                    </Th>
+                  ) : null}
                   {areValidationsShowing ? (
                     <Th $align="center">{t('validations.validations')}</Th>
                   ) : null}
@@ -400,6 +491,7 @@ BenthicPitObservationsTable.propTypes = {
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({
+      include_bleaching: PropTypes.string,
       interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       interval_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

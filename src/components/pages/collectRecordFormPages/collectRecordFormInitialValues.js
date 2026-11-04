@@ -1,4 +1,5 @@
 import { dateFormat } from '../../../library/strings/dateFormat'
+import { toIncludeBleachingFormValue } from '../../../library/bleachingStatus'
 
 const getCollectRecordDataInitialValues = (collectRecord) => {
   const collectRecordData = collectRecord?.data
@@ -59,6 +60,13 @@ const getBenthicPitAdditionalValues = (collectRecord) => {
   }
 }
 
+// Benthic PIT and LIT. A record with no include_bleaching opens as No.
+const getIncludeBleachingInitialValues = (collectRecord) => {
+  return {
+    include_bleaching: toIncludeBleachingFormValue(collectRecord?.data?.include_bleaching),
+  }
+}
+
 const getHabitatComplexityAdditionalValues = (collectRecord) => {
   return {
     is_interval_size_as_start: collectRecord?.data?.is_interval_size_as_start ?? true,
@@ -92,6 +100,7 @@ export {
   getBleachingQuadratCollection,
   getCollectRecordDataInitialValues,
   getHabitatComplexityAdditionalValues,
+  getIncludeBleachingInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
 }

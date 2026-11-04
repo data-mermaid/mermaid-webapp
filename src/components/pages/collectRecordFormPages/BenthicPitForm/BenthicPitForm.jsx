@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useMemo, useReducer, useState } from 're
 import {
   getBenthicPitAdditionalValues,
   getCollectRecordDataInitialValues,
+  getIncludeBleachingInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
@@ -148,6 +149,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
         ...getSampleInfoInitialValues(collectRecordBeingEdited),
         ...getTransectInitialValues(collectRecordBeingEdited, 'benthic_transect'),
         ...getBenthicPitAdditionalValues(collectRecordBeingEdited),
+        ...getIncludeBleachingInitialValues(collectRecordBeingEdited),
       }
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
