@@ -5,6 +5,7 @@ import React, { useState, useReducer, useEffect, useMemo, useCallback } from 're
 
 import {
   getCollectRecordDataInitialValues,
+  getIncludeBleachingInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
@@ -145,6 +146,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
         ...getSampleInfoInitialValues(collectRecordBeingEdited),
         ...getTransectInitialValues(collectRecordBeingEdited, 'benthic_transect'),
+        ...getIncludeBleachingInitialValues(collectRecordBeingEdited),
       }
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])

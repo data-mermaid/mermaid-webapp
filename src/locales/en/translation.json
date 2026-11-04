@@ -711,6 +711,8 @@
     "avg_macroalgae_cover": "Avg macroalgae cover %",
     "avg_soft_coral_cover": "Avg soft coral cover %",
     "biomass_constants": "Biomass constants",
+    "bleaching": "Bleaching",
+    "bleaching_info": "Coral records default to Normal (not bleached). Records that are not coral show NA.",
     "bleaching_severity": "Bleaching severity",
     "colonies_bleached": "Observations - colonies bleached",
     "family": "Family",
@@ -720,6 +722,8 @@
     "growth_form_info": "Growth form of the observed benthic attribute. Only choose a growth form if it is relevant to the benthic attribute (e.g. Acropora branching).",
     "hard_coral_cover": "Hard coral % cover",
     "hard_coral_cover_info": "Hard coral cover as decimal percentage of quadrat total area (e.g. 33.3).",
+    "include_bleaching": "Include bleaching observations",
+    "include_bleaching_info": "Bleaching is recorded as presence only. Coral records default to Normal (not bleached), so change a record only where you see bleaching. Every coral record must show Normal (not bleached) or a bleaching severity. Records that are not coral show NA.<br /><protocolLink>Read the protocol</protocolLink><br /><gcrmnLink>GCRMN summary</gcrmnLink>",
     "interval": "Interval",
     "interval_size": "Interval size",
     "interval_size_info": "Distance between observations on a transect, in meters. May include decimal (e.g. 0.5).",
@@ -1270,5 +1274,13 @@
   "visibility_info": "The horizontal distance at which an object underwater can still be identified.",
   "width": "Width",
   "width_info": "The total width (NOT width to one side of the tape) of the fish belt transect, in meters.",
-  "yes": "Yes"
+  "yes": "Yes",
+  "bleaching_status": {
+    "na": "NA",
+    "normal": "Normal",
+    "pale": "Pale",
+    "partially_bleached": "Partially bleached",
+    "fully_bleached": "Fully bleached",
+    "recent_bleaching_mortality": "Recent bleaching mortality"
+  }
 }
