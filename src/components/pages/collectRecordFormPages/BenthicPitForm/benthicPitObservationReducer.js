@@ -1,4 +1,6 @@
 import { createUuid } from '../../../../library/createUuid'
+import { clearBleachingStatuses, fillBleachingStatuses } from '../../../../library/bleachingStatus'
+import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
 const benthicPitObservationReducer = (state, action) => {
   const getObservationsWithRecalculatedIntervals = ({
@@ -96,9 +98,11 @@ const benthicPitObservationReducer = (state, action) => {
 
     case 'duplicateLastObservation': {
       const { intervalSize, intervalStart, referenceObservation } = action.payload
+      // A new row starts not assessed for bleaching; fillBleachingStatuses makes it Normal if coral.
       const observationWithNewId = {
         ...referenceObservation,
         id: createUuid(),
+        bleaching_status: null,
       }
 
       return getObservationsWithRecalculatedIntervals({
@@ -123,6 +127,12 @@ const benthicPitObservationReducer = (state, action) => {
 
         return isObservationToUpdate ? { ...observation, growth_form: newGrowthForm } : observation
       })
+    case 'updateBleachingStatus':
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'bleaching_status' })
+    case 'fillBleachingStatuses':
+      return fillBleachingStatuses(state, action.payload.coralAttributeIds)
+    case 'clearBleachingStatuses':
+      return clearBleachingStatuses(state)
 
     default:
       throw new Error(`This action (${action.type}) isn't supported by the observationReducer`)

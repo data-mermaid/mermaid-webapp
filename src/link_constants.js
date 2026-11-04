@@ -11,6 +11,8 @@ export const links = {
   tideIntroduction: 'https://oceanservice.noaa.gov/education/tutorial_tides/tides01_intro.html',
   fishBaseLink: 'https://fishbase.mnhn.fr/search.php',
   allenCoralAtlas: 'https://allencoralatlas.org/atlas',
+  bleachingProtocol: 'https://doi.org/10.25923/8xsj-qs43',
+  bleachingGcrmnSummary: 'https://gcrmn.net/2026/05/28/bleaching-sop/',
   gfcrToolkitPdf: `https://public.datamermaid.org/GFCR-Monitoring-and-Evaluation-Toolkit.pdf?nocache=${Date.now()}`,
   twoXChallengeCriteria: 'https://www.2xchallenge.org/2xcriteria',
   latLongDecimalDegrees: 'https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees',

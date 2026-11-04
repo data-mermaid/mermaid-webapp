@@ -1,3 +1,11 @@
+import { clearBleachingStatuses, isIncludeBleachingOn } from '../../../library/bleachingStatus'
+
+// Bleaching not included means no observation was assessed, whatever the table still holds.
+const getBenthicObservationsToSave = (observations, includeBleachingFormValue) =>
+  isIncludeBleachingOn(includeBleachingFormValue)
+    ? observations
+    : clearBleachingStatuses(observations)
+
 export const reformatFormValuesIntoFishBeltRecord = ({
   formikValues,
   observationsTable1State,
@@ -120,6 +128,7 @@ export const reformatFormValuesIntoBenthicPitRecord = ({
   const {
     current,
     depth,
+    include_bleaching,
     interval_size,
     interval_start,
     is_interval_size_as_start,
@@ -159,10 +168,11 @@ export const reformatFormValuesIntoBenthicPitRecord = ({
         sample_date,
         site,
       },
+      include_bleaching: isIncludeBleachingOn(include_bleaching),
       interval_size,
       is_interval_size_as_start,
       interval_start,
-      obs_benthic_pits: observationsTable1State,
+      obs_benthic_pits: getBenthicObservationsToSave(observationsTable1State, include_bleaching),
       observers,
     },
   }
@@ -176,6 +186,7 @@ export const reformatFormValuesIntoBenthicLitRecord = ({
   const {
     current,
     depth,
+    include_bleaching,
     label,
     len_surveyed,
     management,
@@ -212,7 +223,8 @@ export const reformatFormValuesIntoBenthicLitRecord = ({
         sample_date,
         site,
       },
-      obs_benthic_lits: observationsTable1State,
+      include_bleaching: isIncludeBleachingOn(include_bleaching),
+      obs_benthic_lits: getBenthicObservationsToSave(observationsTable1State, include_bleaching),
       observers,
     },
   }

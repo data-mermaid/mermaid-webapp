@@ -51,10 +51,18 @@ const BenthicAttributesMixin = (Base) =>
         return Promise.reject(benthicAttributeException)
       }
 
+      const parentBenthicAttribute = existingBenthicAttribute.find(
+        ({ id }) => id === benthicAttributeParentId,
+      )
+
+      // The API derives top_level_category and ignores it on push. Copying the parent's lets an
+      // attribute proposed offline group under its category (and count as coral for bleaching)
+      // before the next sync replaces it with the API's version.
       const newBenthicAttributeObject = {
         id: createUuid(),
         name: newBenthicAttributeName,
         parent: benthicAttributeParentId,
+        top_level_category: parentBenthicAttribute?.top_level_category,
         uiState_pushToApi: true,
       }
 
