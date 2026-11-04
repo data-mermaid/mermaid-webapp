@@ -6,6 +6,7 @@ import {
   screen,
   renderAuthenticatedOffline,
   waitFor,
+  waitForElementToBeRemoved,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -123,6 +124,43 @@ describe('Benthic PIT bleaching', () => {
 
     expect(savedRecord.data.include_bleaching).toBe(false)
     expect(savedRecord.data.obs_benthic_pits[3].bleaching_status).toBeNull()
+  })
+
+  test('an attribute proposed offline under a coral attribute takes a status', async () => {
+    const { user, dexiePerUserDataInstance } = await renderBenthicPitRecord()
+
+    await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
+
+    const firstAttributeInput = screen.getAllByTestId('observation-benthic-attribute-input')[0]
+
+    await user.clear(firstAttributeInput)
+    await user.type(firstAttributeInput, 'supercalifragilistic')
+    await user.click(await screen.findByTestId('propose-new-benthic-attribute-button'))
+
+    const modal = screen.getByTestId('attribute-proposal-modal')
+
+    await user.type(await within(modal).findByTestId('attribute-label'), 'acro')
+    await user.selectOptions(
+      within(modal).getByRole('listbox'),
+      within(modal).getByRole('option', { name: 'Acropora' }),
+    )
+    await user.type(within(modal).getByTestId('new-attribute-name'), 'unicorn')
+    await user.click(within(modal).getByTestId('next-form-page'))
+    await user.click(await within(modal).findByTestId('submit-proposal-button'))
+    await waitForElementToBeRemoved(() => screen.queryByTestId('attribute-proposal-modal'))
+
+    const proposedAttribute = (await dexiePerUserDataInstance.benthic_attributes.toArray()).find(
+      ({ name }) => name === 'unicorn',
+    )
+
+    expect(proposedAttribute.top_level_category).toBe('hard-coral-category-0000-0000-000000000000')
+
+    const firstRowBleachingSelect = screen.getAllByTestId('bleaching-status-select')[0]
+
+    await waitFor(() => expect(firstRowBleachingSelect).toBeEnabled())
+    expect(screen.getAllByTestId('bleaching-status-select')[0]).toHaveDisplayValue(
+      'bleaching_status.normal',
+    )
   })
 
   test('a record saved with bleaching reopens at Yes with its statuses', async () => {
