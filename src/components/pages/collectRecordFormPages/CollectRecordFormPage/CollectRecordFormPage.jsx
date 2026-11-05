@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import PropTypes from 'prop-types'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -44,11 +44,17 @@ import ObserversInput from '../ObserversInput'
 import PageUnavailable from '../../PageUnavailable'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo'
+import { ObservationsHeadingValidationsContext } from '../ObservationsHeadingValidations'
+import splitRecordLevelValidations from '../splitRecordLevelValidations'
 import SampleEventInputs from '../SampleEventInputs'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCollectRecordValidation from './useCollectRecordValidation'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
+import {
+  ValidationDisclosureProvider,
+  useValidationDisclosureStore,
+} from '../../../generic/ValidationMessage/ValidationDisclosure'
 
 function loadObservationsFromCollectRecordIntoTableState({
   collectRecordBeingEdited,
@@ -129,6 +135,7 @@ const CollectRecordFormPage = ({
   isImageClassificationEnabledForUser = false,
 }) => {
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
+  const validationDisclosureStore = useValidationDisclosureStore()
   const [imageClassificationObservationIds, setImageClassificationObservationIds] = useState(null)
   const [choices, setChoices] = useState({})
   const [isCommonProtocolDataLoading, setIsCommonProtocolDataLoading] = useState(true)
@@ -155,6 +162,11 @@ const CollectRecordFormPage = ({
     submitButtonState === buttonGroupStates.submitting
   const isLoading = isParentDataLoading || isCommonProtocolDataLoading
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+  const observationTableNames = getObservationsPropertyNames(collectRecordBeingEdited)
+  const splitValidations = splitRecordLevelValidations(
+    recordLevelValidations,
+    observationTableNames,
+  )
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
   const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
 
@@ -168,7 +180,6 @@ const CollectRecordFormPage = ({
   const location = useLocation()
   const isMounted = useIsMounted()
   const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
-  const observationTableRef = useRef(null)
   const shouldPromptTrigger = isFormDirty && saveButtonState !== buttonGroupStates.saving // we need to prevent the user from seeing the dirty form prompt when a new record is saved (and that triggers a navigation to its new page)
   const isBenthicPQTNewRecordWithImageClassificationEnabled =
     isImageClassificationEnabledForUser && isNewRecord && sampleUnitName === 'benthicpqt'
@@ -380,7 +391,6 @@ const CollectRecordFormPage = ({
     : tableStateObservationIds
 
   const {
-    handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,
     ignoreObservationValidations,
@@ -395,12 +405,13 @@ const CollectRecordFormPage = ({
     goToNextValidation,
     nextAnnouncement,
   } = useCollectRecordValidation({
+    areValidationsShowing,
     collectRecordBeingEdited,
     databaseSwitchboardInstance,
+    disclosureStore: validationDisclosureStore,
     handleCollectRecordChange,
     isParentDataLoading,
     observationIdsOnPage,
-    observationTableRef,
     projectId,
     recordId,
     setAreValidationsShowing,
@@ -552,14 +563,20 @@ const CollectRecordFormPage = ({
     </ErrorBox>
   )
 
+  const getObservationsHeadingValidations = (tableName) => ({
+    validations: splitValidations.byTable[tableName] ?? [],
+    areValidationsShowing,
+    ignoreRecordLevelValidation,
+    unignoreRecordLevelValidation,
+  })
+
   const contentViewByRole = !isReadOnlyUser ? (
     <>
       <RecordLevelInputValidationInfo
-        validations={recordLevelValidations}
+        validations={splitValidations.top}
         areValidationsShowing={areValidationsShowing}
         unignoreRecordLevelValidation={unignoreRecordLevelValidation}
         ignoreRecordLevelValidation={ignoreRecordLevelValidation}
-        handleScrollToObservation={handleScrollToObservation}
       />
       <form
         id="collect-record-form"
@@ -604,9 +621,8 @@ const CollectRecordFormPage = ({
             validationsApiData={validationsApiData}
           />
         )}
-        <div
-          ref={observationTableRef}
-          data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[0]}
+        <ObservationsHeadingValidationsContext
+          value={getObservationsHeadingValidations(observationTableNames[0])}
         >
           <ObservationTable1
             {...observationTable1Props}
@@ -624,9 +640,11 @@ const CollectRecordFormPage = ({
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
           />
-        </div>
+        </ObservationsHeadingValidationsContext>
         {ObservationTable2 ? (
-          <div data-observation-table={getObservationsPropertyNames(collectRecordBeingEdited)[1]}>
+          <ObservationsHeadingValidationsContext
+            value={getObservationsHeadingValidations(observationTableNames[1])}
+          >
             <ObservationTable2
               testId="observations2-section"
               areValidationsShowing={areValidationsShowing}
@@ -643,7 +661,7 @@ const CollectRecordFormPage = ({
                 setObservationIdToAddNewBenthicAttributeTo
               }
             />
-          </div>
+          </ObservationsHeadingValidationsContext>
         ) : null}
       </form>
       {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
@@ -689,51 +707,53 @@ const CollectRecordFormPage = ({
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <>
+    <ValidationDisclosureProvider store={validationDisclosureStore}>
       <ContentPageLayout
         isPageContentLoading={isLoading}
         isToolbarSticky={true}
         subNavNode={subNavNode}
         content={contentViewByRole}
-        headerTitle={renderCollectRecordTitle()}
         toolbar={
-          <CollectFormToolbarWrapper>
-            <FormStatusIndicators
-              areValidationsShowing={areValidationsShowing}
-              errorCount={validationCounts.errorCount}
-              warningCount={validationCounts.warningCount}
-              ignoredCount={validationCounts.ignoredCount}
-              nextAnnouncement={nextAnnouncement}
-              onNext={goToNextValidation}
-            />
-            <ButtonGroupWithCallout>
-              {!isReadOnlyUser && (
-                <SaveValidateSubmitButtonGroup
-                  isNewRecord={isNewRecord}
-                  saveButtonState={saveButtonState}
-                  validateButtonState={validateButtonState}
-                  submitButtonState={submitButtonState}
-                  onValidate={handleValidate}
-                  onSave={handleSave}
-                  onSubmit={handleSubmit}
-                />
-              )}
-              <ErrorBoxSubmit>
-                <ErrorTextSubmit $isErrorShown={isSubmitWarningVisible}>
-                  {t('sample_units.errors.submit_disabled')}
-                  <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
-                    x
-                  </ErrorTextButton>
-                </ErrorTextSubmit>
-              </ErrorBoxSubmit>
-            </ButtonGroupWithCallout>
-          </CollectFormToolbarWrapper>
+          <>
+            {renderCollectRecordTitle()}
+            <CollectFormToolbarWrapper>
+              <FormStatusIndicators
+                areValidationsShowing={areValidationsShowing}
+                errorCount={validationCounts.errorCount}
+                warningCount={validationCounts.warningCount}
+                ignoredCount={validationCounts.ignoredCount}
+                nextAnnouncement={nextAnnouncement}
+                onNext={goToNextValidation}
+              />
+              <ButtonGroupWithCallout>
+                {!isReadOnlyUser && (
+                  <SaveValidateSubmitButtonGroup
+                    isNewRecord={isNewRecord}
+                    saveButtonState={saveButtonState}
+                    validateButtonState={validateButtonState}
+                    submitButtonState={submitButtonState}
+                    onValidate={handleValidate}
+                    onSave={handleSave}
+                    onSubmit={handleSubmit}
+                  />
+                )}
+                <ErrorBoxSubmit>
+                  <ErrorTextSubmit $isErrorShown={isSubmitWarningVisible}>
+                    {t('sample_units.errors.submit_disabled')}
+                    <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
+                      x
+                    </ErrorTextButton>
+                  </ErrorTextSubmit>
+                </ErrorBoxSubmit>
+              </ButtonGroupWithCallout>
+            </CollectFormToolbarWrapper>
+          </>
         }
       />
 
       {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={shouldPromptTrigger} />
-    </>
+    </ValidationDisclosureProvider>
   )
 }
 

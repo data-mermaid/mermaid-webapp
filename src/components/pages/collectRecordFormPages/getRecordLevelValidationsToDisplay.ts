@@ -1,6 +1,6 @@
-// `unsuccessful_dry_submit` is the API's summary of everything blocking a submit ("One or
-// more invalid fields: ..."). It duplicates errors the user can already see, so it is only
-// worth showing once nothing else at the record level is failing.
+// `unsuccessful_dry_submit` is the API's summary of everything blocking a submit ("System
+// validation error: ..."). It duplicates errors the user can already see, so it is only worth
+// showing once nothing else at the record level is failing.
 //
 // `len_surveyed_not_positive` and `interval_size_not_positive` come from the observation count
 // check on benthic PIT and habitat complexity, and the total length check on benthic LIT, when
@@ -9,7 +9,7 @@
 //
 // Both the record-level panel and the form status indicator chips filter through here, so
 // the chip totals cannot count a message the panel has hidden.
-const DRY_SUBMIT_CODE = 'unsuccessful_dry_submit'
+export const DRY_SUBMIT_CODE = 'unsuccessful_dry_submit'
 const CODES_REPORTED_BY_A_FIELD = new Set([
   'len_surveyed_not_positive',
   'interval_size_not_positive',

@@ -1,42 +1,58 @@
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import getDuplicateValuesObservationIds, {
-  isDuplicateValuesValidation,
-} from './getDuplicateValuesObservationIds'
+import { getMessageColumns } from '../../../../library/validationMessageHelpers'
+import getDuplicateValuesObservationIds from './getDuplicateValuesObservationIds'
 
+// A row's own validations, then each record-level duplicate_values that names the row. Bleaching
+// has one duplicate check per table, so a row shows only the one about its own table.
 const getObservationValidations = ({ observationId, collectRecord, observationsPropertyName }) => {
-  const allObservationsValidations =
-    collectRecord?.validations?.results?.data?.[observationsPropertyName] ?? []
+  const results = collectRecord?.validations?.results
 
-  const duplicateRecordValidator = collectRecord?.validations?.results?.$record?.filter(
-    isDuplicateValuesValidation,
-  )
-
-  const isObservationIdIncludedInDuplicateRecordValidator = duplicateRecordValidator?.some(
-    (validator) => getDuplicateValuesObservationIds(validator).includes(observationId),
-  )
-
-  const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
-    // api is inconsistent between id and observation_id
-
-    return (
+  const rowValidations = (results?.data?.[observationsPropertyName] ?? []).flat().filter(
+    // The API names the row in either property.
+    (validation) =>
       validation.context?.observation_id === observationId ||
-      validation.context?.id === observationId
+      validation.context?.id === observationId,
+  )
+
+  const duplicatesNamingRow = (results?.$record ?? []).filter((validation) =>
+    getDuplicateValuesObservationIds(validation).includes(observationId),
+  )
+
+  return [...rowValidations, ...duplicatesNamingRow]
+}
+
+const STATUS_SEVERITY = { ignore: 1, warning: 2, error: 3 }
+
+// When two messages are about one cell, the more severe status marks it.
+const isStrongerMark = (mark, current) =>
+  !current || STATUS_SEVERITY[mark.status] > STATUS_SEVERITY[current.status]
+
+// The mark for each observation column a row's messages are about, keyed by column.
+const getCellMarks = (validationMessages) =>
+  validationMessages.reduce((marks, message) => {
+    const mark = { status: message.status, isStale: Boolean(message.isStale) }
+
+    getMessageColumns(message).forEach((column) => {
+      if (isStrongerMark(mark, marks[column])) {
+        marks[column] = mark
+      }
+    })
+
+    return marks
+  }, {})
+
+// Props for an observation cell that answers to one or more columns, such as a bleaching count
+// that is both its own column and part of the row's total.
+export const getCellMarkProps = (cellMarks, ...columns) => {
+  const mark = columns
+    .map((column) => cellMarks[column])
+    .reduce(
+      (strongest, candidate) =>
+        candidate && isStrongerMark(candidate, strongest) ? candidate : strongest,
+      undefined,
     )
-  })
 
-  // if there are duplicate values, in context, there is an array of objects with the duplicate observations ids
-  // here we add an id property to the context object so that we can use the same function to get the validation properties for the input
-
-  if (isObservationIdIncludedInDuplicateRecordValidator) {
-    duplicateRecordValidator[0].context.id = observationId
-
-    const observationValidationsWithDuplicateValidator =
-      justThisObservationsValidations.concat(duplicateRecordValidator)
-
-    return observationValidationsWithDuplicateValidator
-  }
-
-  return justThisObservationsValidations
+  return mark ? { 'data-validation-mark': mark.isStale ? 'info' : mark.status } : {}
 }
 
 const getObservationValidationInfo = ({
@@ -69,6 +85,7 @@ const getObservationValidationInfo = ({
     isObservationValid: observationValidationType === 'ok',
     observationValidationMessages: validationMessages,
     observationValidationType,
+    cellMarks: getCellMarks(validationMessages),
   }
 }
 

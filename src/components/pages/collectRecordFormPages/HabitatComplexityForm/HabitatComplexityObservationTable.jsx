@@ -22,9 +22,12 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -115,13 +118,17 @@ const HabitatComplexityObservationsTable = ({
     return observationsState.map((observation, index) => {
       const rowNumber = index + 1
       const { id: observationId, score: habitatComplexityScore = '', interval } = observation
-      const { isObservationValid, observationValidationMessages, observationValidationType } =
-        getObservationValidationInfo({
-          observationId,
-          collectRecord,
-          areValidationsShowing,
-          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-        })
+      const {
+        cellMarks,
+        isObservationValid,
+        observationValidationMessages,
+        observationValidationType,
+      } = getObservationValidationInfo({
+        observationId,
+        collectRecord,
+        areValidationsShowing,
+        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+      })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -155,12 +162,17 @@ const HabitatComplexityObservationsTable = ({
           $messageType={observationValidationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="right" aria-labelledby="interval-label" data-testid="interval-cell">
+          <Td
+            {...getCellMarkProps(cellMarks, 'interval')}
+            $align="right"
+            aria-labelledby="interval-label"
+            data-testid="interval-cell"
+          >
             {interval}
             {metersShort}
           </Td>
 
-          <Td $align="center">
+          <Td {...getCellMarkProps(cellMarks, 'score')} $align="center">
             <Select
               data-testid="habitat-complexity-score-select"
               onChange={handleHabitatComplexityScoreChange}
@@ -225,6 +237,7 @@ const HabitatComplexityObservationsTable = ({
     <>
       <InputWrapper data-testid={testId}>
         <H2 id="table-label">{t('observations.observations')}</H2>
+        <ObservationsHeadingValidations />
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable aria-labelledby="table-label">

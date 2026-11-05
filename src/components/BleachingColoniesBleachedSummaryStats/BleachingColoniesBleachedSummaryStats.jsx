@@ -3,30 +3,29 @@ import { useTranslation } from 'react-i18next'
 import { observationsColoniesBleachedPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { ObservationsSummaryStats, Td, Th, Tr } from '../generic/Table/table'
 
+// Collect records are free-form JSON, so a row written by another client can leave a count out.
+const toCount = (value) => Number(value) || 0
+
 const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached = [] }) => {
   const { t } = useTranslation()
   const getTotalOfColonies = () => {
     const totals = observationsColoniesBleached.map((item) => {
       return (
-        Number(item.count_20) +
-        Number(item.count_50) +
-        Number(item.count_80) +
-        Number(item.count_100) +
-        Number(item.count_dead) +
-        Number(item.count_normal) +
-        Number(item.count_pale)
+        toCount(item.count_20) +
+        toCount(item.count_50) +
+        toCount(item.count_80) +
+        toCount(item.count_100) +
+        toCount(item.count_dead) +
+        toCount(item.count_normal) +
+        toCount(item.count_pale)
       )
     })
 
     return totals.reduce((acc, currentVal) => acc + currentVal, 0)
   }
 
-  const getTotalOfCoralGenera = () => {
-    const attributeIds = observationsColoniesBleached.filter((item) => item.attribute)
-    const uniqueAttributeIds = [...new Set(attributeIds)]
-
-    return uniqueAttributeIds.length
-  }
+  const getTotalOfCoralGenera = () =>
+    new Set(observationsColoniesBleached.map((item) => item.attribute).filter(Boolean)).size
 
   const getPercentageOfColonies = (colonyType) => {
     if (!observationsColoniesBleached.length || getTotalOfColonies() === 0) {
@@ -38,15 +37,15 @@ const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached = 
     if (colonyType === 'bleached') {
       totals = observationsColoniesBleached.map((item) => {
         return (
-          Number(item.count_20) +
-          Number(item.count_50) +
-          Number(item.count_80) +
-          Number(item.count_100) +
-          Number(item.count_dead)
+          toCount(item.count_20) +
+          toCount(item.count_50) +
+          toCount(item.count_80) +
+          toCount(item.count_100) +
+          toCount(item.count_dead)
         )
       })
     } else {
-      totals = observationsColoniesBleached.map((item) => Number(item[colonyType]))
+      totals = observationsColoniesBleached.map((item) => toCount(item[colonyType]))
     }
 
     return (

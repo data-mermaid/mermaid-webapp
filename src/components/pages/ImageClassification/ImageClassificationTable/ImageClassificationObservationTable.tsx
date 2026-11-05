@@ -47,6 +47,7 @@ import {
 import getDuplicateValidationInfo, {
   ValidationResult,
 } from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
+import ObservationsHeadingValidations from '../../collectRecordFormPages/ObservationsHeadingValidations'
 
 interface TableHeaderProps {
   align: 'left' | 'right' | 'center'
@@ -781,6 +782,7 @@ const ImageClassificationObservationTable = ({
     <>
       <InputWrapper>
         <H2 id="table-label">{t('observations.observations')}</H2>
+        <ObservationsHeadingValidations />
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
             <thead>

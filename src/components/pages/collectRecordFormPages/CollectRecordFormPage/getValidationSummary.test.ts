@@ -1,10 +1,22 @@
 import { describe, expect, test } from 'vitest'
 import getValidationSummary from './getValidationSummary'
+import {
+  fieldDisclosureKey,
+  rowDisclosureKey,
+} from '../../../generic/ValidationMessage/ValidationDisclosure'
 import mockImageClassificationValidations from '../../../../testUtilities/mockBenthicPhotoQuadratImageClassificationValidationsObject'
 
 const recordTarget = (value: string) => ({ attribute: 'data-record-validation-id', value })
-const fieldTarget = (value: string) => ({ attribute: 'data-validation-field', value })
-const observationTarget = (value: string) => ({ attribute: 'data-observation-id', value })
+const fieldTarget = (validationPath: string) => ({
+  attribute: 'data-validation-field',
+  value: validationPath.slice(validationPath.lastIndexOf('.') + 1),
+  disclosureKey: fieldDisclosureKey(validationPath),
+})
+const observationTarget = (value: string) => ({
+  attribute: 'data-observation-id',
+  value,
+  disclosureKey: rowDisclosureKey(value),
+})
 
 const noCounts = { error: 0, warning: 0, ignore: 0 }
 const noTargets = { error: [], warning: [], ignore: [] }
@@ -38,8 +50,8 @@ describe('getValidationSummary targets', () => {
       },
     })
 
-    expect(targets.error).toEqual([fieldTarget('site')])
-    expect(targets.warning).toEqual([fieldTarget('management')])
+    expect(targets.error).toEqual([fieldTarget('data.sample_event.site')])
+    expect(targets.warning).toEqual([fieldTarget('data.sample_event.management')])
   })
 
   test('emits one observation target per observation_id per status', () => {
@@ -76,8 +88,14 @@ describe('getValidationSummary targets', () => {
       },
     })
 
-    expect(targets.error).toEqual([fieldTarget('site'), observationTarget('obs1')])
-    expect(targets.warning).toEqual([fieldTarget('site'), observationTarget('obs1')])
+    expect(targets.error).toEqual([
+      fieldTarget('data.sample_event.site'),
+      observationTarget('obs1'),
+    ])
+    expect(targets.warning).toEqual([
+      fieldTarget('data.sample_event.site'),
+      observationTarget('obs1'),
+    ])
     expect(targets.ignore).toEqual([])
     expect(counts).toEqual({ error: 2, warning: 2, ignore: 0 })
   })
@@ -93,7 +111,7 @@ describe('getValidationSummary targets', () => {
       },
     })
 
-    expect(targets.error).toEqual([recordTarget('r1'), fieldTarget('site')])
+    expect(targets.error).toEqual([fieldTarget('data.sample_event.site'), recordTarget('r1')])
     expect(targets.warning).toEqual([observationTarget('obs1')])
   })
 
@@ -110,9 +128,9 @@ describe('getValidationSummary targets', () => {
       },
     })
 
-    expect(targets.error).toEqual([fieldTarget('depth')])
-    expect(targets.warning).toEqual([fieldTarget('width')])
-    expect(targets.ignore).toEqual([fieldTarget('width')])
+    expect(targets.error).toEqual([fieldTarget('data.fishbelt_transect.depth')])
+    expect(targets.warning).toEqual([fieldTarget('data.fishbelt_transect.width')])
+    expect(targets.ignore).toEqual([fieldTarget('data.fishbelt_transect.width')])
   })
 
   test('handles shallow field shape where data.<section> contains validations directly (e.g. observers)', () => {
@@ -126,8 +144,8 @@ describe('getValidationSummary targets', () => {
     })
 
     // An error never hides a warning, so the row is a target for both chips.
-    expect(targets.error).toEqual([fieldTarget('observers')])
-    expect(targets.warning).toEqual([fieldTarget('observers')])
+    expect(targets.error).toEqual([fieldTarget('data.observers')])
+    expect(targets.warning).toEqual([fieldTarget('data.observers')])
   })
 
   test('accepts context.id as well as context.observation_id, as the row lookup does', () => {
@@ -231,8 +249,9 @@ describe('getValidationSummary with deleted observation rows', () => {
 })
 
 describe('getValidationSummary with duplicate_values', () => {
-  // duplicate_values is a $record validation that getObservationValidationInfo also paints
-  // onto every row named in context.duplicates, so those rows are targets too.
+  // duplicate_values is a $record validation that getObservationValidationInfo also shows on
+  // every row named in context.duplicates. While any of those rows is on the page, the rows are
+  // what is counted and reached, not the message.
   const duplicateValues = (status: string) => ({
     code: 'duplicate_values',
     status,
@@ -248,77 +267,51 @@ describe('getValidationSummary with duplicate_values', () => {
     },
   })
 
-  test('emits a target for the record message and for every row it names', () => {
-    const { targets } = getValidationSummary({ $record: [duplicateValues('warning')] })
+  test('counts once per row it marks, and targets the rows only', () => {
+    const { counts, targets } = getValidationSummary({ $record: [duplicateValues('error')] })
 
-    expect(targets.warning).toEqual([
-      recordTarget('dupes'),
-      observationTarget('obs1'),
-      observationTarget('obs2'),
-    ])
-  })
-
-  test('counts one warning, however many rows it marks', () => {
-    // One validation, one message on screen. The marked rows are places to go, not more work.
-    const { counts } = getValidationSummary({ $record: [duplicateValues('warning')] })
-
-    expect(counts).toEqual({ error: 0, warning: 1, ignore: 0 })
+    expect(counts).toEqual({ error: 2, warning: 0, ignore: 0 })
+    expect(targets.error).toEqual([observationTarget('obs1'), observationTarget('obs2')])
   })
 
   test('still counts a marked row for validations of its own', () => {
     const { counts, targets } = getValidationSummary({
-      $record: [duplicateValues('warning')],
+      $record: [duplicateValues('error')],
       data: {
         obs_benthic_photo_quadrats: [[{ status: 'warning', context: { observation_id: 'obs1' } }]],
       },
     })
 
-    // The record message, plus obs1's own warning. obs2 carries only the duplicate.
-    expect(counts).toEqual({ error: 0, warning: 2, ignore: 0 })
-    expect(targets.warning).toEqual([
-      recordTarget('dupes'),
-      observationTarget('obs1'),
-      observationTarget('obs2'),
-    ])
+    expect(counts).toEqual({ error: 2, warning: 1, ignore: 0 })
+    expect(targets.error).toEqual([observationTarget('obs1'), observationTarget('obs2')])
+    expect(targets.warning).toEqual([observationTarget('obs1')])
   })
 
-  test('a named row with its own error still shows the duplicate warning, counted once', () => {
-    const { counts, targets } = getValidationSummary({
-      $record: [duplicateValues('warning')],
-      data: {
-        obs_benthic_photo_quadrats: [[{ status: 'error', context: { observation_id: 'obs1' } }]],
-      },
-    })
-
-    expect(targets.error).toEqual([observationTarget('obs1')])
-    expect(targets.warning).toEqual([
-      recordTarget('dupes'),
-      observationTarget('obs1'),
-      observationTarget('obs2'),
-    ])
-    expect(counts).toEqual({ error: 1, warning: 1, ignore: 0 })
-  })
-
-  test('respects rows that are no longer on the page', () => {
+  test('counts only the marked rows still on the page', () => {
     const { counts, targets } = getValidationSummary(
-      { $record: [duplicateValues('warning')] },
+      { $record: [duplicateValues('error')] },
       new Set(['obs2']),
     )
 
-    expect(targets.warning).toEqual([recordTarget('dupes'), observationTarget('obs2')])
-    expect(counts).toEqual({ error: 0, warning: 1, ignore: 0 })
+    expect(counts).toEqual({ error: 1, warning: 0, ignore: 0 })
+    expect(targets.error).toEqual([observationTarget('obs2')])
+  })
+
+  test('counts and targets the message when none of its rows is on the page', () => {
+    const { counts, targets } = getValidationSummary(
+      { $record: [duplicateValues('error')] },
+      new Set(['obs3']),
+    )
+
+    expect(counts).toEqual({ error: 1, warning: 0, ignore: 0 })
+    expect(targets.error).toEqual([recordTarget('dupes')])
   })
 
   test('follows the validation status, so an ignored duplicate counts as ignored', () => {
     const { counts, targets } = getValidationSummary({ $record: [duplicateValues('ignore')] })
 
-    expect(targets.warning).toEqual([])
-    expect(targets.ignore).toEqual([
-      recordTarget('dupes'),
-      observationTarget('obs1'),
-      observationTarget('obs2'),
-    ])
-    expect(counts).toEqual({ error: 0, warning: 0, ignore: 1 })
+    expect(counts).toEqual({ error: 0, warning: 0, ignore: 2 })
+    expect(targets.ignore).toEqual([observationTarget('obs1'), observationTarget('obs2')])
   })
 
   test('ignores duplicate_images, which keys context.duplicates by image id instead', () => {
@@ -391,6 +384,144 @@ describe('getValidationSummary record level statuses', () => {
     expect(targets.error).toEqual([recordTarget('summary')])
     expect(targets.warning).toEqual([recordTarget('r1')])
     expect(counts).toEqual({ error: 1, warning: 1, ignore: 0 })
+  })
+})
+
+// "One or more invalid fields": the API's duplicate transect check could not read one of the
+// fields in its `fields`.
+describe('getValidationSummary with the invalid transect fields message', () => {
+  const invalidTransect = {
+    status: 'error',
+    code: 'invalid_fishbelt_transect',
+    validation_id: 'transect',
+    fields: ['data.sample_event.site', 'data.fishbelt_transect.depth'],
+  }
+
+  test('is not counted or targeted while one of its fields shows a message', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [invalidTransect],
+      data: { sample_event: { site: [{ status: 'error' }] } },
+    })
+
+    expect(counts.error).toBe(1)
+    expect(targets.error).toEqual([fieldTarget('data.sample_event.site')])
+  })
+
+  test('is counted again once its only mark is greyed by an edit', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [invalidTransect],
+      data: { fishbelt_transect: { depth: [{ status: 'error', isStale: true }] } },
+    })
+
+    expect(counts.error).toBe(1)
+    expect(targets.error).toEqual([recordTarget('transect')])
+  })
+
+  test('is not explained by a warning on one of its fields', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [invalidTransect],
+      data: { sample_event: { site: [{ status: 'warning' }] } },
+    })
+
+    expect(counts).toEqual({ error: 1, warning: 1, ignore: 0 })
+    expect(targets.error).toEqual([recordTarget('transect')])
+  })
+
+  test('is counted and targeted when none of its fields shows a message', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [invalidTransect],
+      data: { fishbelt_transect: { width: [{ status: 'error' }] } },
+    })
+
+    expect(counts.error).toBe(2)
+    expect(targets.error).toEqual([
+      fieldTarget('data.fishbelt_transect.width'),
+      recordTarget('transect'),
+    ])
+  })
+})
+
+// The dry submit summary ("System validation error") names, in context.dry_submit_results, the
+// fields and observation columns the API could not save.
+describe('getValidationSummary with the dry submit summary', () => {
+  const drySubmit = (...names: string[]) => ({
+    status: 'error',
+    code: 'unsuccessful_dry_submit',
+    validation_id: 'summary',
+    context: {
+      dry_submit_results: Object.fromEntries(
+        names.map((name) => [name, 'This field is required.']),
+      ),
+    },
+  })
+
+  test('is not counted or targeted while every field it names shows a message', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [drySubmit('site', 'depth')],
+      data: {
+        sample_event: { site: [{ status: 'error' }] },
+        fishbelt_transect: { depth: [{ status: 'error' }] },
+      },
+    })
+
+    expect(counts.error).toBe(2)
+    expect(targets.error).toEqual([
+      fieldTarget('data.sample_event.site'),
+      fieldTarget('data.fishbelt_transect.depth'),
+    ])
+  })
+
+  test('is counted again when a field it names shows only a greyed or ignored message', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [drySubmit('site', 'depth')],
+      data: {
+        sample_event: { site: [{ status: 'ignore' }] },
+        fishbelt_transect: { depth: [{ status: 'error', isStale: true }] },
+      },
+    })
+
+    expect(counts).toEqual({ error: 1, warning: 0, ignore: 1 })
+    expect(targets.error).toEqual([recordTarget('summary')])
+  })
+
+  test('matches an observation column a row marks, by the column key the table uses', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [drySubmit('fish_attribute', 'size')],
+      data: {
+        obs_belt_fishes: [
+          [
+            {
+              status: 'error',
+              code: 'required',
+              name: 'fish_attribute_list_required_validator',
+              context: { observation_id: 'obs1' },
+            },
+            {
+              status: 'error',
+              code: 'required',
+              name: 'size_list_required_validator',
+              context: { observation_id: 'obs1' },
+            },
+          ],
+        ],
+      },
+    })
+
+    expect(counts.error).toBe(2)
+    expect(targets.error).toEqual([observationTarget('obs1')])
+  })
+
+  test('is counted and targeted when a name it gives has no mark of its own', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [drySubmit('depth', 'non_field_errors')],
+      data: { fishbelt_transect: { depth: [{ status: 'error' }] } },
+    })
+
+    expect(counts.error).toBe(2)
+    expect(targets.error).toEqual([
+      fieldTarget('data.fishbelt_transect.depth'),
+      recordTarget('summary'),
+    ])
   })
 })
 

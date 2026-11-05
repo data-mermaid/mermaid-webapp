@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import ValidationMessage, { EditedNote } from '../../generic/ValidationMessage/ValidationMessage'
+import ValidationMessageGroup from '../../generic/ValidationMessage/ValidationMessageGroup'
+import { fieldDisclosureKey } from '../../generic/ValidationMessage/ValidationDisclosure'
 import { getValidationMessage } from '../../../library/validationMessageHelpers'
 import ResolveDuplicateSiteButtonAndModal from '../../ResolveDuplicateSiteButtonAndModal/ResolveDuplicateSiteButtonAndModal'
 import ResolveDuplicateMRButtonAndModal from '../../ResolveDuplicateMRButtonAndModal/ResolveDuplicateMRButtonAndModal'
@@ -94,17 +96,22 @@ const InputValidationInfo = ({
     <ValidationWrapper data-testid={testId}>
       {messages.length ? (
         <MessageList>
-          {messages.map((message) => (
-            <ValidationMessage
-              key={message.id}
-              status={message.status}
-              isStale={message.isStale}
-              className={`${message.status}-indicator`}
-              action={getAction(message)}
-            >
-              <p>{getValidationMessage(message, projectId)}</p>
-            </ValidationMessage>
-          ))}
+          <ValidationMessageGroup
+            disclosureKey={validationPath ? fieldDisclosureKey(validationPath) : undefined}
+            messages={messages}
+          >
+            {messages.map((message) => (
+              <ValidationMessage
+                key={message.id}
+                status={message.status}
+                isStale={message.isStale}
+                className={`${message.status}-indicator`}
+                action={getAction(message)}
+              >
+                <p>{getValidationMessage(message, projectId)}</p>
+              </ValidationMessage>
+            ))}
+          </ValidationMessageGroup>
           {isEdited ? <EditedNote>{t('validations.edited_revalidate')}</EditedNote> : null}
         </MessageList>
       ) : null}
