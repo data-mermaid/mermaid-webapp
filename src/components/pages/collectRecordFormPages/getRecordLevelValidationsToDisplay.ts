@@ -1,3 +1,5 @@
+import isPassedIgnoredCheck from './isPassedIgnoredCheck'
+
 // `unsuccessful_dry_submit` is the API's summary of everything blocking a submit ("System
 // validation error: ..."). It duplicates errors the user can already see, so it is only worth
 // showing once nothing else at the record level is failing.
@@ -6,6 +8,8 @@
 // check on benthic PIT and habitat complexity, and the total length check on benthic LIT, when
 // the transect length or interval size is empty, zero or negative. The transect length and interval size fields report every one
 // of those cases themselves, so the record-level copies are never the only sign of the problem.
+//
+// An ignored check that has since passed is dropped too (see isPassedIgnoredCheck).
 //
 // Both the record-level panel and the form status indicator chips filter through here, so
 // the chip totals cannot count a message the panel has hidden.
@@ -27,7 +31,9 @@ const readProperty = (value: unknown, property: 'code' | 'status'): string | und
 
 const getRecordLevelValidationsToDisplay = <T>(validations: readonly T[]): T[] => {
   const shown = validations.filter(
-    (validation) => !CODES_REPORTED_BY_A_FIELD.has(readProperty(validation, 'code') ?? ''),
+    (validation) =>
+      !isPassedIgnoredCheck(validation) &&
+      !CODES_REPORTED_BY_A_FIELD.has(readProperty(validation, 'code') ?? ''),
   )
   const hasOtherErrors = shown.some(
     (validation) =>

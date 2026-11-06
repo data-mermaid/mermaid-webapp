@@ -27,7 +27,7 @@ const getChipCount = (variant) => {
   return chipCalls.at(-1)?.[1]?.count
 }
 
-const renderFishBeltAndValidate = async (validations) => {
+const renderFishBelt = (validations) => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -59,6 +59,12 @@ const renderFishBeltAndValidate = async (validations) => {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   )
+
+  return { user }
+}
+
+const renderFishBeltAndValidate = async (validations) => {
+  const { user } = renderFishBelt(validations)
 
   await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
   await waitFor(() => expect(screen.getByTestId('validate-button')))
@@ -161,4 +167,47 @@ test('A row showing several warnings counts them all, and is still one place to 
   await user.click(nextButton)
 
   expect(scrollIntoView.mock.instances).toEqual([row, row])
+}, 50000)
+
+// Validate keeps a check ignored after it passes: the API returns `ignore` with a null code. One
+// such result at each level, beside a warning that is still ignored.
+const ignoredChecksThatHavePassed = {
+  status: 'ok',
+  results: {
+    $record: [
+      { name: 'observation_count_validator', code: null, status: 'ignore', validation_id: 'r1' },
+      { code: 'all_equal', status: 'ignore', validation_id: 'still-ignored' },
+    ],
+    data: {
+      fishbelt_transect: {
+        depth: [{ name: 'depth_validator', code: null, status: 'ignore', validation_id: 'd1' }],
+      },
+      obs_belt_fishes: [
+        [
+          {
+            name: 'fish_size_validator',
+            code: null,
+            status: 'ignore',
+            validation_id: 'o1',
+            context: { observation_id: '7' },
+          },
+        ],
+      ],
+    },
+  },
+}
+
+test('An ignored check that has since passed shows nothing and is not counted as ignored', async () => {
+  // Only an ignore is left, so the API calls the record ok and it opens already validated.
+  renderFishBelt(ignoredChecksThatHavePassed)
+
+  expect(
+    await screen.findByTestId('form-status-indicators', {}, { timeout: 10000 }),
+  ).toBeInTheDocument()
+  await waitFor(() => expect(getChipCount('ignored')).toBe(1))
+  expect(screen.getAllByTestId('ignore-warning-checkbox')).toHaveLength(1)
+
+  for (const name of ['observation_count_validator', 'depth_validator', 'fish_size_validator']) {
+    expect(screen.queryByText(name)).not.toBeInTheDocument()
+  }
 }, 50000)

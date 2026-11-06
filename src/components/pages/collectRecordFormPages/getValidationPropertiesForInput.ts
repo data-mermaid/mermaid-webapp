@@ -1,6 +1,7 @@
 import type { ValidationStatus } from '../../../types/constants'
 import type { Validation, ValidationContext } from '../../../types/validation'
 import { getRequiredColumn } from '../../../library/validationMessageHelpers'
+import isPassedIgnoredCheck from './isPassedIgnoredCheck'
 
 // A row's validations are usually an array, but some paths hold a keyed object (see
 // walkFieldSubtree in getValidationSummary), so they are read by key.
@@ -55,11 +56,12 @@ export const isGreyed = (validation: { status?: ValidationStatus; isStale?: bool
 // Which of a field's or row's validations reach the screen. Every required error shows, then
 // every other error and every warning or ignore, so an error never hides a warning. A field is
 // one cell, so its required error hides the field's other errors. A row's required error names
-// its column, so it hides only the errors the API also raises for that empty cell. Also read by
+// its column, so it hides only the errors the API also raises for that empty cell. An ignored
+// check that has since passed shows nothing (see isPassedIgnoredCheck). Also read by
 // getValidationSummary, so the status indicator chips count exactly what this returns.
 export const getValidationsToDisplay = (inputValidations: RowValidations): Validation[] => {
   const validations = Object.values(inputValidations).filter(
-    (validation) => !isSiteNotFoundOnManagement(validation),
+    (validation) => !isSiteNotFoundOnManagement(validation) && !isPassedIgnoredCheck(validation),
   )
   const requiredErrors = validations.filter(isRequiredError)
   const isFieldRequired = requiredErrors.some((validation) => !getRequiredColumn(validation.name))
