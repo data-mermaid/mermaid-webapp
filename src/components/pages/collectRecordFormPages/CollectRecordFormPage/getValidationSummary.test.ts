@@ -387,6 +387,21 @@ describe('getValidationSummary record level statuses', () => {
   })
 })
 
+// The API keeps `ignore` on a check that has since passed, with a null code.
+describe('getValidationSummary with ignored checks that have since passed', () => {
+  test('neither counts nor targets them, on the record, a field or a row', () => {
+    const summary = getValidationSummary({
+      $record: [{ status: 'ignore', code: null, validation_id: 'photos' }],
+      data: {
+        fishbelt_transect: { depth: [{ status: 'ignore', code: null }] },
+        obs_belt_fishes: [[{ status: 'ignore', code: null, context: { observation_id: 'obs1' } }]],
+      },
+    })
+
+    expect(summary).toEqual({ counts: noCounts, targets: noTargets })
+  })
+})
+
 // "One or more invalid fields": the API's duplicate transect check could not read one of the
 // fields in its `fields`.
 describe('getValidationSummary with the invalid transect fields message', () => {
