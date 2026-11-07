@@ -24,11 +24,18 @@ const ProjectName = () => {
   // getProjectName
   useEffect(() => {
     if (databaseSwitchboardInstance) {
-      databaseSwitchboardInstance.getProject(projectId).then((projectResponse) => {
-        if (isMounted.current) {
-          setProject(projectResponse)
-        }
-      })
+      databaseSwitchboardInstance
+        .getProject(projectId)
+        .then((projectResponse) => {
+          if (isMounted.current) {
+            setProject(projectResponse)
+          }
+        })
+        .catch((error) => {
+          // NavMenu loads the same project on these routes and already reports the failure to the
+          // user, so this only needs to stop the rejection going unhandled.
+          console.error('Unable to load the project name', error)
+        })
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
 

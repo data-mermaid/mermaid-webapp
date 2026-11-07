@@ -73,6 +73,10 @@ const Gfcr = () => {
     }
 
     if (databaseSwitchboardInstance && isAppOnline) {
+      // The list lives in CurrentProjectContext, above the routes. Without this a failed load
+      // leaves the previous project's indicator sets on screen under the new project's id.
+      setGfcrIndicatorSets([])
+
       Promise.all([databaseSwitchboardInstance.getIndicatorSets(projectId)])
         .then(([indicatorSetsResponse]) => {
           if (isMounted.current) {
@@ -84,6 +88,9 @@ const Gfcr = () => {
         .catch((error) => {
           handleHttpResponseError({
             error,
+            // This page is online-only and shows its own error state, so one unanswered request
+            // must not flip Collect offline and unmount it.
+            shouldSetServerNotReachable: false,
             callback: () => {
               toast.error(...getToastArguments(indicatorSetsUnavailableText))
             },
