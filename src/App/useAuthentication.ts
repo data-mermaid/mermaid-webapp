@@ -18,6 +18,14 @@ interface UseAuthenticationParams {
   dexieCurrentUserInstance: DexieCurrentUserInstance
 }
 
+const RELOGIN_REQUIRED_ERROR_CODES = ['missing_refresh_token', 'invalid_grant', 'login_required']
+
+const getIsReloginRequiredError = (error: unknown): boolean => {
+  const errorCode = (error as { error?: unknown } | null)?.error
+
+  return typeof errorCode === 'string' && RELOGIN_REQUIRED_ERROR_CODES.includes(errorCode)
+}
+
 interface UseAuthenticationReturn {
   isMermaidAuthenticated: boolean
   logoutMermaid: () => void
@@ -46,24 +54,6 @@ const useAuthentication = ({
     setIsMermaidAuthenticated(false)
   }, [])
 
-  const handleAccessTokenError = useCallback(
-    (error: unknown) => {
-      console.error('Unable to get access token from Auth0', error)
-
-      // Offline is a supported state. The app runs from the session already stored, so a
-      // refresh that fails without a connection is expected and needs no message.
-      if (!isAppOnline) {
-        return
-      }
-
-      // Nothing else reports a failed refresh, and whether the Auth0 tenant is issuing
-      // refresh tokens correctly can only be judged from the rate of these events.
-      Sentry.captureException(error)
-      toast.error(...getToastArguments(authenticationFailedText))
-    },
-    [isAppOnline, authenticationFailedText],
-  )
-
   const handlePostLoginRedirect = useCallback(() => {
     const validateReturnPath = (path: string | null): boolean => {
       if (!path) {
@@ -91,6 +81,54 @@ const useAuthentication = ({
     logout: auth0Logout,
     getAccessTokenSilently: getAuth0AccessTokenSilently,
   } = useAuth0()
+
+  const redirectToLogin = useCallback(() => {
+    const { pathname, search } = window.location
+    const isValidReturnPath = pathname.startsWith('/') && !pathname.startsWith('//')
+
+    pullRequestRedirectAuth0Hack()
+    auth0LoginWithRedirect({
+      appState: {
+        returnTo: isValidReturnPath ? `${pathname}${search}` : '/',
+      },
+    })
+  }, [auth0LoginWithRedirect])
+
+  const handleAccessTokenError = useCallback(
+    (error: unknown) => {
+      console.error('Unable to get access token from Auth0', error)
+
+      // Offline is a supported state. The app runs from the session already stored, so a
+      // refresh that fails without a connection is expected and needs no message.
+      if (!isAppOnline) {
+        return
+      }
+
+      // The stored session can no longer be refreshed (e.g. no refresh token in the cache).
+      // The only recovery is a fresh login, so send the user there instead of reporting it.
+      if (getIsReloginRequiredError(error)) {
+        redirectToLogin()
+        return
+      }
+
+      // Nothing else reports a failed refresh, and whether the Auth0 tenant is issuing
+      // refresh tokens correctly can only be judged from the rate of these events.
+      Sentry.captureException(error)
+      toast.error(...getToastArguments(authenticationFailedText))
+    },
+    [isAppOnline, authenticationFailedText, redirectToLogin],
+  )
+
+  const getAccessToken = useCallback(async (): Promise<string> => {
+    try {
+      return await getAuth0AccessTokenSilently()
+    } catch (error) {
+      if (isAppOnline && getIsReloginRequiredError(error)) {
+        redirectToLogin()
+      }
+      throw error
+    }
+  }, [getAuth0AccessTokenSilently, isAppOnline, redirectToLogin])
 
   const _silentAuthentication = useEffect(() => {
     const silentAuth = async () => {
@@ -218,7 +256,7 @@ const useAuthentication = ({
     logoutMermaid,
     loginMermaid,
     emailNotVerified,
-    getAccessToken: getAuth0AccessTokenSilently,
+    getAccessToken,
   }
 }
 
