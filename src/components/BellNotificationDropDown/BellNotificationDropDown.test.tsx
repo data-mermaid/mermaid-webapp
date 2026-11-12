@@ -6,7 +6,7 @@ import { renderAuthenticatedOnline, screen } from '../../testUtilities/testingLi
 import { BellNotificationProvider } from '../../App/BellNotificationContext'
 import BellNotificationDropDown from './BellNotificationDropDown'
 
-const renderDropDown = (notifications) =>
+const renderDropDown = (notifications: object[]) =>
   renderAuthenticatedOnline(
     <BellNotificationProvider
       value={{ notifications, deleteNotification: () => {}, deleteAllNotifications: () => {} }}
@@ -15,7 +15,7 @@ const renderDropDown = (notifications) =>
     </BellNotificationProvider>,
   )
 
-const getNotification = (title, status, created_on) => ({
+const getNotification = (title: string, status: string, created_on: string) => ({
   id: title,
   title,
   status,

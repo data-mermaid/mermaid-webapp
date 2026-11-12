@@ -17,24 +17,35 @@ import { useBellNotifications } from '../../App/BellNotificationContext'
 import { formatDateTimeIntl, formatDistanceNoQuarters } from '../../library/formatDateTime'
 import { useTranslation } from 'react-i18next'
 import { ButtonSecondary, CloseButton } from '../generic/buttons.js'
+import type { Notification } from '../../App/mermaidData/mermaidDataTypes'
+
+type BellNotification = Notification['results'][number]
+
+interface BellNotifications {
+  notifications: BellNotification[]
+  deleteNotification: (id: string) => void
+  deleteAllNotifications: () => void
+}
 
 const sanitizeHtml = domPurify.sanitize
 
 const RELEASE_STATUS = 'release'
 const STATUS_ORDER = ['error', 'warning', 'info']
 
-const byNewestFirst = (a, b) => new Date(b.created_on) - new Date(a.created_on)
+const byNewestFirst = (a: BellNotification, b: BellNotification) =>
+  new Date(b.created_on).getTime() - new Date(a.created_on).getTime()
 
 const BellNotificationDropDown = () => {
   const { t } = useTranslation()
-  const { notifications, deleteNotification, deleteAllNotifications } = useBellNotifications()
+  const { notifications, deleteNotification, deleteAllNotifications }: BellNotifications =
+    useBellNotifications()
 
-  const dismissNotification = (event, id) => {
+  const dismissNotification = (event: React.MouseEvent, id: string) => {
     deleteNotification(id)
     event.stopPropagation()
   }
 
-  const dismissAllNotifications = (event) => {
+  const dismissAllNotifications = (event: React.MouseEvent) => {
     deleteAllNotifications()
     event.stopPropagation()
   }
@@ -59,7 +70,7 @@ const BellNotificationDropDown = () => {
         STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status) || byNewestFirst(a, b),
     )
 
-  const renderNotificationCard = (notification) => {
+  const renderNotificationCard = (notification: BellNotification) => {
     const dateTime = new Date(notification.created_on)
     const distanceToNow = formatDistanceNoQuarters(dateTime, new Date()) // e.g. "2 hours ago"
 
@@ -77,7 +88,7 @@ const BellNotificationDropDown = () => {
             <NotificationTitle>{notification.title}</NotificationTitle>
             <CloseButton
               id="gtm-dismiss-one-notification"
-              onClick={(event) => dismissNotification(event, notification.id)}
+              onClick={(event: React.MouseEvent) => dismissNotification(event, notification.id)}
             >
               <IconClose aria-label={t('buttons.close')} />
             </CloseButton>
@@ -97,8 +108,7 @@ const BellNotificationDropDown = () => {
     <NotificationCardWrapper>
       <ButtonSecondary
         id="gtm-dismiss-all-notifications"
-        width="100%"
-        onClick={(event) => dismissAllNotifications(event)}
+        onClick={(event: React.MouseEvent) => dismissAllNotifications(event)}
       >
         {t('buttons.dismiss_all_notifications')}
       </ButtonSecondary>
