@@ -10,6 +10,7 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
+import mockPullAfterValidate from '../../../../testUtilities/mockPullAfterValidate'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockBeltInvertValidationsObject from '../../../../testUtilities/mockBeltInvertValidationsObject'
 import mockBeltInvertCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBeltInvertCollectRecords'
@@ -58,41 +59,10 @@ test('Validate macroinvertebrate: fails to validate, shows button able to run va
     },
   )
 
-  // The page's load sync may still be pulling when Validate is clicked, so only answer pulls
-  // made after the validate request; earlier ones fall through to the default handler.
-  let isValidateRequested = false
-
-  mockMermaidApiAllSuccessful.use(
-    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
-      isValidateRequested = true
-
-      return new HttpResponse(null, { status: 200 })
-    }),
-    // append the validated data on the pull response, because that is what the UI uses to update itself
-    http.post(`${apiBaseUrl}/pull/`, () => {
-      if (!isValidateRequested) {
-        return undefined
-      }
-
-      const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
-        validations: mockBeltInvertValidationsObject, // fails validation
-      }
-
-      const response = {
-        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-        choices: { updates: mockMermaidData.choices },
-        collect_records: { updates: [collectRecordWithValidation] },
-        project_managements: { updates: mockMermaidData.project_managements },
-        project_profiles: { updates: mockMermaidData.project_profiles },
-        project_sites: { updates: mockMermaidData.project_sites },
-        projects: { updates: mockMermaidData.projects },
-        invert_attributes: { updates: mockMermaidData.invert_attributes },
-      }
-
-      return HttpResponse.json(response)
-    }),
-  )
+  mockPullAfterValidate({
+    ...mockBeltInvertCollectRecords[0],
+    validations: mockBeltInvertValidationsObject,
+  })
 
   await user.click(await screen.findByTestId('validate-button'))
 
@@ -114,55 +84,7 @@ test('Validate & submit macroinvertebrate: validation passes, shows validate but
     },
   )
 
-  mockMermaidApiAllSuccessful.use(
-    // append the validated data on the pull response, because that is what the UI uses to update itself
-    http.post(
-      `${apiBaseUrl}/pull/`,
-      () => {
-        const collectRecordWithValidationFailing = {
-          ...mockBeltInvertCollectRecords[0],
-          validations: mockBeltInvertValidationsObject, // fails validation
-        }
-
-        const firstPullResponse = {
-          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-          choices: { updates: mockMermaidData.choices },
-          collect_records: { updates: [collectRecordWithValidationFailing] },
-          project_managements: { updates: mockMermaidData.project_managements },
-          project_profiles: { updates: mockMermaidData.project_profiles },
-          project_sites: { updates: mockMermaidData.project_sites },
-          projects: { updates: mockMermaidData.projects },
-          invert_attributes: { updates: mockMermaidData.invert_attributes },
-        }
-
-        return HttpResponse.json(firstPullResponse)
-      },
-      { once: true },
-    ),
-    http.post(
-      `${apiBaseUrl}/pull/`,
-      () => {
-        const collectRecordWithValidationOk = {
-          ...mockBeltInvertCollectRecords[0],
-          validations: { status: 'ok' },
-        }
-
-        const secondPullResponse = {
-          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-          choices: { updates: mockMermaidData.choices },
-          collect_records: { updates: [collectRecordWithValidationOk] },
-          project_managements: { updates: mockMermaidData.project_managements },
-          project_profiles: { updates: mockMermaidData.project_profiles },
-          project_sites: { updates: mockMermaidData.project_sites },
-          projects: { updates: mockMermaidData.projects },
-          invert_attributes: { updates: mockMermaidData.invert_attributes },
-        }
-
-        return HttpResponse.json(secondPullResponse)
-      },
-      { once: true },
-    ),
-  )
+  mockPullAfterValidate({ ...mockBeltInvertCollectRecords[0], validations: { status: 'ok' } })
 
   await user.click(await screen.findByTestId('validate-button'))
 

@@ -10,6 +10,7 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
+import mockPullAfterValidate from '../../../../testUtilities/mockPullAfterValidate'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockBenthicPitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
 import mockBenthicPitValidationsObject from '../../../../testUtilities/mockBenthicPitValidationsObject'
@@ -57,43 +58,10 @@ test('Validate Benthic PIT: fails to validate, shows button able to run validati
     },
   )
 
-  // The page's load sync may still be pulling when Validate is clicked, so only answer pulls
-  // made after the validate request; earlier ones fall through to the default handler.
-  let isValidateRequested = false
-
-  mockMermaidApiAllSuccessful.use(
-    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
-      isValidateRequested = true
-
-      return new HttpResponse(null, { status: 200 })
-    }),
-    // append the validated data on the pull response, because that is what the UI uses to update itself
-    http.post(`${apiBaseUrl}/pull/`, () => {
-      if (!isValidateRequested) {
-        return undefined
-      }
-
-      const collectRecordWithValidation = {
-        ...mockBenthicPitCollectRecords[0],
-        validations: mockBenthicPitValidationsObject, // fails validation
-      }
-
-      const response = {
-        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-        choices: { updates: mockMermaidData.choices },
-        collect_records: { updates: [collectRecordWithValidation] },
-        fish_families: { updates: mockMermaidData.fish_families },
-        fish_genera: { updates: mockMermaidData.fish_genera },
-        fish_species: { updates: mockMermaidData.fish_species },
-        project_managements: { updates: mockMermaidData.project_managements },
-        project_profiles: { updates: mockMermaidData.project_profiles },
-        project_sites: { updates: mockMermaidData.project_sites },
-        projects: { updates: mockMermaidData.projects },
-      }
-
-      return HttpResponse.json(response)
-    }),
-  )
+  mockPullAfterValidate({
+    ...mockBenthicPitCollectRecords[0],
+    validations: mockBenthicPitValidationsObject,
+  })
 
   await user.click(await screen.findByTestId('validate-button'))
 
@@ -115,59 +83,7 @@ test('Validate & submit Benthic PIT: validation passes, shows validate button di
     },
   )
 
-  mockMermaidApiAllSuccessful.use(
-    // append the validated data on the pull response, because that is what the UI uses to update itself
-    http.post(
-      `${apiBaseUrl}/pull/`,
-      () => {
-        const collectRecordWithValidationFailing = {
-          ...mockBenthicPitCollectRecords[0],
-          validations: mockBenthicPitValidationsObject, // fails validation
-        }
-
-        const firstPullResponse = {
-          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-          choices: { updates: mockMermaidData.choices },
-          collect_records: { updates: [collectRecordWithValidationFailing] },
-          fish_families: { updates: mockMermaidData.fish_families },
-          fish_genera: { updates: mockMermaidData.fish_genera },
-          fish_species: { updates: mockMermaidData.fish_species },
-          project_managements: { updates: mockMermaidData.project_managements },
-          project_profiles: { updates: mockMermaidData.project_profiles },
-          project_sites: { updates: mockMermaidData.project_sites },
-          projects: { updates: mockMermaidData.projects },
-        }
-
-        return HttpResponse.json(firstPullResponse)
-      },
-      { once: true },
-    ),
-    http.post(
-      `${apiBaseUrl}/pull/`,
-      () => {
-        const collectRecordWithValidationOk = {
-          ...mockBenthicPitCollectRecords[0],
-          validations: { status: 'ok' },
-        }
-
-        const secondPullResponse = {
-          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-          choices: { updates: mockMermaidData.choices },
-          collect_records: { updates: [collectRecordWithValidationOk] },
-          fish_families: { updates: mockMermaidData.fish_families },
-          fish_genera: { updates: mockMermaidData.fish_genera },
-          fish_species: { updates: mockMermaidData.fish_species },
-          project_managements: { updates: mockMermaidData.project_managements },
-          project_profiles: { updates: mockMermaidData.project_profiles },
-          project_sites: { updates: mockMermaidData.project_sites },
-          projects: { updates: mockMermaidData.projects },
-        }
-
-        return HttpResponse.json(secondPullResponse)
-      },
-      { once: true },
-    ),
-  )
+  mockPullAfterValidate({ ...mockBenthicPitCollectRecords[0], validations: { status: 'ok' } })
 
   await user.click(await screen.findByTestId('validate-button'))
 
