@@ -542,6 +542,28 @@ describe('getValidationSummary with the dry submit summary', () => {
     expect(targets.error).toEqual([observationTarget('obs1')])
   })
 
+  test('is not counted or targeted while the column it names shows a greyed row error', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [drySubmit('size')],
+      data: {
+        obs_belt_fishes: [
+          [
+            {
+              status: 'error',
+              isStale: true,
+              code: 'required',
+              name: 'size_list_required_validator',
+              context: { observation_id: 'obs1' },
+            },
+          ],
+        ],
+      },
+    })
+
+    expect(counts.error).toBe(0)
+    expect(targets.error).toEqual([])
+  })
+
   test('is counted and targeted when a name it gives has no mark of its own', () => {
     const { counts, targets } = getValidationSummary({
       $record: [drySubmit('depth', 'non_field_errors')],
