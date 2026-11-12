@@ -7,6 +7,10 @@ import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import getValidationSummary from './getValidationSummary'
 import { VALIDATION_STATUS } from '../../Collect/collectConstants'
+import {
+  getIsEligibleForValidationAnnouncement,
+  startValidationAnnouncement,
+} from '../../../../library/validationAnnouncement'
 
 // Marks the item Next last landed on, valued by the chip's type, until Next selects another (see
 // globalStyles). An attribute rather than a class, because React rewrites a styled row's class
@@ -32,6 +36,7 @@ const getIsValidationResultCurrent = (collectRecord) =>
 const useCollectRecordValidation = ({
   areValidationsShowing,
   collectRecordBeingEdited,
+  currentUser,
   databaseSwitchboardInstance,
   disclosureStore,
   handleCollectRecordChange,
@@ -146,13 +151,30 @@ const useCollectRecordValidation = ({
     setIsSubmitWarningVisible(getIsErrorOrWarning(validatedRecord))
   }
 
+  const closeAnnouncementRef = useRef(null)
+
+  useEffect(
+    function closeAnnouncementOnLeavingRecord() {
+      return () => closeAnnouncementRef.current?.()
+    },
+    [recordId],
+  )
+
   const handleValidate = () => {
     setValidateButtonState(buttonGroupStates.validating)
 
     databaseSwitchboardInstance
       .validateSampleUnit({ recordId, projectId })
       .then((validatedRecordResponse) => {
-        showValidationResult(validatedRecordResponse)
+        // Committed before announcing, so the counts bar the announcement points at is on the page.
+        flushSync(() => showValidationResult(validatedRecordResponse))
+
+        if (
+          getIsErrorOrWarning(validatedRecordResponse) &&
+          getIsEligibleForValidationAnnouncement(currentUser)
+        ) {
+          closeAnnouncementRef.current = startValidationAnnouncement(currentUser, t)
+        }
 
         if (validatedRecordResponse.validations.status === 'ok') {
           toast.success(...getToastArguments(t('sample_units.success.record_validated')))

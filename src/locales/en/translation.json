@@ -1016,6 +1016,12 @@
     "transect_number": "Transect number",
     "transfer": "Transfer sample units",
     "transfer_unsubmitted": "Transfer unsubmitted sample units",
+    "validation_announcement": {
+      "description": "Validate now runs faster and shows every error and warning in your sample unit at once. Press Next to go straight to each one, fix it, then submit.",
+      "done": "Done",
+      "read_the_guide": "Read the guide",
+      "title": "Faster to validate, easier to submit"
+    },
     "validation_status": {
       "chip_label_error_one": "{{count}} Error",
       "chip_label_error_other": "{{count}} Errors",

@@ -2,6 +2,7 @@ import React from 'react'
 import { styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import theme from '../../../../theme'
+import { VALIDATION_COUNTS_BAR_ID } from '../../../../library/validationAnnouncement'
 
 // Matches the API's validation statuses. Only the chip label says "Ignored".
 type ChipVariant = 'error' | 'warning' | 'ignore'
@@ -19,6 +20,11 @@ const IndicatorBar = styled('div')`
   gap: ${theme.spacing.small};
   /* Keeps the toolbar's buttons hard right whether or not this bar is showing. */
   margin-right: auto;
+  /* Set by driver.js while the validation announcement points here (see validationAnnouncement). */
+  &.driver-active-element {
+    outline: 2px solid ${theme.color.primaryColor};
+    outline-offset: ${theme.spacing.small};
+  }
 `
 
 const chipBackgroundByVariant: Record<ChipVariant, string> = {
@@ -103,7 +109,11 @@ const FormStatusIndicators = ({
   ] as const
 
   return (
-    <IndicatorBar data-testid="form-status-indicators" aria-live="polite">
+    <IndicatorBar
+      id={VALIDATION_COUNTS_BAR_ID}
+      data-testid="form-status-indicators"
+      aria-live="polite"
+    >
       {chips
         .filter(({ count }) => count > 0)
         .map(({ variant, count, labelKey }) => {
