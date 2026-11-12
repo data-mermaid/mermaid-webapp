@@ -422,14 +422,17 @@ describe('getValidationSummary with the invalid transect fields message', () => 
     expect(targets.error).toEqual([fieldTarget('data.sample_event.site')])
   })
 
-  test('is counted again once its only mark is greyed by an edit', () => {
+  test('is not counted or targeted while every field it names is greyed by an edit', () => {
     const { counts, targets } = getValidationSummary({
       $record: [invalidTransect],
-      data: { fishbelt_transect: { depth: [{ status: 'error', isStale: true }] } },
+      data: {
+        sample_event: { site: [{ status: 'error', isStale: true }] },
+        fishbelt_transect: { depth: [{ status: 'error', isStale: true }] },
+      },
     })
 
-    expect(counts.error).toBe(1)
-    expect(targets.error).toEqual([recordTarget('transect')])
+    expect(counts.error).toBe(0)
+    expect(targets.error).toEqual([])
   })
 
   test('is not explained by a warning on one of its fields', () => {
@@ -486,7 +489,20 @@ describe('getValidationSummary with the dry submit summary', () => {
     ])
   })
 
-  test('is counted again when a field it names shows only a greyed or ignored message', () => {
+  test('is not counted or targeted while every field it names shows a greyed error', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [drySubmit('site', 'depth')],
+      data: {
+        sample_event: { site: [{ status: 'error', isStale: true }] },
+        fishbelt_transect: { depth: [{ status: 'error', isStale: true }] },
+      },
+    })
+
+    expect(counts.error).toBe(0)
+    expect(targets.error).toEqual([])
+  })
+
+  test('is counted when a field it names shows only an ignored message', () => {
     const { counts, targets } = getValidationSummary({
       $record: [drySubmit('site', 'depth')],
       data: {
