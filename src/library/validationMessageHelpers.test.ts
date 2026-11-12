@@ -173,6 +173,12 @@ describe('getValidationMessage for observation counts and renamed messages', () 
     expect(getValidationMessage({ code: 'invert_size_exceeds_maximum' })).toBe(
       'validation_messages.size_larger_than_maximum_expected',
     )
+    expect(
+      getValidationMessage({
+        code: 'missing_quadrat_numbers',
+        context: { missing_quadrat_numbers: [2] },
+      }),
+    ).toBe('validation_messages.missing_quadrats')
   })
 })
 
