@@ -58,11 +58,22 @@ test('Validate macroinvertebrate: fails to validate, shows button able to run va
     },
   )
 
-  await user.click(await screen.findByTestId('validate-button'))
+  // The page's load sync may still be pulling when Validate is clicked, so only answer pulls
+  // made after the validate request; earlier ones fall through to the default handler.
+  let isValidateRequested = false
 
   mockMermaidApiAllSuccessful.use(
+    http.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, () => {
+      isValidateRequested = true
+
+      return new HttpResponse(null, { status: 200 })
+    }),
     // append the validated data on the pull response, because that is what the UI uses to update itself
     http.post(`${apiBaseUrl}/pull/`, () => {
+      if (!isValidateRequested) {
+        return undefined
+      }
+
       const collectRecordWithValidation = {
         ...mockMermaidData.collect_records[0],
         validations: mockBeltInvertValidationsObject, // fails validation
@@ -82,6 +93,8 @@ test('Validate macroinvertebrate: fails to validate, shows button able to run va
       return HttpResponse.json(response)
     }),
   )
+
+  await user.click(await screen.findByTestId('validate-button'))
 
   expect(await screen.findByTestId('validating-button'))
 
