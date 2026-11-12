@@ -25,6 +25,11 @@ export const NotificationHeader = styled('div')`
   align-items: center;
   justify-content: space-between;
 `
+export const NotificationGroupHeading = styled('h2')`
+  font-size: ${theme.typography.defaultFontSize};
+  margin: ${theme.spacing.medium} 0 0;
+  color: ${theme.color.textColor};
+`
 export const NotificationTitle = styled('p')`
   font-weight: 700;
   margin: 0;
@@ -50,6 +55,7 @@ const getNotificationStatusColor = (props) => {
     info: theme.color.infoColor,
     warning: theme.color.warningColor,
     error: theme.color.cautionColor,
+    release: theme.color.primaryColor,
   }
 
   if (!props.$status) {
