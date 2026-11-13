@@ -1,6 +1,5 @@
 import { expect, test } from 'vitest'
 import '@testing-library/jest-dom'
-import { http, HttpResponse } from 'msw'
 import React from 'react'
 
 import {
@@ -11,11 +10,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 import mockBenthicLitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
 import mockBenthicLitValidationsObject from '../../../../testUtilities/mockCollectRecords/mockBenthicLitValidationsObject'
 import App from '../../../App'
-import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockPullAfterValidate from '../../../../testUtilities/mockPullAfterValidate'
-import mockMermaidData from '../../../../testUtilities/mockMermaidData'
-
-const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 test('Edit Benthic LIT - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
@@ -112,36 +107,9 @@ test('Initial load of successfully validated record', async () => {
     },
   )
 
+  mockPullAfterValidate({ ...mockBenthicLitCollectRecords[0], validations: { status: 'ok' } })
+
   await user.click(await screen.findByTestId('validate-button'))
-
-  mockMermaidApiAllSuccessful.use(
-    // append the validated data on the pull response, because that is what the UI uses to update itself
-    http.post(
-      `${apiBaseUrl}/pull/`,
-      () => {
-        const collectRecordWithValidation = {
-          ...mockBenthicLitCollectRecords[0],
-          validations: { status: 'ok' },
-        }
-
-        const response = {
-          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-          choices: { updates: mockMermaidData.choices },
-          collect_records: { updates: [collectRecordWithValidation] },
-          fish_families: { updates: mockMermaidData.fish_families },
-          fish_genera: { updates: mockMermaidData.fish_genera },
-          fish_species: { updates: mockMermaidData.fish_species },
-          project_managements: { updates: mockMermaidData.project_managements },
-          project_profiles: { updates: mockMermaidData.project_profiles },
-          project_sites: { updates: mockMermaidData.project_sites },
-          projects: { updates: mockMermaidData.projects },
-        }
-
-        return HttpResponse.json(response)
-      },
-      { once: true },
-    ),
-  )
 
   expect(await screen.findByTestId('saved-button')).toBeDisabled()
   expect(await screen.findByTestId('validated-button')).toBeDisabled()
