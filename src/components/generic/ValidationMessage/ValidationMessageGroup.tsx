@@ -1,5 +1,5 @@
 import React, { useId } from 'react'
-import { styled } from 'styled-components'
+import { css, styled } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 
 import theme from '../../../theme'
@@ -34,6 +34,9 @@ const Summary = styled.div`
   flex-wrap: wrap;
   align-items: center;
   gap: ${theme.spacing.xsmall};
+`
+
+const ToggleButton = styled(ButtonThatLooksLikeLinkUnderlined)`
   font-size: smaller;
 `
 
@@ -44,11 +47,20 @@ const Chips = styled.span`
 `
 
 // Stacks messages the way a field's own list does, since a field passes its messages unwrapped.
+// Behind a count chip, each pill shrinks to its message's text size so the chip leads the group.
 const MessageList = styled.div<{ $isCollapsible: boolean }>`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.xsmall};
   margin-top: ${(props) => (props.$isCollapsible ? theme.spacing.xsmall : 0)};
+
+  ${(props) =>
+    props.$isCollapsible &&
+    css`
+      ${MessagePill} {
+        font-size: smaller;
+      }
+    `}
 
   &[hidden] {
     display: none;
@@ -90,7 +102,7 @@ const ValidationMessageGroup = ({
               </MessagePill>
             ))}
           </Chips>
-          <ButtonThatLooksLikeLinkUnderlined
+          <ToggleButton
             type="button"
             aria-expanded={isOpen}
             aria-controls={listId}
@@ -98,7 +110,7 @@ const ValidationMessageGroup = ({
             onClick={toggle}
           >
             {isOpen ? t('validations.hide') : t('validations.show')}
-          </ButtonThatLooksLikeLinkUnderlined>
+          </ToggleButton>
         </Summary>
       ) : null}
       <MessageList id={listId} hidden={isCollapsible && !isOpen} $isCollapsible={isCollapsible}>
