@@ -48,6 +48,21 @@ test('Releases sit under Updates, above the rest grouped error, warning, info, n
   ])
 })
 
+test('Dismissing a release has its own analytics id', () => {
+  renderDropDown([
+    getNotification('Release', 'release', '2026-01-02T00:00:00Z'),
+    getNotification('Info', 'info', '2026-01-01T00:00:00Z'),
+  ])
+
+  const buttonIds = screen.getAllByRole('button').map((button) => button.id)
+
+  expect(buttonIds).toEqual([
+    'gtm-dismiss-all-notifications',
+    'gtm-dismiss-one-release',
+    'gtm-dismiss-one-notification',
+  ])
+})
+
 test('A group with no notifications has no heading', () => {
   renderDropDown([getNotification('Info', 'info', '2026-01-01T00:00:00Z')])
 

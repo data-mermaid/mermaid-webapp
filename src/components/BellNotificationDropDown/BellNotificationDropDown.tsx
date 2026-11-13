@@ -87,7 +87,11 @@ const BellNotificationDropDown = () => {
           <NotificationHeader>
             <NotificationTitle>{notification.title}</NotificationTitle>
             <CloseButton
-              id="gtm-dismiss-one-notification"
+              id={
+                notification.status === RELEASE_STATUS
+                  ? 'gtm-dismiss-one-release'
+                  : 'gtm-dismiss-one-notification'
+              }
               onClick={(event: React.MouseEvent) => dismissNotification(event, notification.id)}
             >
               <IconClose aria-label={t('buttons.close')} />
