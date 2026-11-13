@@ -81,8 +81,15 @@ const MethodsFilterDropDown = ({
     : // Remove false case when macroinvertebrate goes live
       methodKeys.filter((key) => key !== 'protocol_titles.macroinvertebrate').map((key) => t(key))
 
+  // value may not be an array if a corrupted preference was restored from sessionStorage
+  const selectedMethods: string[] = Array.isArray(value) ? value : []
+
   const handleChange = (event: SelectChangeEvent<string[]>) => {
-    handleMethodsColumnFilterChange(event.target.value as string[])
+    const {
+      target: { value: newValue },
+    } = event
+    // MUI multiple Select can emit a comma-separated string (e.g. on browser autofill)
+    handleMethodsColumnFilterChange(typeof newValue === 'string' ? newValue.split(',') : newValue)
   }
 
   // Dynamic FormStyle with background color applied to notchedOutline
@@ -91,12 +98,12 @@ const MethodsFilterDropDown = ({
     '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
       border: '2px solid #264b7e',
       backgroundColor:
-        value.length > 0 ? theme.color.getMessageColorBackground('warning') : 'transparent',
+        selectedMethods.length > 0 ? theme.color.getMessageColorBackground('warning') : 'transparent',
     },
     '& .MuiOutlinedInput-notchedOutline': {
       border: `1px solid ${theme.color.border}`,
       backgroundColor:
-        value.length > 0 ? theme.color.getMessageColorBackground('warning') : 'transparent',
+        selectedMethods.length > 0 ? theme.color.getMessageColorBackground('warning') : 'transparent',
       '& legend': {
         display: 'none',
       },
@@ -127,16 +134,16 @@ const MethodsFilterDropDown = ({
           labelId="method-filter-multiple-checkbox-label"
           id={id}
           multiple
-          value={value}
+          value={selectedMethods}
           onChange={handleChange}
           input={<OutlinedInput label={t('filters.method')} />}
-          renderValue={(selected) => selected.join(', ')}
+          renderValue={(selected) => (Array.isArray(selected) ? selected : []).join(', ')}
           MenuProps={MenuProps}
           disabled={disabled}
         >
           {methods.map((method) => (
             <MenuItem key={method} value={method} sx={MenuItemStyle}>
-              <Checkbox style={CheckboxStyle} checked={value.indexOf(method) > -1} />
+              <Checkbox style={CheckboxStyle} checked={selectedMethods.indexOf(method) > -1} />
               <ListItemText primary={method} primaryTypographyProps={fontStyle} />
             </MenuItem>
           ))}

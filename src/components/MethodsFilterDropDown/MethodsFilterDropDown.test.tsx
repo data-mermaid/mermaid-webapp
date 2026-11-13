@@ -43,3 +43,15 @@ test('MethodsFilterDropDown renders 6 options when macroinvertebrate feature is 
   await user.click(screen.getByRole('combobox'))
   expect(screen.getAllByRole('option')).toHaveLength(6)
 })
+
+test('MethodsFilterDropDown does not crash when value is a non-array (corrupted sessionStorage)', () => {
+  renderAuthenticatedOnline(
+    <MethodsFilterDropDown
+      handleMethodsColumnFilterChange={() => {}}
+      value={'Fish Belt' as unknown as string[]}
+    />,
+    { currentUserOverride: macroinvertebrateDisabledUser },
+  )
+
+  expect(screen.getByRole('combobox')).toBeInTheDocument()
+})
