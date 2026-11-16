@@ -98,12 +98,16 @@ const MethodsFilterDropDown = ({
     '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
       border: '2px solid #264b7e',
       backgroundColor:
-        selectedMethods.length > 0 ? theme.color.getMessageColorBackground('warning') : 'transparent',
+        selectedMethods.length > 0
+          ? theme.color.getMessageColorBackground('warning')
+          : 'transparent',
     },
     '& .MuiOutlinedInput-notchedOutline': {
       border: `1px solid ${theme.color.border}`,
       backgroundColor:
-        selectedMethods.length > 0 ? theme.color.getMessageColorBackground('warning') : 'transparent',
+        selectedMethods.length > 0
+          ? theme.color.getMessageColorBackground('warning')
+          : 'transparent',
       '& legend': {
         display: 'none',
       },
