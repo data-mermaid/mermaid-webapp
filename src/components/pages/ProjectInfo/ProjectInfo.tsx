@@ -142,8 +142,8 @@ const ProjectInfo = ({ isNewDemoProject }: ProjectInfoProps) => {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            // Every failure has to clear this. getProjectTags used to swallow HTTP errors and
-            // resolve with [], so the page never saw a rejection here and stayed on the spinner.
+            // Clear the spinner on every failure, not only 404 and 400, or any other error
+            // leaves the page loading forever.
             setIsLoading(false)
           }
           handleHttpResponseError({
