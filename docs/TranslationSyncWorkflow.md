@@ -81,8 +81,9 @@ Pick whichever case applies:
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Rewording, typo or punctuation fix                                   | Make the change **in Lokalise**. The weekly pull brings it back, and target languages get re-reviewed at the same time.                                                                                                                                                                                                                                      |
 | Changing `{{interpolation}}` or inline markup (`<br />`, `<strong>`) | **Add a new token** and point the code at it. Never edit the old one: a token whose placeholders no longer match the code renders broken text as soon as Lokalise reasserts the old string. Once nothing references the old token, remove it from `en` in the same PR and delete it in Lokalise after the merge (see [Removing a token](#removing-a-token)). |
+| Turning an existing token into a plural (`_one` / `_other`)          | **Use a new base name**, as for a placeholder change. Lokalise reads `key_one` / `key_other` as plural forms of `key`, so if `key` already exists the push skips them and the next pull drops both forms from `en`. The source guard can't catch this, because the suffixed names look like new keys.                                                        |
 
-**There is deliberately no override.** The push has no mode that sends a reworded value up, so every case is covered by one of the two rows above. The only exemption is the `chore/lokalise-translations` branch, which is how Lokalise's own rewording is meant to arrive.
+**There is deliberately no override.** The push has no mode that sends a reworded value up, so every case is covered by one of the rows above. The only exemption is the `chore/lokalise-translations` branch, which is how Lokalise's own rewording is meant to arrive.
 
 Note that the check is currently **advisory**: `develop`'s branch protection has no required status checks, so a failing run shows a red mark but does not hard-block the merge. Add `check-en-source-edits` to the required checks if you want it enforced.
 
@@ -125,6 +126,7 @@ gh workflow run lokalise-push.yml --ref develop
   ```
 
 - **A key I deleted keeps coming back** - it was deleted in one place only. The push re-creates any key in `en` that Lokalise lacks, and the pull re-adds any key Lokalise has that `en` lacks. See [Removing a token](#removing-a-token).
+- **New `_one` / `_other` keys never appear in Lokalise** - the base name already exists there as a regular key. Rename the pair to a new base name. See [Changing the English text of an existing token](#changing-the-english-text-of-an-existing-token).
 - **A copy fix made in code disappeared after the weekly pull** - expected: Lokalise owns the English wording of existing tokens. See [Changing the English text of an existing token](#changing-the-english-text-of-an-existing-token).
 - **The `Guard English Translation Source` check is failing** - the PR rewords a token that already exists. The job log lists the offending keys. Either make the change in Lokalise instead, or add a new token; there is no bypass.
 

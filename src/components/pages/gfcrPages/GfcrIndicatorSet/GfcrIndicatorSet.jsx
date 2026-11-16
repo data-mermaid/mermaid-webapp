@@ -110,6 +110,9 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         .catch((error) => {
           handleHttpResponseError({
             error,
+            // This page is online-only and shows its own error state, so one unanswered request
+            // must not flip Collect offline and unmount it.
+            shouldSetServerNotReachable: false,
             callback: () => {
               toast.error(...getToastArguments(indicatorSetsUnavailableText))
             },

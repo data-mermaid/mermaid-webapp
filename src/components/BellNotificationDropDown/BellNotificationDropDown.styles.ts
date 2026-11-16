@@ -25,6 +25,11 @@ export const NotificationHeader = styled('div')`
   align-items: center;
   justify-content: space-between;
 `
+export const NotificationGroupHeading = styled('h2')`
+  font-size: ${theme.typography.defaultFontSize};
+  margin: ${theme.spacing.medium} 0 0;
+  color: ${theme.color.textColor};
+`
 export const NotificationTitle = styled('p')`
   font-weight: 700;
   margin: 0;
@@ -33,7 +38,6 @@ export const NotificationDateWrapper = styled('div')`
   * {
     opacity: 0.7;
     margin: 0;
-    color: ${theme.color.secondary};
   }
 `
 export const NotificationActualDate = styled('p')`
@@ -45,21 +49,18 @@ export const NotificationContent = styled('div')`
   overflow-wrap: break-word; /* Ensure words wrap */
 `
 
-const getNotificationStatusColor = (props) => {
-  const statusColors = {
+const getNotificationStatusColor = (props: { $status?: string }) => {
+  const statusColors: Record<string, string> = {
     info: theme.color.infoColor,
     warning: theme.color.warningColor,
     error: theme.color.cautionColor,
+    release: theme.color.primaryColor,
   }
 
-  if (!props.$status) {
-    return theme.infoColor
-  }
-
-  return statusColors[props.$status] || theme.infoColor
+  return statusColors[props.$status]
 }
 
-export const NotificationStatus = styled('span')`
+export const NotificationStatus = styled('span')<{ $status?: string }>`
   width: ${theme.spacing.medium};
   background-color: ${(props) => getNotificationStatusColor(props)};
 }

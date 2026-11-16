@@ -653,11 +653,11 @@ const CollectRecordsMixin = (Base) =>
 
     getCollectRecord = function getCollectRecord(id) {
       if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
+        return Promise.reject(this._operationMissingIdParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
-        Promise.reject(this._notAuthenticatedAndReadyError)
+        return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
       return this._dexiePerUserDataInstance.collect_records.get(id)

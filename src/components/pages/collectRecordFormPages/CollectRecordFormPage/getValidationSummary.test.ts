@@ -422,14 +422,17 @@ describe('getValidationSummary with the invalid transect fields message', () => 
     expect(targets.error).toEqual([fieldTarget('data.sample_event.site')])
   })
 
-  test('is counted again once its only mark is greyed by an edit', () => {
+  test('is not counted or targeted while every field it names is greyed by an edit', () => {
     const { counts, targets } = getValidationSummary({
       $record: [invalidTransect],
-      data: { fishbelt_transect: { depth: [{ status: 'error', isStale: true }] } },
+      data: {
+        sample_event: { site: [{ status: 'error', isStale: true }] },
+        fishbelt_transect: { depth: [{ status: 'error', isStale: true }] },
+      },
     })
 
-    expect(counts.error).toBe(1)
-    expect(targets.error).toEqual([recordTarget('transect')])
+    expect(counts.error).toBe(0)
+    expect(targets.error).toEqual([])
   })
 
   test('is not explained by a warning on one of its fields', () => {
@@ -486,7 +489,20 @@ describe('getValidationSummary with the dry submit summary', () => {
     ])
   })
 
-  test('is counted again when a field it names shows only a greyed or ignored message', () => {
+  test('is not counted or targeted while every field it names shows a greyed error', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [drySubmit('site', 'depth')],
+      data: {
+        sample_event: { site: [{ status: 'error', isStale: true }] },
+        fishbelt_transect: { depth: [{ status: 'error', isStale: true }] },
+      },
+    })
+
+    expect(counts.error).toBe(0)
+    expect(targets.error).toEqual([])
+  })
+
+  test('is counted when a field it names shows only an ignored message', () => {
     const { counts, targets } = getValidationSummary({
       $record: [drySubmit('site', 'depth')],
       data: {
@@ -524,6 +540,28 @@ describe('getValidationSummary with the dry submit summary', () => {
 
     expect(counts.error).toBe(2)
     expect(targets.error).toEqual([observationTarget('obs1')])
+  })
+
+  test('is not counted or targeted while the column it names shows a greyed row error', () => {
+    const { counts, targets } = getValidationSummary({
+      $record: [drySubmit('size')],
+      data: {
+        obs_belt_fishes: [
+          [
+            {
+              status: 'error',
+              isStale: true,
+              code: 'required',
+              name: 'size_list_required_validator',
+              context: { observation_id: 'obs1' },
+            },
+          ],
+        ],
+      },
+    })
+
+    expect(counts.error).toBe(0)
+    expect(targets.error).toEqual([])
   })
 
   test('is counted and targeted when a name it gives has no mark of its own', () => {

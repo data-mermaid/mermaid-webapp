@@ -1,7 +1,15 @@
 import { expect, test } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { getSortIndicatorContent, Th } from './table'
+import {
+  GenericStickyTable,
+  GenericStickyTableTextWrapTh,
+  getSortIndicatorContent,
+  StickyOverviewTable,
+  SubmittedObservationStickyTable,
+  Table,
+  Th,
+} from './table'
 
 const ASCENDING = ' ▲'
 const DESCENDING = ' ▼'
@@ -100,5 +108,41 @@ describe('Th sort indicator styling', () => {
     const plainHeader = getSortIndicatorRule({}, 'Observations')
 
     expect(getContentValue(plainHeader)).toBe('')
+  })
+})
+
+const renderTable = (Component, label) =>
+  render(
+    <Component aria-label={label}>
+      <tbody>
+        <tr>
+          <td>Acropora</td>
+        </tr>
+      </tbody>
+    </Component>,
+  )
+
+// A page translator rewrites text nodes into <font> wrappers, which moves nodes out from under
+// React and crashes its commit phase (MERMAID-WEBAPP-N). The opt-out has to survive every styled()
+// wrapper between these roots and the DOM, so assert it on each variant rather than on the root.
+describe('tables that reorder rows opt out of browser translation', () => {
+  test.each([
+    ['GenericStickyTable', GenericStickyTable],
+    ['GenericStickyTableTextWrapTh', GenericStickyTableTextWrapTh],
+    ['StickyOverviewTable', StickyOverviewTable],
+    ['SubmittedObservationStickyTable', SubmittedObservationStickyTable],
+  ])('%s', (label, Component) => {
+    renderTable(Component, label)
+
+    expect(screen.getByRole('table', { name: label })).toHaveAttribute('translate', 'no')
+  })
+
+  // Deliberate. Table's own consumers are modals and static info tables holding explanatory prose
+  // worth translating, and none of them reorders rows. If this starts failing, the opt-out has been
+  // raised too far and the whole app has quietly stopped being translatable.
+  test('the plain Table stays translatable', () => {
+    renderTable(Table, 'info')
+
+    expect(screen.getByRole('table', { name: 'info' })).not.toHaveAttribute('translate')
   })
 })
