@@ -7,10 +7,6 @@ import intervalPlural from 'i18next-intervalplural-postprocessor'
 // document misdeclaring itself. That fails WCAG 3.1.1, which changes how a screen reader pronounces
 // the page.
 //
-// Scope is smaller than it looks: LanguageMenuTool only renders when VITE_ENVIRONMENT is not
-// production (Header.jsx:124), and no language detector is configured, so production always runs as
-// 'en' and this is a no-op there.
-//
 // Registered before init() because i18next emits languageChanged for the initial language too, not
 // only on later switches.
 i18next.on('languageChanged', (language: string) => {
