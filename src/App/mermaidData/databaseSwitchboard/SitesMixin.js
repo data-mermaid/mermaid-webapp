@@ -106,11 +106,11 @@ const SitesMixin = (Base) =>
 
     getSite = function getSite(id) {
       if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
+        return Promise.reject(this._operationMissingIdParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
-        Promise.reject(this._notAuthenticatedAndReadyError)
+        return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
       return this._dexiePerUserDataInstance.project_sites.get(id)

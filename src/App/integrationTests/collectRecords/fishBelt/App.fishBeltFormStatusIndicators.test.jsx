@@ -211,3 +211,38 @@ test('An ignored check that has since passed shows nothing and is not counted as
     expect(screen.queryByText(name)).not.toBeInTheDocument()
   }
 }, 50000)
+
+const mockCurrentUserCreatedOn = (created_on) =>
+  mockMermaidApiAllSuccessful.use(
+    http.get(`${apiBaseUrl}/me`, () => HttpResponse.json({ id: 'fake-id', created_on })),
+  )
+
+const announcementTitle = 'sample_units.validation_announcement.title'
+
+test('A Validate that finds errors announces the counts bar to an existing account, once', async () => {
+  mockCurrentUserCreatedOn('2020-01-01T00:00:00Z')
+
+  const { user } = await renderFishBeltAndValidate(oneValidationPerRow)
+
+  expect(await screen.findByText(announcementTitle)).toBeInTheDocument()
+  expect(
+    screen.getByRole('link', { name: 'sample_units.validation_announcement.read_the_guide' }),
+  ).toHaveAttribute(
+    'href',
+    'https://datamermaid.org/documentation/collect-data-validation-submission',
+  )
+
+  await user.click(screen.getByText('sample_units.validation_announcement.done'))
+
+  expect(screen.queryByText(announcementTitle)).not.toBeInTheDocument()
+  // validationAnnouncement.test.ts covers this flag keeping it from opening again.
+  expect(localStorage.getItem('validation-release-announcement-seen:fake-id')).toBe('true')
+}, 50000)
+
+test('Validate announces nothing to an account created after the release', async () => {
+  mockCurrentUserCreatedOn('2027-01-01T00:00:00Z')
+
+  await renderFishBeltAndValidate(oneValidationPerRow)
+
+  expect(screen.queryByText(announcementTitle)).not.toBeInTheDocument()
+}, 50000)

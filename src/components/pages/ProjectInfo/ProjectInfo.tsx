@@ -137,12 +137,20 @@ const ProjectInfo = ({ isNewDemoProject }: ProjectInfoProps) => {
         .catch((error) => {
           const errorStatus = error.response?.status
 
-          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId])
+          if (isMounted.current) {
+            if (errorStatus === 404 || errorStatus === 400) {
+              setIdsNotAssociatedWithData([projectId])
+            }
+
+            // Clear the spinner on every failure, not only 404 and 400, or any other error
+            // leaves the page loading forever.
             setIsLoading(false)
           }
           handleHttpResponseError({
             error,
+            // This page is online-only and shows its own error state, so one unanswered request
+            // must not flip Collect offline and unmount it.
+            shouldSetServerNotReachable: false,
             callback: () => {
               toast.error(...getToastArguments(projectDataUnavailableToastText))
             },

@@ -312,8 +312,10 @@ export const getValidationMessage = (
         minimumFishCount: context?.minimum_fish_count ?? '',
       }),
     missing_quadrat_numbers: () =>
-      i18n.t('validation_messages.missing_quadrat_numbers', {
-        numbers: context?.missing_quadrat_numbers ?? '',
+      i18n.t('validation_messages.missing_quadrats', {
+        count: context?.missing_quadrat_numbers?.length ?? 0,
+        // Intl.ListFormat, behind the list format, only accepts strings
+        numbers: (context?.missing_quadrat_numbers ?? []).map(String),
       }),
     missing_intervals: () =>
       i18n.t('validation_messages.missing_intervals', {
