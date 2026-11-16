@@ -13,10 +13,13 @@ interface InlineMessageProps {
   id?: string
 }
 
-const MessagePill = styled.span<{ type: MessageType }>`
+export const MessagePill = styled.span<{ type: MessageType }>`
   border: solid 1px ${theme.color.border};
   text-transform: uppercase;
-  background: ${(props) => theme.color.getMessageColorBackground(props.type)};
+  /* Doubled to outrank the observation table's white background for spans in a cell's div. */
+  && {
+    background: ${(props) => theme.color.getMessageColorBackground(props.type)};
+  }
   color: ${theme.color.textColor};
   padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
   border-radius: 5px;

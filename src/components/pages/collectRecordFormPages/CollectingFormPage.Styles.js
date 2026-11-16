@@ -9,12 +9,18 @@ import {
 } from '../../generic/buttons'
 import { TableOverflowWrapper, Tr, GenericStickyTable } from '../../generic/Table/table'
 import { inputTextareaSelectStyles } from '../../generic/form'
-import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import {
+  CONTENT_TOOLBAR_HEIGHT_VAR,
+  ContentPageToolbarWrapper,
+} from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 
+// The sticky toolbar's rendered height, which the title and the status indicator chips change.
+// The theme value is the fallback until the layout has measured it.
+const toolbarHeight = `var(${CONTENT_TOOLBAR_HEIGHT_VAR}, ${theme.spacing.toolbarHeight})`
+
+// The status indicator bar is absent until a record is validated, so the buttons anchor
+// themselves rather than relying on a second flex child being present.
 export const CollectFormToolbarWrapper = styled(ContentPageToolbarWrapper)`
-  min-height: ${theme.spacing.toolbarHeight};
-  /* The status indicator bar is absent until a record is validated, so the buttons anchor
-     themselves rather than relying on a second flex child being present. */
   justify-content: flex-end;
 `
 
@@ -25,10 +31,22 @@ export const NewOptionButton = styled(ButtonThatLooksLikeLink)`
   `)}
 `
 
+const CELL_MARK_TYPES = ['error', 'warning', 'ignore', 'info']
+
 export const ObservationTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
   border-color: ${(props) => theme.color.getBorderColor(props.$messageType)};
+
+  /* The cell a row message is about (see getCellMarkProps). An inset outline, so it shows on a
+     striped row and does not shift the layout. A greyed message marks its cell as info. */
+  ${CELL_MARK_TYPES.map(
+    (type) => css`
+      & > td[data-validation-mark='${type}'] {
+        box-shadow: inset 0 0 0 2px ${theme.color.getBorderColor(type)};
+      }
+    `,
+  )}
 `
 
 export const InputAutocompleteContainer = styled.div`
@@ -73,18 +91,14 @@ export const StyledOverflowWrapper = styled(TableOverflowWrapper)`
 export const StickyObservationTable = styled(GenericStickyTable)`
   thead tr:nth-child(1) th {
     position: sticky;
-    top: calc(
-      ${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small}
-    );
+    top: calc(${theme.spacing.headerHeight} + ${toolbarHeight});
     z-index: 4; /* Ensure the first row is above the second */
     background-color: white;
   }
 
   thead tr:nth-child(2) th {
     position: sticky;
-    top: calc(
-      ${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small} + 4rem
-    ); /* Adjust for the height of the first row */
+    top: calc(${theme.spacing.headerHeight} + ${toolbarHeight} + 4rem); /* Below the first row */
     z-index: 3; /* Ensure the second row is below the first */
     background-color: white;
   }
@@ -203,7 +217,7 @@ export const ErrorBox = styled.div`
   position: fixed;
   z-index: 4;
   pointer-events: none;
-  top: calc(${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + 20px);
+  top: calc(${theme.spacing.headerHeight} + ${toolbarHeight} + 20px);
   bottom: ${theme.spacing.small};
   div:nth-child(1) {
     &::after {

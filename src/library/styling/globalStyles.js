@@ -4,6 +4,14 @@ import { hoverState } from './mediaQueries'
 import '@fontsource/open-sans'
 import '@fontsource/open-sans/700.css'
 
+// Pale enough to lay across a whole row. Ignored uses a light blue-grey, not the Ignored chip's
+// solid grey.
+const nextStopTints = {
+  error: theme.color.chipErrorBackground,
+  warning: theme.color.chipWarningBackground,
+  ignore: theme.color.ignore,
+}
+
 const GlobalStyle = createGlobalStyle`
     :root {
         font-size: 62.5%;
@@ -35,27 +43,16 @@ const GlobalStyle = createGlobalStyle`
           text-decoration: none;
         `)}
     }
-    /* Holds at full colour before fading, so the mark is catchable on a row that was already
-       on screen and needed no scrolling. */
-    @keyframes validation-target-highlight-fade {
-        0%, 30% { background-color: var(--validation-target-highlight-color, ${
-          theme.color.chipWarningBackground
-        }); }
-        100% { background-color: transparent; }
-    }
-    .validation-target-highlight {
-        animation: validation-target-highlight-fade ${
-          theme.timing.validationTargetHighlightMs
-        }ms ease-out;
-
-        /* Hold the colour; the timer still removes the class. */
-        @media (prefers-reduced-motion: reduce) {
-            animation: none;
-            background-color: var(--validation-target-highlight-color, ${
-              theme.color.chipWarningBackground
-            });
+    /* The item Next last landed on (see useCollectRecordValidation). A background image paints
+       over any background colour, so the tint shows on striped and hovered rows without
+       competing on specificity. */
+    ${Object.entries(nextStopTints).map(
+      ([type, tint]) => css`
+        [data-validation-selected='${type}'] {
+          background-image: linear-gradient(${tint}, ${tint});
         }
-    }
+      `,
+    )}
 `
 
 export default GlobalStyle

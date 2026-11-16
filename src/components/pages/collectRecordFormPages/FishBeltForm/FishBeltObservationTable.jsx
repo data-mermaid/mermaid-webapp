@@ -36,7 +36,9 @@ import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -47,6 +49,7 @@ import { getFishNameTable } from '../../../../App/mermaidData/fishNameHelpers'
 import { useTranslation, Trans } from 'react-i18next'
 import { HelperTextLink } from '../../../generic/links'
 import { links } from '../../../../link_constants'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -323,12 +326,13 @@ const FishBeltObservationTable = ({
         setIsNewBenthicAttributeModalOpen(true)
       }
 
-      const { isObservationValid, observationValidationMessages } = getObservationValidationInfo({
-        observationId,
-        collectRecord,
-        areValidationsShowing,
-        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-      })
+      const { cellMarks, isObservationValid, observationValidationMessages } =
+        getObservationValidationInfo({
+          observationId,
+          collectRecord,
+          areValidationsShowing,
+          observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+        })
 
       return (
         <ObservationTr
@@ -337,7 +341,7 @@ const FishBeltObservationTable = ({
           $messageType={validationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {fishNameOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -388,8 +392,10 @@ const FishBeltObservationTable = ({
               </InputAutocompleteContainer>
             )}
           </Td>
-          <Td $align="right">{sizeInput}</Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'size')} $align="right">
+            {sizeInput}
+          </Td>
+          <Td {...getCellMarkProps(cellMarks, 'count')} $align="right">
             <InputNumberNumericCharactersOnly
               value={countOrEmptyStringToAvoidInputValueErrors}
               step="any"
@@ -453,6 +459,7 @@ const FishBeltObservationTable = ({
   return (
     <InputWrapper data-testid={testId}>
       <H2 id="table-label">{t('observations.observations')}</H2>
+      <ObservationsHeadingValidations />
       <StyledOverflowWrapper>
         <StickyObservationTable
           data-testid="fish-observations-table"

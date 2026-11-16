@@ -30,3 +30,11 @@ test('a hidden transect length error does not hide the dry submit summary', () =
     drySubmit,
   ])
 })
+
+// The API keeps `ignore` on a check that has since passed, with a null code.
+test('hides an ignored check that has since passed, and keeps one that still warns', () => {
+  const passedIgnore = { name: 'image_count_validator', code: null, status: 'ignore' }
+  const stillIgnored = { code: 'all_equal', status: 'ignore' }
+
+  expect(getRecordLevelValidationsToDisplay([passedIgnore, stillIgnored])).toEqual([stillIgnored])
+})

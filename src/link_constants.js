@@ -6,6 +6,8 @@ export default imageClassificationLinks
 
 export const links = {
   contactUs: 'https://datamermaid.org/contact-us',
+  collectValidationGuide:
+    'https://datamermaid.org/documentation/collect-data-validation-submission',
   reefCoverClassDefinitions:
     'https://reefresilience.org/wp-content/uploads/REEF-COVER-CLASS-DEFINITIONS.pdf',
   tideIntroduction: 'https://oceanservice.noaa.gov/education/tutorial_tides/tides01_intro.html',

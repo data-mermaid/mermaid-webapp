@@ -123,7 +123,7 @@ const mockImageClassificationApi = (record = collectRecord) =>
     ),
   )
 
-test('Image classification rows showing an error are counted and highlighted with Next', async () => {
+test('Image classification rows showing an error are counted and selected with Next', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const scrollIntoView = vi
     .spyOn(window.HTMLElement.prototype, 'scrollIntoView')
@@ -150,7 +150,7 @@ test('Image classification rows showing an error are counted and highlighted wit
 
   const firstStop = scrollIntoView.mock.instances.at(-1)
 
-  await waitFor(() => expect(firstStop).toHaveClass('validation-target-highlight'))
+  expect(firstStop).toHaveAttribute('data-validation-selected', 'error')
   expect(firstStop).toBeInTheDocument()
 
   await user.click(nextButton)
