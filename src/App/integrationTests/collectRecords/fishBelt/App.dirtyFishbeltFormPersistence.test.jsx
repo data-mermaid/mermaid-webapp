@@ -96,6 +96,35 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   // initial unedited depth value
   await waitFor(() => expect(within(formAfterNav).getByTestId('depth-input')).toHaveValue(20))
 })
+
+test('Cancelling the unsaved changes prompt keeps the user on the fishbelt form with their edits', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  const { user } = renderAuthenticatedOnline(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
+
+  const form = await screen.findByRole('form')
+  const depthInput = await within(form).findByTestId('depth-input')
+
+  await user.clear(depthInput)
+  await user.type(depthInput, '45')
+
+  // try to nav away, then cancel the unsaved changes prompt
+  const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false)
+  const sideNav = screen.getByTestId('content-page-side-nav')
+
+  await user.click(within(sideNav).getByRole('link', { name: /collecting/i }))
+
+  await waitFor(() => expect(confirmSpy).toHaveBeenCalledTimes(1))
+  expect(within(screen.getByRole('form')).getByTestId('depth-input')).toHaveValue(45)
+})
+
 test('Unsaved NEW fishbelt form edits persist through change in online/offline status', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 

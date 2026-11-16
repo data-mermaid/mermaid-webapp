@@ -8,13 +8,22 @@ function Prompt({ shouldPromptTrigger = false, message }) {
   const blocker = useBlocker(shouldPromptTrigger)
 
   useEffect(() => {
-    if (blocker.state === 'blocked') {
+    if (blocker.state !== 'blocked') {
+      return undefined
+    }
+
+    // Defer the blocking confirm dialog until after React finishes committing.
+    // Firefox keeps processing events while window.confirm is open, which can
+    // re-enter React's scheduler and throw "Should not already be working."
+    const timeoutId = setTimeout(() => {
       if (window.confirm(message)) {
         blocker.proceed()
       } else {
         blocker.reset()
       }
-    }
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
   }, [blocker, message])
 
   return <></>
