@@ -4,6 +4,9 @@ import axios from 'axios'
 import { reportOfflineSwitch } from './reportOfflineSwitch'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
+// A single failed health check is often a device waking up before its network is back,
+// so we check once more after this delay before switching Collect offline.
+const HEALTH_CHECK_RETRY_DELAY_MS = 4000
 const OnlineStatusContext = createContext()
 
 const OnlineStatusProvider = ({ children, value = {} }) => {
@@ -17,26 +20,69 @@ const OnlineStatusProvider = ({ children, value = {} }) => {
   const canUserOverrideOnlineStatus = isServerReachable && isNavigatorOnline
 
   const rePingApiRef = useRef()
+  const healthCheckRetryRef = useRef()
+  // pingApi runs from intervals and listeners that close over stale state, so it reads this ref
+  const isServerReachableRef = useRef(isServerReachable)
+  // Bumped by a successful check and when pinging stops. A request that started under an older
+  // value is stale, so its result is ignored rather than overriding newer state or reporting.
+  const healthCheckGenerationRef = useRef(0)
+
+  useEffect(() => {
+    isServerReachableRef.current = isServerReachable
+  }, [isServerReachable])
 
   const pingApi = () => {
-    axios
-      .get(`${apiBaseUrl}/health/`, {
-        cache: false,
-        method: 'HEAD',
-      })
-      .then(() => {
-        setIsServerReachable(true)
-      })
-      .catch(() => {
-        reportOfflineSwitch('health_check_failed')
-        setIsServerReachable(false)
-      })
+    const checkHealth = ({ isRetry }) => {
+      const generation = healthCheckGenerationRef.current
+
+      axios
+        .get(`${apiBaseUrl}/health/`, {
+          cache: false,
+          method: 'HEAD',
+        })
+        .then(() => {
+          if (generation !== healthCheckGenerationRef.current) {
+            return
+          }
+          healthCheckGenerationRef.current += 1
+          clearTimeout(healthCheckRetryRef.current)
+          healthCheckRetryRef.current = undefined
+          isServerReachableRef.current = true
+          setIsServerReachable(true)
+        })
+        .catch(() => {
+          if (generation !== healthCheckGenerationRef.current) {
+            return
+          }
+          // While the server is considered reachable, one failure only schedules a retry
+          if (!isRetry && isServerReachableRef.current === true) {
+            if (!healthCheckRetryRef.current) {
+              healthCheckRetryRef.current = window.setTimeout(() => {
+                healthCheckRetryRef.current = undefined
+                checkHealth({ isRetry: true })
+              }, HEALTH_CHECK_RETRY_DELAY_MS)
+            }
+
+            return
+          }
+          clearTimeout(healthCheckRetryRef.current)
+          healthCheckRetryRef.current = undefined
+          reportOfflineSwitch('health_check_failed')
+          isServerReachableRef.current = false
+          setIsServerReachable(false)
+        })
+    }
+
+    checkHealth({ isRetry: false })
   }
 
   const _setIsServerReachable = useEffect(() => {
     const stopPingingApi = () => {
+      healthCheckGenerationRef.current += 1
       setIsServerReachable(null)
       clearInterval(rePingApiRef.current)
+      clearTimeout(healthCheckRetryRef.current)
+      healthCheckRetryRef.current = undefined
     }
 
     if (!isNavigatorOnline) {
@@ -49,7 +95,18 @@ const OnlineStatusProvider = ({ children, value = {} }) => {
       }, 30000)
     }
 
+    // A hidden tab is throttled and a sleeping device doesn't ping at all, so check
+    // as soon as the tab is visible again instead of waiting for the next interval
+    const pingApiWhenVisible = () => {
+      if (document.visibilityState === 'visible' && navigator.onLine) {
+        pingApi()
+      }
+    }
+
+    document.addEventListener('visibilitychange', pingApiWhenVisible)
+
     return () => {
+      document.removeEventListener('visibilitychange', pingApiWhenVisible)
       stopPingingApi()
     }
   }, [isNavigatorOnline])
