@@ -88,6 +88,8 @@ export const StyledOverflowWrapper = styled(TableOverflowWrapper)`
   overflow-y: visible;
 `
 
+// translate="no" is inherited from GenericStickyTable; see the rationale on it in
+// src/components/generic/Table/table.js.
 export const StickyObservationTable = styled(GenericStickyTable)`
   thead tr:nth-child(1) th {
     position: sticky;
