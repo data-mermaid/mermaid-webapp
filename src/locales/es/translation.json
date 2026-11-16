@@ -703,6 +703,7 @@
   "no_notifications": "Actualmente no hay notificaciones",
   "notes": "Notas",
   "notification_not_removed": "No se pudo eliminar la notificación.",
+  "notifications_heading": "Notificaciones",
   "notifications_unavailable": "Las notificaciones no están disponibles.",
   "number": "Número",
   "number_info": "MERMAID genera automáticamente este número como identificador para una unidad de muestra de blanqueo y no es editable.",
@@ -1016,6 +1017,12 @@
     "transect_number": "Número de transecto",
     "transfer": "Transferir unidades de muestra",
     "transfer_unsubmitted": "Transferir unidades de muestra no enviadas",
+    "validation_announcement": {
+      "description": "La validación ahora es más rápida y muestra todos los errores y advertencias de la unidad de muestra a la vez. Pulse Siguiente para ir directamente a cada uno, corregirlo y, a continuación, enviar.",
+      "done": "Hecho",
+      "read_the_guide": "Lea la guía",
+      "title": "Validación más rápida, envío más sencillo"
+    },
     "validation_status": {
       "chip_label_error_one": "{{count}} Error",
       "chip_label_error_other": "{{count}} Errores",
@@ -1125,6 +1132,7 @@
   "transect_number_info": "Número de unidad de muestra, en forma de entero (p. ej., 1). Normalmente, las unidades de muestra se numeran consecutivamente en cada sitio, con el mismo número por sitio en un proyecto.",
   "try_again": "Intentar otra vez",
   "type": "Tipo",
+  "updates_heading": "Actualizaciones",
   "use_interval_size_as_start": "Utilice el tamaño del intervalo como inicio del intervalo",
   "users": {
     "add_user_email": "Introduzca la dirección de correo electrónico del usuario que desea agregar",
@@ -1219,7 +1227,8 @@
     "maximum_metres": "El valor debe ser {{max}} metros o menos",
     "minimum_total_fish_count": "El recuento total de peces es menor que {{minimumFishCount}}",
     "missing_intervals": "Intervalos faltantes: {{intervals}}",
-    "missing_quadrat_numbers": "Números de cuadrantes faltantes {{numbers}}",
+    "missing_quadrats_one": "Número de cuadrante faltante {{numbers, list}}",
+    "missing_quadrats_other": "Números de cuadrantes faltantes {{numbers, list}}",
     "no_region_match": "Coral o pez no observado previamente en la región del sitio",
     "not_part_of_fish_family_subset": "Los peces no forman parte de las familias de peces definidas por el proyecto.",
     "not_unique_site": "Sitio: Se detectaron registros similares",
