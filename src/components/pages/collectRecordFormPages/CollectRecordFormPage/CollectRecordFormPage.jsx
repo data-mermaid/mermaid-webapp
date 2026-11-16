@@ -407,6 +407,7 @@ const CollectRecordFormPage = ({
   } = useCollectRecordValidation({
     areValidationsShowing,
     collectRecordBeingEdited,
+    currentUser,
     databaseSwitchboardInstance,
     disclosureStore: validationDisclosureStore,
     handleCollectRecordChange,

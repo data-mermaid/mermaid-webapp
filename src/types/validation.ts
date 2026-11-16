@@ -36,7 +36,7 @@ export interface ValidationContext {
 export interface Validation {
   status: ValidationStatus
   isStale?: boolean
-  code?: string
+  code?: string | null
   name?: string
   validation_id?: string
   fields?: string[]

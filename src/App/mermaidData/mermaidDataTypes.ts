@@ -349,6 +349,7 @@ export interface ManagementRegime {
 
 export interface CurrentUser {
   id: string
+  created_on?: string
   first_name: string
   last_name: string
   full_name: string

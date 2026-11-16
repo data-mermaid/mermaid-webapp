@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react'
 import { describe, expect, test, vi } from 'vitest'
+import i18next from 'i18next'
 import i18n from '../../i18n'
 import en from '../locales/en/translation.json'
 import { getMessageColumns, getValidationMessage } from './validationMessageHelpers'
@@ -126,6 +127,24 @@ describe('getValidationMessage for observation counts and renamed messages', () 
     expect(tSpy).toHaveBeenCalledWith('validation_messages.decimal_places_exceeded', { count: 1 })
   })
 
+  test('missing quadrat numbers read "number" for one quadrat and list several with "and"', async () => {
+    // Tests run i18n in cimode, which skips plural keys and formatters, so this renders the
+    // helper's own call through a real English instance
+    const english = i18next.createInstance()
+    await english.init({ lng: 'en', resources: { en: { translation: en } } })
+    vi.spyOn(i18n, 't').mockImplementation(english.t.bind(english))
+
+    const getMessage = (numbers: number[]) =>
+      getValidationMessage({
+        code: 'missing_quadrat_numbers',
+        context: { missing_quadrat_numbers: numbers },
+      })
+
+    expect(getMessage([2])).toBe('Missing quadrat number 2')
+    expect(getMessage([2, 4])).toBe('Missing quadrat numbers 2 and 4')
+    expect(getMessage([2, 4, 6])).toBe('Missing quadrat numbers 2, 4, and 6')
+  })
+
   test('renamed messages point at their new keys', () => {
     expect(getValidationMessage({ code: 'invalid_fish_size' })).toBe(
       'validation_messages.invalid_size',
@@ -154,6 +173,12 @@ describe('getValidationMessage for observation counts and renamed messages', () 
     expect(getValidationMessage({ code: 'invert_size_exceeds_maximum' })).toBe(
       'validation_messages.size_larger_than_maximum_expected',
     )
+    expect(
+      getValidationMessage({
+        code: 'missing_quadrat_numbers',
+        context: { missing_quadrat_numbers: [2] },
+      }),
+    ).toBe('validation_messages.missing_quadrats')
   })
 })
 
