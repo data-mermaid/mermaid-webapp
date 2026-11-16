@@ -23,6 +23,9 @@ const OnlineStatusProvider = ({ children, value = {} }) => {
   const healthCheckRetryRef = useRef()
   // pingApi runs from intervals and listeners that close over stale state, so it reads this ref
   const isServerReachableRef = useRef(isServerReachable)
+  // Bumped by a successful check and when pinging stops. A request that started under an older
+  // value is stale, so its result is ignored rather than overriding newer state or reporting.
+  const healthCheckGenerationRef = useRef(0)
 
   useEffect(() => {
     isServerReachableRef.current = isServerReachable
@@ -30,18 +33,27 @@ const OnlineStatusProvider = ({ children, value = {} }) => {
 
   const pingApi = () => {
     const checkHealth = ({ isRetry }) => {
+      const generation = healthCheckGenerationRef.current
+
       axios
         .get(`${apiBaseUrl}/health/`, {
           cache: false,
           method: 'HEAD',
         })
         .then(() => {
+          if (generation !== healthCheckGenerationRef.current) {
+            return
+          }
+          healthCheckGenerationRef.current += 1
           clearTimeout(healthCheckRetryRef.current)
           healthCheckRetryRef.current = undefined
           isServerReachableRef.current = true
           setIsServerReachable(true)
         })
         .catch(() => {
+          if (generation !== healthCheckGenerationRef.current) {
+            return
+          }
           // While the server is considered reachable, one failure only schedules a retry
           if (!isRetry && isServerReachableRef.current === true) {
             if (!healthCheckRetryRef.current) {
@@ -66,6 +78,7 @@ const OnlineStatusProvider = ({ children, value = {} }) => {
 
   const _setIsServerReachable = useEffect(() => {
     const stopPingingApi = () => {
+      healthCheckGenerationRef.current += 1
       setIsServerReachable(null)
       clearInterval(rePingApiRef.current)
       clearTimeout(healthCheckRetryRef.current)

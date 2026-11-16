@@ -100,6 +100,49 @@ test('A tab becoming visible checks the server right away', async () => {
   await waitFor(() => expect(healthCheckCount).toBe(2))
 })
 
+test('A retry that fails after a newer check succeeded does not switch the app offline', async () => {
+  useFakeTimersThatStillTick()
+  let healthCheckCount = 0
+  let failRetry
+  const retryFailure = new Promise((resolve) => {
+    failRetry = resolve
+  })
+  mockMermaidApiAllSuccessful.use(
+    http.get(`${apiBaseUrl}/health/`, async () => {
+      healthCheckCount += 1
+
+      if (healthCheckCount === 1) {
+        return HttpResponse.error()
+      }
+      if (healthCheckCount === 2) {
+        await retryFailure
+
+        return HttpResponse.error()
+      }
+
+      return HttpResponse.json({}, { status: 200 })
+    }),
+  )
+
+  const onlineStatus = mountProviderAndCaptureStatus()
+
+  await waitFor(() => expect(healthCheckCount).toBe(1))
+  await act(() => vi.advanceTimersByTimeAsync(5000))
+  await waitFor(() => expect(healthCheckCount).toBe(2))
+
+  act(() => {
+    document.dispatchEvent(new Event('visibilitychange'))
+  })
+  await waitFor(() => expect(healthCheckCount).toBe(3))
+  await act(() => vi.advanceTimersByTimeAsync(1000))
+
+  failRetry()
+  await act(() => vi.advanceTimersByTimeAsync(1000))
+
+  expect(onlineStatus.isAppOnline).toBe(true)
+  expect(Sentry.captureMessage).not.toHaveBeenCalled()
+})
+
 test('A failed health check and the browser going offline are reported', async () => {
   useFakeTimersThatStillTick()
   let healthCheckCount = 0
