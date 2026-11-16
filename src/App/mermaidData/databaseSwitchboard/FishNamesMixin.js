@@ -12,8 +12,25 @@ const FishNameMixin = (Base) =>
     }
 
     ensureFishSpeciesLoaded = async function ensureFishSpeciesLoaded(attributeIds = []) {
+      if (!this._isOnlineAuthenticatedAndReady) {
+        return
+      }
+
+      // Observation fish_attribute ids can be genera, families or groupings, which
+      // /fishspecies/{id}/ would 404 on. Only fetch ids that aren't one of those.
+      const uniqueIds = Array.from(new Set(attributeIds.filter(Boolean)))
+      const { fish_genera, fish_families, fish_groupings } = this._dexiePerUserDataInstance
+      const [genera, families, groupings] = await Promise.all([
+        fish_genera.bulkGet(uniqueIds),
+        fish_families.bulkGet(uniqueIds),
+        fish_groupings.bulkGet(uniqueIds),
+      ])
+      const speciesCandidateIds = uniqueIds.filter(
+        (_id, index) => !genera[index] && !families[index] && !groupings[index],
+      )
+
       return ensureAttributesLoaded({
-        ids: attributeIds,
+        ids: speciesCandidateIds,
         dexieTable: this._dexiePerUserDataInstance.fish_species,
         detailUrlById: (id) => `${this._apiBaseUrl}/fishspecies/${id}/`,
         getAccessToken: this._getAccessToken,
