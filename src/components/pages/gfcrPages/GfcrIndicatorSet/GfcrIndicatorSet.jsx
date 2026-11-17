@@ -66,6 +66,7 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { gfcrIndicatorSets, setGfcrIndicatorSets } = useCurrentProject()
   const [choices, setChoices] = useState()
+  const [hasSupportingDataLoadFailed, setHasSupportingDataLoadFailed] = useState(false)
 
   const [isLoading, setIsLoading] = useState(true)
   const [isFormDirty, setIsFormDirty] = useState(false)
@@ -109,11 +110,15 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         .catch((error) => {
           handleHttpResponseError({
             error,
+            // This page is online-only and shows its own error state, so one unanswered request
+            // must not flip Collect offline and unmount it.
+            shouldSetServerNotReachable: false,
             callback: () => {
               toast.error(...getToastArguments(indicatorSetsUnavailableText))
             },
           })
 
+          setHasSupportingDataLoadFailed(true)
           setIsLoading(false)
         })
     }
@@ -273,7 +278,9 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
         setSelectedNavItem={setSelectedNavItem}
       />
       <div style={{ flex: 1 }}>
-        {!!indicatorSetBeingEdited && (
+        {/* Sub-pages and their modals need choices, but the set can be here without them
+            (already in context from the GFCR list, with choices still loading or failed) */}
+        {!!indicatorSetBeingEdited && !!choices && (
           <GfcrIndicatorSetForm
             formik={formik}
             indicatorSet={indicatorSetBeingEdited}
@@ -286,6 +293,11 @@ const GfcrIndicatorSet = ({ newIndicatorSetType }) => {
             choices={choices}
             displayHelp={displayHelp}
           />
+        )}
+        {!!indicatorSetBeingEdited && !choices && hasSupportingDataLoadFailed && (
+          <GfcrPageUnavailablePadding>
+            <PageUnavailable mainText={indicatorSetsUnavailableText} />
+          </GfcrPageUnavailablePadding>
         )}
       </div>
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}

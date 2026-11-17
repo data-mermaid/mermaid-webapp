@@ -26,12 +26,15 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 import { HelperTextLink } from '../../../generic/links'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const WORMS_LINK = 'https://www.marinespecies.org/'
 
@@ -58,8 +61,9 @@ const ColoniesBleachedObservationTable = ({
   choices,
   collectRecord = undefined,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
   setObservationIdToAddNewBenthicAttributeTo,
@@ -128,10 +132,8 @@ const ColoniesBleachedObservationTable = ({
       } = observation
 
       const {
+        cellMarks,
         isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
       } = getObservationValidationInfo({
@@ -161,7 +163,7 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -177,7 +179,7 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -194,7 +196,7 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -215,7 +217,7 @@ const ColoniesBleachedObservationTable = ({
         >
           <Td $align="center">{rowNumber}</Td>
 
-          <Td $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {benthicAttributeSelectOptions?.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -257,7 +259,7 @@ const ColoniesBleachedObservationTable = ({
               ))}
             </Select>
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_normal', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="normal-label"
               value={count_normal}
@@ -270,7 +272,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_pale', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="pale-label"
               value={count_pale}
@@ -283,7 +285,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_20', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="20-bleached-label"
               value={count_20}
@@ -296,7 +298,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_50', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="50-bleached-label"
               value={count_50}
@@ -309,7 +311,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_80', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="80-bleached-label"
               value={count_80}
@@ -322,7 +324,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_100', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="100-bleached-label"
               value={count_100}
@@ -335,7 +337,7 @@ const ColoniesBleachedObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'count_dead', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="recently-dead-label"
               value={count_dead}
@@ -353,15 +355,11 @@ const ColoniesBleachedObservationTable = ({
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
-              observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -384,12 +382,13 @@ const ColoniesBleachedObservationTable = ({
     choices,
     collectRecord,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     deleteObservationText,
     proposeNewBenthicAttributeText,
     noResultsText,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
@@ -399,6 +398,7 @@ const ColoniesBleachedObservationTable = ({
     <>
       <InputWrapper data-testid={testId}>
         <H2 id="colonies-bleached-label">{t('observations.colonies_bleached')}</H2>
+        <ObservationsHeadingValidations />
         <>
           <StyledOverflowWrapper>
             <StickyObservationTableWrapTh
@@ -515,6 +515,7 @@ ColoniesBleachedObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: bleachingRecordPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({
       interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -522,7 +523,7 @@ ColoniesBleachedObservationTable.propTypes = {
     }),
   }).isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,

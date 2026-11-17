@@ -8,11 +8,9 @@ export const UserProfilePicture = styled.img`
   width: ${theme.typography.largeIconSize};
   height: ${theme.typography.largeIconSize};
   border-radius: 50%;
-  ${hoverState(
-    css`
-      outline: solid 3px ${theme.color.callout};
-    `,
-  )};
+  ${hoverState(css`
+    outline: solid 3px ${theme.color.callout};
+  `)};
   ${mediaQueryTabletLandscapeOnly(css`
     height: calc(${theme.spacing.headerHeight} - 15px);
     margin-top: 7px;

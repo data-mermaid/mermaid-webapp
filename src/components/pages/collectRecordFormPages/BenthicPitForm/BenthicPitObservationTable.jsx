@@ -25,12 +25,15 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { HelperTextLink } from '../../../generic/links'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -67,8 +70,9 @@ const BenthicPitObservationsTable = ({
   collectRecord = undefined,
   formik,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
   setObservationIdToAddNewBenthicAttributeTo,
@@ -139,10 +143,8 @@ const BenthicPitObservationsTable = ({
       const { id: observationId, attribute, growth_form = '', interval } = observation
 
       const {
+        cellMarks,
         isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
       } = getObservationValidationInfo({
@@ -172,7 +174,7 @@ const BenthicPitObservationsTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -188,7 +190,7 @@ const BenthicPitObservationsTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -205,10 +207,15 @@ const BenthicPitObservationsTable = ({
           $messageType={observationValidationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="right" aria-labelledby="interval-label" data-testid="interval-cell">
+          <Td
+            {...getCellMarkProps(cellMarks, 'interval')}
+            $align="right"
+            aria-labelledby="interval-label"
+            data-testid="interval-cell"
+          >
             {interval}m
           </Td>
-          <Td $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -256,15 +263,11 @@ const BenthicPitObservationsTable = ({
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
-              observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -289,13 +292,14 @@ const BenthicPitObservationsTable = ({
     collectRecord,
     deleteObservationLabelText,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     intervalSize,
     intervalStart,
     proposeNewBenthicAttributeText,
     noResultsText,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
@@ -305,6 +309,7 @@ const BenthicPitObservationsTable = ({
     <>
       <InputWrapper data-testid={testId}>
         <H2 id="table-label">{t('observations.observations')}</H2>
+        <ObservationsHeadingValidations />
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable aria-labelledby="table-label">
@@ -389,8 +394,9 @@ BenthicPitObservationsTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: benthicPitRecordPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

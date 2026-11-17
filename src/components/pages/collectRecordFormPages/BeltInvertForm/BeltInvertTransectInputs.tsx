@@ -4,7 +4,9 @@ import { useTranslation, Trans } from 'react-i18next'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
-import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+import getValidationPropertiesForInput, {
+  type RowValidations,
+} from '../getValidationPropertiesForInput'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
@@ -62,16 +64,16 @@ interface BeltInvertTransectInputsProps {
     handleChange: (event: React.ChangeEvent<HTMLElement>) => void
     setFieldValue: (field: string, value: unknown) => void
   }
-  ignoreNonObservationFieldValidations: (args: { validationPath: string }) => void
-  resetNonObservationFieldValidations: (args: {
-    inputName?: string
+  ignoreNonObservationFieldValidations: (args: {
     validationPath: string
+    validationId: string
   }) => void
-  validationPropertiesWithDirtyResetOnInputChange: (
-    validationProps: Record<string, unknown>,
-    inputName: string,
-  ) => Record<string, unknown>
-  validationsApiData?: { beltinvert_transect?: Record<string, unknown> }
+  markFieldValidationsStale: (args: { validationPath: string }) => void
+  unignoreNonObservationFieldValidations: (args: {
+    validationPath: string
+    validationId: string
+  }) => void
+  validationsApiData?: { beltinvert_transect?: Record<string, RowValidations> }
 }
 
 const formatSizeBinOptionLabel = (label: string) => {
@@ -91,8 +93,8 @@ const BeltInvertTransectInputs = ({
   choices,
   formik,
   ignoreNonObservationFieldValidations,
-  resetNonObservationFieldValidations,
-  validationPropertiesWithDirtyResetOnInputChange,
+  markFieldValidationsStale,
+  unignoreNonObservationFieldValidations,
   validationsApiData,
 }: BeltInvertTransectInputsProps) => {
   const { t } = useTranslation()
@@ -175,14 +177,10 @@ const BeltInvertTransectInputs = ({
     areValidationsShowing,
   )
 
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLElement>,
-    inputName: string,
-    validationPath: string,
-  ) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLElement>, validationPath: string) => {
     formik.handleChange(event)
 
-    resetNonObservationFieldValidations({ inputName, validationPath })
+    markFieldValidationsStale({ validationPath })
   }
 
   const openClearSizeValuesModal = () => {
@@ -196,8 +194,7 @@ const BeltInvertTransectInputs = ({
 
   const applySizeBinChange = (sizeBinValue: string) => {
     formik.setFieldValue('size_bin', sizeBinValue)
-    resetNonObservationFieldValidations({
-      inputName: 'size_bin',
+    markFieldValidationsStale({
       validationPath: SIZE_BIN_VALIDATION_PATH,
     })
   }
@@ -236,22 +233,14 @@ const BeltInvertTransectInputs = ({
           id="number"
           testId="transect-number"
           type="number"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({
-              validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
-            })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: TRANSECT_NUMBER_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            transectNumberValidationProperties,
-            'number',
-          )}
+          validationPath={TRANSECT_NUMBER_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...transectNumberValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.number as string | number}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'number', TRANSECT_NUMBER_VALIDATION_PATH)
+            handleInputChange(event, TRANSECT_NUMBER_VALIDATION_PATH)
           }
           helperText={t('transect_number_info')}
         />
@@ -260,17 +249,14 @@ const BeltInvertTransectInputs = ({
           id="label"
           testId="label"
           type="text"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: LABEL_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(labelValidationProperties, 'label')}
+          validationPath={LABEL_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...labelValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.label as string}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'label', LABEL_VALIDATION_PATH)
+            handleInputChange(event, LABEL_VALIDATION_PATH)
           }
           helperText={t('label_info')}
         />
@@ -279,20 +265,14 @@ const BeltInvertTransectInputs = ({
           id="sample_time"
           testId="sample-time"
           type="time"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            sampleTimeValidationProperties,
-            'sample_time',
-          )}
+          validationPath={SAMPLE_TIME_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...sampleTimeValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.sample_time as string}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'sample_time', SAMPLE_TIME_VALIDATION_PATH)
+            handleInputChange(event, SAMPLE_TIME_VALIDATION_PATH)
           }
           helperText={t('sample_units.sample_time_info')}
         />
@@ -303,17 +283,14 @@ const BeltInvertTransectInputs = ({
           unit="m"
           testId="depth"
           type="number"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(depthValidationProperties, 'depth')}
+          validationPath={DEPTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...depthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.depth as string | number}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'depth', DEPTH_VALIDATION_PATH)
+            handleInputChange(event, DEPTH_VALIDATION_PATH)
           }
           helperText={t('sample_units.depth_info')}
         />
@@ -324,22 +301,14 @@ const BeltInvertTransectInputs = ({
           testId="len-surveyed"
           type="number"
           unit="m"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({
-              validationPath: LENGTH_SURVEYED_VALIDATION_PATH,
-            })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: LENGTH_SURVEYED_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            lengthSurveyedValidationProperties,
-            'len_surveyed',
-          )}
+          validationPath={LENGTH_SURVEYED_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...lengthSurveyedValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed as string | number}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'len_surveyed', LENGTH_SURVEYED_VALIDATION_PATH)
+            handleInputChange(event, LENGTH_SURVEYED_VALIDATION_PATH)
           }
           helperText={t('sample_units.transect_length_surveyed_info')}
         />
@@ -349,17 +318,14 @@ const BeltInvertTransectInputs = ({
           id="width"
           testId="width"
           options={transectWidthOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(widthValidationProperties, 'width')}
+          validationPath={WIDTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...widthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.width as string}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'width', WIDTH_VALIDATION_PATH)
+            handleInputChange(event, WIDTH_VALIDATION_PATH)
           }
           helperText={t('width_info')}
         />
@@ -369,16 +335,10 @@ const BeltInvertTransectInputs = ({
           id="size_bin"
           testId="size-bin"
           options={invertSizeBinOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            sizeBinValidationProperties,
-            'size_bin',
-          )}
+          validationPath={SIZE_BIN_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...sizeBinValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.size_bin as string}
           onChange={handleSizeBinChange}
@@ -390,20 +350,14 @@ const BeltInvertTransectInputs = ({
           id="reef_slope"
           testId="reef-slope"
           options={reefSlopeOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            reefSlopeValidationProperties,
-            'reef_slope',
-          )}
+          validationPath={REEF_SLOPE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...reefSlopeValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope as string}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'reef_slope', REEF_SLOPE_VALIDATION_PATH)
+            handleInputChange(event, REEF_SLOPE_VALIDATION_PATH)
           }
           helperText={
             <Trans
@@ -426,20 +380,14 @@ const BeltInvertTransectInputs = ({
           id="visibility"
           testId="visibility"
           options={visibilityOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            visibilityValidationProperties,
-            'visibility',
-          )}
+          validationPath={VISIBILITY_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...visibilityValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.visibility as string}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'visibility', VISIBILITY_VALIDATION_PATH)
+            handleInputChange(event, VISIBILITY_VALIDATION_PATH)
           }
           helperText={t('visibility_info')}
         />
@@ -449,20 +397,14 @@ const BeltInvertTransectInputs = ({
           id="current"
           testId="current"
           options={currentOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            currentValidationProperties,
-            'current',
-          )}
+          validationPath={CURRENT_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...currentValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.current as string}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'current', CURRENT_VALIDATION_PATH)
+            handleInputChange(event, CURRENT_VALIDATION_PATH)
           }
           helperText={t('current_info')}
         />
@@ -472,20 +414,14 @@ const BeltInvertTransectInputs = ({
           id="relative_depth"
           testId="relative-depth"
           options={relativeDepthOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            relativeDepthValidationProperties,
-            'relative_depth',
-          )}
+          validationPath={RELATIVE_DEPTH_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...relativeDepthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth as string}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'relative_depth', RELATIVE_DEPTH_VALIDATION_PATH)
+            handleInputChange(event, RELATIVE_DEPTH_VALIDATION_PATH)
           }
           helperText={t('relative_depth_info')}
         />
@@ -495,17 +431,14 @@ const BeltInvertTransectInputs = ({
           id="tide"
           testId="tide"
           options={tideOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
+          validationPath={TIDE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...tideValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.tide as string}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'tide', TIDE_VALIDATION_PATH)
+            handleInputChange(event, TIDE_VALIDATION_PATH)
           }
           helperText={
             <Trans
@@ -526,17 +459,14 @@ const BeltInvertTransectInputs = ({
           label={t('notes')}
           id="notes"
           testId="notes"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: NOTES_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(notesValidationProperties, 'notes')}
+          validationPath={NOTES_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...notesValidationProperties}
           onBlur={formik.handleBlur}
           value={(formik.values.notes ?? '') as string}
           onChange={(event: React.ChangeEvent<HTMLElement>) =>
-            handleInputChange(event, 'notes', NOTES_VALIDATION_PATH)
+            handleInputChange(event, NOTES_VALIDATION_PATH)
           }
         />
       </InputWrapper>

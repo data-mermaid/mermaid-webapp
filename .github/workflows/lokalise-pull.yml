@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1  # v2.21.1
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2  # v2.22.2
         with:
           egress-policy: audit
 
@@ -27,7 +27,7 @@ jobs:
 
       - name: Pull translations from Lokalise
         id: lokalise-pull
-        uses: lokalise/lokalise-pull-action@2a9bba5071f83a2b8ac0a8b59c740e73cc1453a7 # v5.4.0
+        uses: lokalise/lokalise-pull-action@69f4cbcac13b4399429727e38e0dcda4bd68f0a3 # v6.0.0
         with:
           api_token: ${{ secrets.LOKALISE_API_TOKEN }}
           project_id: ${{ secrets.LOKALISE_PROJECT_ID }}
@@ -40,10 +40,11 @@ jobs:
           always_pull_base: true
           skip_include_tags: true
           override_branch_name: chore/lokalise-translations
-          # Replace the branch history with a single fresh commit on every run
-          # instead of appending. Nobody edits this branch (all corrections are
-          # made back in Lokalise), so the PR should mirror Lokalise's current
-          # export rather than accumulate weekly commits. Keeps the same PR/thread.
+          # Lets a run overwrite the remote branch. The action reuses the branch
+          # if it exists and commits on top of it; it never rebuilds it from
+          # develop. To rebase it, delete the branch and rerun (see
+          # docs/TranslationSyncWorkflow.md, Troubleshooting). Nobody edits this
+          # branch: all corrections are made back in Lokalise.
           force_push: true
           override_base_branch: develop
           git_commit_message: "chore(i18n): pull latest translations from Lokalise"

@@ -47,7 +47,7 @@ const SubmittedBeltInvertObservationTable = ({
   const getInvertName = (invertAttributeId) => {
     const found = invertAttributes.find((invert) => invert.id === invertAttributeId)
 
-    return found ? found.display_name ?? found.name : ''
+    return found ? (found.display_name ?? found.name) : ''
   }
 
   const getInvertDensity = (item) => {

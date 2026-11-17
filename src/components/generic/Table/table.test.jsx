@@ -1,7 +1,15 @@
 import { expect, test } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { getSortIndicatorContent, Th } from './table'
+import {
+  GenericStickyTable,
+  GenericStickyTableTextWrapTh,
+  getSortIndicatorContent,
+  StickyOverviewTable,
+  SubmittedObservationStickyTable,
+  Table,
+  Th,
+} from './table'
 
 const ASCENDING = ' ▲'
 const DESCENDING = ' ▼'
@@ -62,13 +70,16 @@ const getSortIndicatorRule = (thProps, headerName, children) => {
   )
 }
 
+// The CSSOM serializes a `content` string with whichever quotes the jsdom version prefers.
+const getContentValue = (rule) => rule.style.content.replace(/^(['"])(.*)\1$/, '$2')
+
 describe('Th sort indicator styling', () => {
   // The indicator used to live behind a `> span::after` selector, so any table that rendered its
   // header text bare silently lost the arrow. It now hangs off the Th itself - see M2076.
   test('puts the indicator on the Th, so a bare header still gets an arrow', () => {
     const bareHeader = getSortIndicatorRule({ $sortedIndex: 0, $isSortedDescending: false }, 'Site')
 
-    expect(bareHeader.cssText).toContain(`content: '${ASCENDING}'`)
+    expect(getContentValue(bareHeader)).toBe(ASCENDING)
   })
 
   test('renders a single arrow when a sorted column is also flagged as sortable', () => {
@@ -78,7 +89,7 @@ describe('Th sort indicator styling', () => {
       <span>Method</span>,
     )
 
-    expect(wrappedHeader.cssText).toContain(`content: '${DESCENDING}'`)
+    expect(getContentValue(wrappedHeader)).toBe(DESCENDING)
     expect(getStyleRules().some((rule) => rule.cssText.includes('> span'))).toBe(false)
   })
 
@@ -89,13 +100,49 @@ describe('Th sort indicator styling', () => {
     )
     const hintHeader = getSortIndicatorRule({ $sortedIndex: -1, $isSortingEnabled: true }, 'Email')
 
-    expect(hintHeader.cssText).toContain(`content: '${ASCENDING}'`)
+    expect(getContentValue(hintHeader)).toBe(ASCENDING)
     expect(hintHeader.style.color).not.toBe(sortedHeader.style.color)
   })
 
   test('renders no indicator on a Th that is not part of a sortable table', () => {
     const plainHeader = getSortIndicatorRule({}, 'Observations')
 
-    expect(plainHeader.cssText).toContain("content: ''")
+    expect(getContentValue(plainHeader)).toBe('')
+  })
+})
+
+const renderTable = (Component, label) =>
+  render(
+    <Component aria-label={label}>
+      <tbody>
+        <tr>
+          <td>Acropora</td>
+        </tr>
+      </tbody>
+    </Component>,
+  )
+
+// A page translator rewrites text nodes into <font> wrappers, which moves nodes out from under
+// React and crashes its commit phase (MERMAID-WEBAPP-N). The opt-out has to survive every styled()
+// wrapper between these roots and the DOM, so assert it on each variant rather than on the root.
+describe('tables that reorder rows opt out of browser translation', () => {
+  test.each([
+    ['GenericStickyTable', GenericStickyTable],
+    ['GenericStickyTableTextWrapTh', GenericStickyTableTextWrapTh],
+    ['StickyOverviewTable', StickyOverviewTable],
+    ['SubmittedObservationStickyTable', SubmittedObservationStickyTable],
+  ])('%s', (label, Component) => {
+    renderTable(Component, label)
+
+    expect(screen.getByRole('table', { name: label })).toHaveAttribute('translate', 'no')
+  })
+
+  // Deliberate. Table's own consumers are modals and static info tables holding explanatory prose
+  // worth translating, and none of them reorders rows. If this starts failing, the opt-out has been
+  // raised too far and the whole app has quietly stopped being translatable.
+  test('the plain Table stays translatable', () => {
+    renderTable(Table, 'info')
+
+    expect(screen.getByRole('table', { name: 'info' })).not.toHaveAttribute('translate')
   })
 })

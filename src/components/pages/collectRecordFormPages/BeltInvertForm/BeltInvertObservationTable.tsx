@@ -22,7 +22,9 @@ import { Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getSelectableAttributes from '../../../../App/mermaidData/getSelectableAttributes'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
@@ -32,6 +34,7 @@ import { hasNonEmptyValue } from '../../../../library/hasNonEmptyValue'
 import ObservationSizeSelect from '../ObservationSizeSelect'
 import { ObservationRecord } from './BeltInvertTypes'
 import MacroinvertebrateSummaryStats from '../../BeltInvert/MacroinvertebrateSummaryStats'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 interface SizeBinChoice {
   id: string | number
@@ -120,8 +123,9 @@ interface BeltInvertObservationTableProps {
   collectRecord?: unknown
   formik: FormikLike
   ignoreObservationValidations: (...args: unknown[]) => void
+  unignoreObservationValidations: (args: { observationId: string }) => void
   observationsReducer: [ObservationRecord[], (action: unknown) => void]
-  resetObservationValidations: (args: { observationId: string }) => void
+  markObservationValidationsStale: (args: { observationId: string }) => void
   setAreObservationsInputsDirty: (isDirty: boolean) => void
   setIsNewInvertAttributeModalOpen: (isOpen: boolean) => void
   setObservationIdToAddNewInvertAttributeTo: (observationId: string) => void
@@ -135,6 +139,7 @@ interface ObservationRowProps {
   autoFocusAllowed: boolean
   collectRecord?: unknown
   ignoreObservationValidations: (...args: unknown[]) => void
+  unignoreObservationValidations: (args: { observationId: string }) => void
   isLastRow: boolean
   index: number
   invertAttributeOptions: SelectOption[]
@@ -142,7 +147,7 @@ interface ObservationRowProps {
   observationDensity: number
   observationsDispatch: (action: unknown) => void
   onNotesClick: (observationId: string) => void
-  resetObservationValidations: (args: { observationId: string }) => void
+  markObservationValidationsStale: (args: { observationId: string }) => void
   setAreObservationsInputsDirty: (isDirty: boolean) => void
   setIsNewInvertAttributeModalOpen: (isOpen: boolean) => void
   setObservationIdToAddNewInvertAttributeTo: (observationId: string) => void
@@ -161,6 +166,7 @@ const BeltInvertObservationRow = ({
   autoFocusAllowed,
   collectRecord,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   isLastRow,
   index,
   invertAttributeOptions,
@@ -168,7 +174,7 @@ const BeltInvertObservationRow = ({
   observationDensity,
   observationsDispatch,
   onNotesClick,
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewInvertAttributeModalOpen,
   setObservationIdToAddNewInvertAttributeTo,
@@ -197,7 +203,7 @@ const BeltInvertObservationRow = ({
       type: 'updateSize',
       payload: { newSize, observationId },
     })
-    resetObservationValidations({ observationId })
+    markObservationValidationsStale({ observationId })
   }
 
   const handleUpdateSizeFromInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -225,7 +231,7 @@ const BeltInvertObservationRow = ({
       type: 'updateCount',
       payload: { newCount: newValue, observationId },
     })
-    resetObservationValidations({ observationId })
+    markObservationValidationsStale({ observationId })
   }
 
   const handleInvertAttributeChange = (selectedOption: { value: string }) => {
@@ -239,7 +245,7 @@ const BeltInvertObservationRow = ({
         observationId,
       },
     })
-    resetObservationValidations({ observationId })
+    markObservationValidationsStale({ observationId })
   }
 
   const proposeNewSpeciesClick = () => {
@@ -247,19 +253,13 @@ const BeltInvertObservationRow = ({
     setIsNewInvertAttributeModalOpen(true)
   }
 
-  const {
-    isObservationValid,
-    hasObservationWarningValidation,
-    hasObservationErrorValidation,
-    hasObservationIgnoredValidation,
-    observationValidationMessages,
-    observationValidationType,
-  } = getObservationValidationInfo({
-    observationId,
-    collectRecord,
-    areValidationsShowing,
-    observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
-  })
+  const { cellMarks, isObservationValid, observationValidationMessages } =
+    getObservationValidationInfo({
+      observationId,
+      collectRecord,
+      areValidationsShowing,
+      observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+    })
 
   const sizeInput = showNumericSizeInput ? (
     <InputNumberNumericCharactersOnly
@@ -292,7 +292,7 @@ const BeltInvertObservationRow = ({
   return (
     <ObservationTr key={observationId} data-observation-id={observationId}>
       <Td $align="center">{rowNumber}</Td>
-      <Td $align="left">
+      <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
         <InputAutocompleteContainer>
           <ObservationAutocomplete
             id={`observation-${observationId}`}
@@ -317,8 +317,12 @@ const BeltInvertObservationRow = ({
           />
         </InputAutocompleteContainer>
       </Td>
-      {sizeBinSelectedLabel && <Td $align="right">{sizeInput}</Td>}
-      <Td>
+      {sizeBinSelectedLabel && (
+        <Td {...getCellMarkProps(cellMarks, 'size')} $align="right">
+          {sizeInput}
+        </Td>
+      )}
+      <Td {...getCellMarkProps(cellMarks, 'count')}>
         <InputNumberNumericCharactersOnly
           $textAlign="right"
           value={count ?? ''}
@@ -369,15 +373,11 @@ const BeltInvertObservationRow = ({
       </Td>
       {areValidationsShowing ? (
         <ObservationValidationInfo
-          hasObservationErrorValidation={hasObservationErrorValidation}
-          hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-          hasObservationWarningValidation={hasObservationWarningValidation}
           ignoreObservationValidations={ignoreObservationValidations}
+          unignoreObservationValidations={unignoreObservationValidations}
           isObservationValid={isObservationValid}
           observationId={observationId}
           observationValidationMessages={observationValidationMessages}
-          observationValidationType={observationValidationType}
-          resetObservationValidations={resetObservationValidations}
         />
       ) : null}
       <Td $align="right" className={tableStyles.tdCellText}>
@@ -404,8 +404,9 @@ const BeltInvertObservationTable = ({
   collectRecord = undefined,
   formik,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [[], () => undefined],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewInvertAttributeModalOpen,
   setObservationIdToAddNewInvertAttributeTo,
@@ -424,7 +425,7 @@ const BeltInvertObservationTable = ({
   const [notesModalObservationId, setNotesModalObservationId] = useState<string | null>(null)
 
   const notesModalObservation = notesModalObservationId
-    ? observationsState.find((o) => o.id === notesModalObservationId) ?? null
+    ? (observationsState.find((o) => o.id === notesModalObservationId) ?? null)
     : null
   const notesModalRowIndex = notesModalObservationId
     ? observationsState.findIndex((o) => o.id === notesModalObservationId)
@@ -549,6 +550,7 @@ const BeltInvertObservationTable = ({
         onDone={handleNotesDone}
       />
       <H2 id="table-label">{t('observations.observations')}</H2>
+      <ObservationsHeadingValidations />
       <StyledOverflowWrapper>
         <StickyObservationTable
           data-testid="invert-observations-table"
@@ -601,13 +603,14 @@ const BeltInvertObservationTable = ({
                 autoFocusAllowed={autoFocusAllowed}
                 collectRecord={collectRecord}
                 ignoreObservationValidations={ignoreObservationValidations}
+                unignoreObservationValidations={unignoreObservationValidations}
                 isLastRow={index === observationsState.length - 1}
                 index={index}
                 invertAttributeOptions={invertAttributeOptions}
                 observation={observation}
                 observationDensity={observationDensities.get(observation.id) ?? 0}
                 observationsDispatch={observationsDispatch}
-                resetObservationValidations={resetObservationValidations}
+                markObservationValidationsStale={markObservationValidationsStale}
                 setAreObservationsInputsDirty={setAreObservationsInputsDirty}
                 setIsNewInvertAttributeModalOpen={setIsNewInvertAttributeModalOpen}
                 setObservationIdToAddNewInvertAttributeTo={

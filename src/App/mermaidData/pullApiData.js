@@ -119,7 +119,7 @@ export const pullApiData = async ({
               apiDataType === 'fish_species' ||
               apiDataType === 'invert_species'
             const protocolAttributesCount = isAttributeDataTypeWithProposalSupport
-              ? attributesInUseCounts?.[apiDataType] ?? {}
+              ? (attributesInUseCounts?.[apiDataType] ?? {})
               : {}
 
             const updatesToStore = updatesWithPushToApiTagReset

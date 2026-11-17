@@ -3,6 +3,7 @@ import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 import i18n from '../../../../i18n'
+import { skipApiDuplicateCheck } from '../skipApiDuplicateCheck'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {
@@ -116,11 +117,11 @@ const ManagementRegimesMixin = (Base) =>
 
     getManagementRegime = function getManagementRegime(id) {
       if (!id) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
-        Promise.reject(this._notAuthenticatedAndReadyError)
+        return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
       return this._dexiePerUserDataInstance.project_managements.get(id)
@@ -157,7 +158,7 @@ const ManagementRegimesMixin = (Base) =>
           .post(
             `${this._apiBaseUrl}/push/`,
             {
-              project_managements: [managementToSubmit],
+              project_managements: [skipApiDuplicateCheck(managementToSubmit)],
             },
             {
               params: {

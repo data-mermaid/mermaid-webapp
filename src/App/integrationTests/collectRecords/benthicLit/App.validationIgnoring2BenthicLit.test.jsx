@@ -17,7 +17,7 @@ import mockBenthicLitCollectRecords from '../../../../testUtilities/mockCollectR
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Benthic LIT validation: user can reset ignored observation warnings ', async () => {
+test('Benthic LIT validation: user can un-ignore observation warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -105,30 +105,32 @@ test('Benthic LIT validation: user can reset ignored observation warnings ', asy
 
   const observationsTable = screen.getByTestId('observations-section')
 
-  // only one observation will have warnings
-
+  // Row 9's two ignored warnings stay on screen, each with its own ticked box.
   await waitFor(() =>
-    expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument(),
+    expect(within(observationsTable).getAllByTestId('ignore-warning-checkbox')).toHaveLength(2),
   )
-  expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).getByTestId('ignore-warning-label')).toBeInTheDocument()
+  expect(observationsTable.querySelectorAll('li.ignore-indicator')).toHaveLength(2)
 
   // other two passing
   expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
     2,
   )
 
-  await user.click(within(observationsTable).getByTestId('ignore-warning-checkbox'))
+  // Unticking one brings that warning back and leaves the other ignored.
+  await user.click(within(observationsTable).getAllByTestId('ignore-warning-checkbox')[0])
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
   await waitFor(() =>
-    expect(within(observationsTable).queryByTestId('ignore-warning-label')).not.toBeInTheDocument(),
+    expect(
+      within(observationsTable).getAllByTestId('ignore-warning-checkbox')[0],
+    ).not.toBeChecked(),
   )
-  expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(observationsTable).getAllByTestId('ignore-warning-checkbox')[1]).toBeChecked()
+  expect(observationsTable.querySelectorAll('li.warning-indicator')).toHaveLength(1)
+  expect(observationsTable.querySelectorAll('li.ignore-indicator')).toHaveLength(1)
   expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
     2,
   )
@@ -213,7 +215,7 @@ test('user can reset dismissed record-level warnings', async () => {
   expect(isFormDirtyAfterReset)
 })
 
-test('Benthic LIT validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
+test('Benthic LIT validation: user edits non-observation input with ignored validation keeps the ignored status for that input.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -424,31 +426,41 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
   expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
   await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
-  await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() => expect(within(siteRow).getAllByTestId('message-pill-ignore')).toHaveLength(2))
 
   await user.selectOptions(within(managementRow).getByTestId('management-select'), '1')
-  await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(managementRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(depthRow).getByTestId('depth-input'), '1')
-  await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(depthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(sampleDateRow).getByTestId('sample-date-input'), '2021-11-09')
-  await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleDateRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(sampleTimeRow).getByTestId('sample-time-input'), '02:39 PM')
-  await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleTimeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(transectNumberRow).getByTestId('transect-number-input'), '12')
   await waitFor(() =>
-    expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(transectNumberRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
 
   await user.type(within(labelRow).getByTestId('label-input'), '1')
-  await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(labelRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(lengthSurveyedRow).getByTestId('len-surveyed-input'), '1')
   await waitFor(() =>
-    expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(lengthSurveyedRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
 
   // Reef Slope select on crest
@@ -456,15 +468,21 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
     within(reefSlopeRow).getByTestId('reef-slope-select'),
     '12dc11ae-3a4b-4309-8fae-66f51398d96f',
   )
-  await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(reefSlopeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(notesRow).getByTestId('notes-textarea'), '1')
-  await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(notesRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   const observerSelect = within(observersRow).getByTestId('observers-select')
 
   await user.click(within(observerSelect).getByText('Melissa Nunes'))
-  await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   // make act error go away
   expect(

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { groupBy } from 'lodash'
 
 import {
   ButtonZoom,
@@ -46,7 +47,8 @@ const ImageAnnotationModalTable = ({
     { groupedPoints: [], unclassifiedCount: 0 },
   )
 
-  const tableData = Object.groupBy(groupedPoints, ({ annotations }) => annotations[0].ba_gr)
+  // lodash rather than Object.groupBy, which some older mobile browsers lack
+  const tableData = groupBy(groupedPoints, ({ annotations }) => annotations[0].ba_gr)
 
   const sortAlphabeticallyByAttributeLabel = (a, b) => {
     if (a === unclassifiedGuid) {

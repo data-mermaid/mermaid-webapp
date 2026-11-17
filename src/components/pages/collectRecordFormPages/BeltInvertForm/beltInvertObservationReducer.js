@@ -23,7 +23,7 @@ const beltInvertObservationReducer = (state, action) => {
     }
 
     case 'addObservation':
-      return [...state, { id: createUuid(), count: null, size: null, notes: ''}]
+      return [...state, { id: createUuid(), count: null, size: null, notes: '' }]
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
       const { referenceObservationIndex } = action.payload

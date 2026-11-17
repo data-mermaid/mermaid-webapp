@@ -1,9 +1,9 @@
 /**
- * GFCR amounts arrive from the API as strings, because Django serialises DecimalField that
+ * Decimal values arrive from the API as strings, because Django serialises DecimalField that
  * way. Parse once at the boundary so the rest of the app only ever handles a plain number.
  * Returns null for empty, missing or unparseable input.
  */
-export const parseGfcrNumber = (value: unknown): number | null => {
+export const parseApiNumber = (value: unknown): number | null => {
   if (value === null || value === undefined || value === '') {
     return null
   }

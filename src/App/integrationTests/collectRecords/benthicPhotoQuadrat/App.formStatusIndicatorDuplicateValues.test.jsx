@@ -20,15 +20,15 @@ const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
 // A duplicate_values record validation names the rows it covers in context.duplicates, and
 // getObservationValidationInfo marks every one of them. Observations 1 and 2 are named here,
-// 3 is not, so the chip should reach the record message and those two rows only.
+// 3 is not. The API always sends duplicate_values as an error.
 const validations = {
   status: 'error',
   results: {
     $record: [
       {
         code: 'duplicate_values',
-        status: 'warning',
-        validation_id: 'duplicate-values-warning',
+        status: 'error',
+        validation_id: 'duplicate-values-error',
         fields: ['data.obs_benthic_photo_quadrats'],
         context: {
           duplicates: [
@@ -43,7 +43,7 @@ const validations = {
   },
 }
 
-test('Next on the warning chip reaches every row a duplicate_values warning marks', async () => {
+test('A duplicate_values error counts once per row it marks, and Next stops on those rows only', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const scrollIntoView = vi
     .spyOn(window.HTMLElement.prototype, 'scrollIntoView')
@@ -79,21 +79,25 @@ test('Next on the warning chip reaches every row a duplicate_values warning mark
   await user.click(await screen.findByTestId('validate-button'), { timeout: 10000 })
   await waitFor(() => expect(screen.getByTestId('validate-button')))
 
-  const warningChip = await screen.findByTestId('form-status-chip-warning')
-  const nextButton = within(warningChip).getByRole('button')
+  const errorChip = await screen.findByTestId('form-status-chip-error')
+  const nextButton = within(errorChip).getByRole('button')
 
-  // One warning, one message on screen, so the chip says 1 however many rows it marks.
-  const warningChipCalls = mockT.mock.calls.filter(
-    ([key]) => key === 'sample_units.validation_status.chip_label_warning',
+  const errorChipCalls = mockT.mock.calls.filter(
+    ([key]) => key === 'sample_units.validation_status.chip_label_error',
   )
 
-  expect(warningChipCalls.at(-1)?.[1]?.count).toBe(1)
+  expect(errorChipCalls.at(-1)?.[1]?.count).toBe(2)
 
+  // The message under the heading still shows, as a summary of the marked rows.
   const recordMessage = document.querySelector('[data-record-validation-id]')
   const markedRows = ['1', '2'].map((id) => document.querySelector(`[data-observation-id="${id}"]`))
 
-  // The record message plus the two rows it names, in page order, then back to the top.
-  const expectedOrder = [recordMessage, ...markedRows, recordMessage]
+  expect(recordMessage).not.toBeNull()
+  expect(document.querySelector('[data-observation-id="3"]')).not.toBeNull()
+
+  // The two rows it names, in page order, then back to the first: those are the only stops, so
+  // neither the message nor observation 3 is one.
+  const expectedOrder = [...markedRows, markedRows[0]]
 
   for (const expectedTarget of expectedOrder) {
     scrollIntoView.mockClear()
@@ -102,10 +106,4 @@ test('Next on the warning chip reaches every row a duplicate_values warning mark
     expect(scrollIntoView).toHaveBeenCalledTimes(1)
     expect(scrollIntoView.mock.instances[0]).toBe(expectedTarget)
   }
-
-  // Observation 3 is not in context.duplicates, so it is never a target.
-  const unmarkedRow = document.querySelector('[data-observation-id="3"]')
-
-  expect(unmarkedRow).not.toBeNull()
-  expect(scrollIntoView.mock.instances).not.toContain(unmarkedRow)
 }, 50000)

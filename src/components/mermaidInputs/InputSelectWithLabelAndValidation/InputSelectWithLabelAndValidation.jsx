@@ -12,8 +12,9 @@ const InputSelectWithLabelAndValidation = ({
   options,
   helperText = undefined,
   validationMessages = [],
-  ignoreNonObservationFieldValidations = () => {},
-  resetNonObservationFieldValidations = () => {},
+  ignoreNonObservationFieldValidations = undefined,
+  unignoreNonObservationFieldValidations = undefined,
+  validationPath = undefined,
   validationType = undefined,
   testId = undefined,
   value = '',
@@ -32,7 +33,8 @@ const InputSelectWithLabelAndValidation = ({
         helperText={helperText}
         validationMessages={validationMessages}
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+        validationPath={validationPath}
         validationType={validationType}
         testId={testId}
         value={value}
@@ -55,7 +57,8 @@ InputSelectWithLabelAndValidation.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
+  validationPath: PropTypes.string,
   testId: PropTypes.string,
   value: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,

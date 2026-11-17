@@ -5,7 +5,9 @@ import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import InlineMessage from '../../generic/InlineMessage/InlineMessage'
+import ValidationMessage, { EditedNote } from '../../generic/ValidationMessage/ValidationMessage'
+import ValidationMessageGroup from '../../generic/ValidationMessage/ValidationMessageGroup'
+import { fieldDisclosureKey } from '../../generic/ValidationMessage/ValidationDisclosure'
 import { getValidationMessage } from '../../../library/validationMessageHelpers'
 import ResolveDuplicateSiteButtonAndModal from '../../ResolveDuplicateSiteButtonAndModal/ResolveDuplicateSiteButtonAndModal'
 import ResolveDuplicateMRButtonAndModal from '../../ResolveDuplicateMRButtonAndModal/ResolveDuplicateMRButtonAndModal'
@@ -19,9 +21,26 @@ const ValidationWrapper = styled('div').attrs({
   align-items: flex-start;
 `
 
+// Takes the width the field has rather than shrinking to its content, so a long message wraps.
+const MessageList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.xsmall};
+  flex: 1;
+  min-width: 0;
+`
+
+const SHOWN_STATUSES = ['error', 'warning', 'ignore']
+
+const RESOLVE_MODALS = {
+  not_unique_site: ResolveDuplicateSiteButtonAndModal,
+  similar_name: ResolveDuplicateMRButtonAndModal,
+}
+
 const InputValidationInfo = ({
   ignoreNonObservationFieldValidations = () => {},
-  resetNonObservationFieldValidations = () => {},
+  unignoreNonObservationFieldValidations = () => {},
+  validationPath = undefined,
   validationMessages = [],
   validationType = undefined,
   currentSelectValue = undefined,
@@ -31,77 +50,73 @@ const InputValidationInfo = ({
 }) => {
   const { projectId } = useParams()
   const { t } = useTranslation()
-  const areThereValidationMessages = validationMessages.length
-  const isWarningValidation = areThereValidationMessages && validationType === 'warning'
-  const isIgnoredWarningValidation = validationType === 'ignore'
-  const isErrorValidation = validationType === 'error'
-  const isValidationPassing = validationType === 'ok'
+  // Collect record messages carry their own status. Other forms (management regimes, GFCR) pass
+  // messages without one, which take the field's type.
+  const messages = validationMessages
+    .map((message) => ({ ...message, status: message.status ?? validationType }))
+    .filter(({ status }) => SHOWN_STATUSES.includes(status))
+  const isEdited = messages.some(({ isStale }) => isStale)
 
-  const handleIgnoreWarningChange = async (event) => {
-    const isIgnoreChecked = event.target.checked
-
-    if (isIgnoreChecked) {
-      ignoreNonObservationFieldValidations()
+  // Each warning has its own control: a Resolve button for a duplicate site or management
+  // regime, otherwise an Ignore box. Once ignored, a duplicate gets the box too, to untick.
+  const getAction = (message) => {
+    if (message.status === 'error') {
+      return null
     }
-    if (!isIgnoreChecked) {
-      resetNonObservationFieldValidations()
-    }
-  }
 
-  const getWarningValidationButtons = () => {
-    if (validationMessages[0]?.code === 'not_unique_site') {
+    const isIgnored = message.status === 'ignore'
+    const ignore = () =>
+      ignoreNonObservationFieldValidations({ validationPath, validationId: message.id })
+    const unignore = () =>
+      unignoreNonObservationFieldValidations({ validationPath, validationId: message.id })
+    const ResolveModal = RESOLVE_MODALS[message.code]
+
+    if (ResolveModal && !isIgnored) {
       return (
-        <ResolveDuplicateSiteButtonAndModal
+        <ResolveModal
           currentSelectValue={currentSelectValue}
-          validationMessages={validationMessages}
+          validationMessages={[message]}
           updateValueAndResetValidationForDuplicateWarning={
             updateValueAndResetValidationForDuplicateWarning
           }
-          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        />
-      )
-    }
-
-    if (validationMessages[0]?.code === 'similar_name') {
-      return (
-        <ResolveDuplicateMRButtonAndModal
-          currentSelectValue={currentSelectValue}
-          validationMessages={validationMessages}
-          updateValueAndResetValidationForDuplicateWarning={
-            updateValueAndResetValidationForDuplicateWarning
-          }
-          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          ignoreNonObservationFieldValidations={ignore}
         />
       )
     }
 
     return (
       <InputIgnoreValidationWarningCheckboxWithLabel
-        onChange={handleIgnoreWarningChange}
-        checked={isIgnoredWarningValidation}
+        onChange={(event) => (event.target.checked ? ignore() : unignore())}
+        checked={isIgnored}
       />
     )
   }
 
   return (
     <ValidationWrapper data-testid={testId}>
-      {areThereValidationMessages &&
-      (isErrorValidation || isWarningValidation || isIgnoredWarningValidation) ? (
-        <>
-          {validationMessages.map((validation) => (
-            <InlineMessage
-              type={validationType}
-              key={validation.id}
-              className={`${validationType}-indicator`}
-            >
-              <p>{getValidationMessage(validation, projectId)}</p>
-            </InlineMessage>
-          ))}
-        </>
+      {messages.length ? (
+        <MessageList>
+          <ValidationMessageGroup
+            disclosureKey={validationPath ? fieldDisclosureKey(validationPath) : undefined}
+            messages={messages}
+          >
+            {messages.map((message) => (
+              <ValidationMessage
+                key={message.id}
+                status={message.status}
+                isStale={message.isStale}
+                className={`${message.status}-indicator`}
+                action={getAction(message)}
+              >
+                <p>{getValidationMessage(message, projectId)}</p>
+              </ValidationMessage>
+            ))}
+          </ValidationMessageGroup>
+          {isEdited ? <EditedNote>{t('validations.edited_revalidate')}</EditedNote> : null}
+        </MessageList>
       ) : null}
       {additionalText}
-      {isWarningValidation || isIgnoredWarningValidation ? getWarningValidationButtons() : null}
-      {isValidationPassing ? (
+      {validationType === 'ok' ? (
         <span aria-label={t('validations.passed')} data-testid="passed-validation-indicator">
           &nbsp;
         </span>
@@ -112,7 +127,8 @@ const InputValidationInfo = ({
 
 InputValidationInfo.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
+  validationPath: PropTypes.string,
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   currentSelectValue: PropTypes.string,

@@ -1,0 +1,364 @@
+import React, { type ReactNode } from 'react'
+import { styled } from 'styled-components'
+import { Trans } from 'react-i18next'
+import i18n from '../../i18n'
+import { HelperTextLink } from '../components/generic/links'
+import type { Validation, ValidationContext } from '../types/validation'
+
+type Context = ValidationContext | null | undefined
+
+const SystemValidationMessageBlock = styled.span`
+  display: block;
+`
+
+export const getSystemValidationErrorMessage = (drySubmitContext: Record<string, string>) => {
+  const errors = Object.entries(drySubmitContext)
+
+  const errorMap = errors.map((errorPart) => (
+    <SystemValidationMessageBlock key={errorPart[0]}>
+      {errorPart[0]} : {errorPart[1]}
+    </SystemValidationMessageBlock>
+  ))
+
+  return (
+    <>
+      <SystemValidationMessageBlock>
+        {i18n.t('validation_messages.system_validation_error')}
+      </SystemValidationMessageBlock>
+      <SystemValidationMessageBlock>{errorMap}</SystemValidationMessageBlock>
+    </>
+  )
+}
+
+export const getDuplicateSampleUnitLink = (context: Context, projectId: string) => {
+  const { duplicate_transect_method: duplicateTransectMethod, protocol } = context ?? {}
+  const protocolPath = protocol != null ? `/${protocol}/${duplicateTransectMethod}` : ''
+  const linkToSampleUnit = `/projects/${projectId}/submitted${protocolPath}`
+
+  return (
+    <Trans
+      i18nKey="validation_messages.duplicate_sample_unit"
+      values={{ method: duplicateTransectMethod }}
+      components={{ a: <HelperTextLink href={linkToSampleUnit} /> }}
+    />
+  )
+}
+
+export const goToManagementOverviewPageLink = (projectId: string) => {
+  const linkToMROverviewPage = `/projects/${projectId}/management-regimes-overview`
+
+  return (
+    <Trans
+      i18nKey="go_to_management_overview_page"
+      components={{
+        a: <HelperTextLink href={linkToMROverviewPage} />,
+      }}
+    />
+  )
+}
+
+const getDuplicateIndexes = (duplicateIndexes: ValidationContext['duplicates']) => {
+  const indexList = duplicateIndexes.flatMap((array) => array.map((item) => item.index + 1))
+
+  return indexList.join(', ')
+}
+
+const getObservationFieldName = (fieldName: string): string => {
+  // fieldName is a string 'data.obs_colonies_bleached' as an example
+  // since the api does not give us the name, 'Colonies Bleached', we have to map this ourselves and also remove 'data.' from the field name
+
+  const cleanFieldName = fieldName.slice(5)
+
+  const observationFieldNameMapping: Record<string, string> = {
+    obs_colonies_bleached: i18n.t('colonies_bleached'),
+    benthic_photo_quadrats: i18n.t('benthic_photo_quadrats'),
+  }
+
+  return observationFieldNameMapping[cleanFieldName]
+    ? observationFieldNameMapping[cleanFieldName]
+    : ''
+}
+
+export const getDuplicateValuesValidationMessage = (
+  field: string,
+  duplicates: ValidationContext['duplicates'],
+) => {
+  return i18n.t('validation_messages.duplicate_values', {
+    fieldName: getObservationFieldName(field),
+    indexes: getDuplicateIndexes(duplicates),
+  })
+}
+
+export const getInvalidBleachingObsMessage = (
+  context: Context,
+  obsTypeKey: 'colony_count' | 'percent_cover',
+) => {
+  const observationCountPaths: Record<string, string> = {
+    count_normal: 'normal',
+    count_pale: 'pale',
+    count_20: '0-20%',
+    count_50: '20-50%',
+    count_80: '50-80%',
+    count_100: '80-100',
+    count_dead: 'dead',
+  }
+  const observationPercentPaths: Record<string, string> = {
+    percent_hard: 'hard coral',
+    percent_soft: 'soft coral',
+    percent_algae: 'macroalgae',
+  }
+  const obsPaths = obsTypeKey === 'percent_cover' ? observationPercentPaths : observationCountPaths
+  const invalidValues = (context?.invalid_paths || []).map((key) => obsPaths[key]).filter(Boolean)
+  const invalidValuesString = invalidValues.join(', ')
+  const obsType = i18n.t(obsTypeKey)
+
+  return i18n.t('validation_messages.invalid_bleaching_observation', {
+    obsType,
+    invalidValues: invalidValuesString,
+  })
+}
+
+export const getInvalidBleachingObsTotalMessage = (context: Context) => {
+  const min = context?.value_range?.[0] ?? ''
+  const max = context?.value_range?.[1] ?? ''
+
+  return i18n.t('validation_messages.invalid_total', { min, max })
+}
+
+// The API sends times as "HH:MM:SS"; the message shows "HH:MM".
+const formatTime = (time = '') => time.slice(0, 5)
+
+const getOutsideOfRangeMessage = (range: readonly (string | number)[] = []) =>
+  i18n.t('validation_messages.outside_of_range', { min: range[0] ?? '', max: range[1] ?? '' })
+
+const getDepthMessage = (context: Context) =>
+  i18n.t('validation_messages.depth_out_of_range', { max: context?.depth_range?.[1] ?? '' })
+
+// An observation row has one Validations cell for all its inputs, so "Required" alone does not
+// say which cell is empty. The API names the column only in the validator name, e.g.
+// `size_list_required_validator`. One full sentence per column, not a "{{column}} required"
+// template, so translators can reorder the words.
+const REQUIRED_MESSAGE_KEYS_BY_OBSERVATION_COLUMN: Record<string, string> = {
+  attribute: 'validation_messages.required_benthic_attribute',
+  count: 'validation_messages.required_count',
+  fish_attribute: 'validation_messages.required_fish_name',
+  interval: 'validation_messages.required_interval',
+  invert_attribute: 'validation_messages.required_macroinvertebrate_name',
+  length: 'validation_messages.required_length',
+  num_points: 'validation_messages.required_number_of_points',
+  quadrat_number: 'validation_messages.required_quadrat',
+  score: 'validation_messages.required_score',
+  size: 'validation_messages.required_size',
+}
+
+const LIST_REQUIRED_VALIDATOR_SUFFIX = '_list_required_validator'
+
+// The observation column a row's required validator names, or undefined for a form field's.
+export const getRequiredColumn = (validatorName = ''): string | undefined =>
+  validatorName.endsWith(LIST_REQUIRED_VALIDATOR_SUFFIX)
+    ? validatorName.slice(0, -LIST_REQUIRED_VALIDATOR_SUFFIX.length)
+    : undefined
+
+// Every observation table calls its name cell `attribute`. The API calls it `attribute`,
+// `fish_attribute` or `invert_attribute` depending on the protocol.
+const COLUMN_ALIASES: Record<string, string> = {
+  fish_attribute: 'attribute',
+  invert_attribute: 'attribute',
+}
+
+// The column key a table marks, for an observation field name as the API spells it.
+export const toColumnKey = (fieldName: string): string => COLUMN_ALIASES[fieldName] ?? fieldName
+
+// `total` is a bleaching row's total: every count or percentage cell in the row answers to it as
+// well as to its own column.
+const COLUMNS_BY_ROW_CODE: Record<string, string> = {
+  invalid_fish_count: 'count',
+  invalid_fish_size: 'size',
+  invalid_invert_count: 'count',
+  invalid_score: 'score',
+  invalid_total: 'total',
+  invert_count_high: 'count',
+  invert_size_exceeds_maximum: 'size',
+  max_fish_size: 'size',
+  no_region_match: 'attribute',
+  not_part_of_fish_family_subset: 'attribute',
+  not_positive_integer: 'quadrat_number',
+}
+
+// Bleaching names the offending cells itself, by observation key (`count_pale`, `percent_hard`).
+const CODES_NAMING_THEIR_CELLS = ['invalid_count', 'invalid_percent_value']
+
+// The observation columns a row message is about, so the table can mark those cells. A message
+// about the whole row, such as duplicate_values, or a code missing here marks no cell.
+export const getMessageColumns = (
+  validation: Pick<Validation, 'code' | 'name' | 'context'>,
+): string[] => {
+  const { code = '', name, context } = validation
+
+  if (code === 'required') {
+    const column = getRequiredColumn(name)
+
+    return column ? [toColumnKey(column)] : []
+  }
+  if (CODES_NAMING_THEIR_CELLS.includes(code)) {
+    return context?.invalid_paths ?? []
+  }
+
+  return COLUMNS_BY_ROW_CODE[code] ? [COLUMNS_BY_ROW_CODE[code]] : []
+}
+
+const getRequiredMessage = (validatorName = '') => {
+  const column = getRequiredColumn(validatorName)
+  const key = REQUIRED_MESSAGE_KEYS_BY_OBSERVATION_COLUMN[column] ?? 'validation_messages.required'
+
+  return i18n.t(key)
+}
+
+export const getValidationMessage = (
+  validation: Pick<Validation, 'code' | 'name' | 'context' | 'fields'>,
+  projectId = '',
+): ReactNode => {
+  const { code, context, fields, name } = validation
+
+  const validationMessages: Record<string, () => ReactNode> = {
+    all_attributes_same_category: () =>
+      i18n.t('validation_messages.all_attributes_same_category', {
+        category: context?.category ?? '',
+      }),
+    all_equal: () => i18n.t('validation_messages.all_equal'),
+    diff_num_images: () => i18n.t('validation_messages.quadrat_count_differs_from_photos'),
+    diff_num_quadrats: () => i18n.t('validation_messages.diff_num_quadrats'),
+    different_num_points_per_quadrat_se: () =>
+      i18n.t('validation_messages.different_num_points_per_quadrat_se'),
+    different_num_quadrats_se: () => i18n.t('validation_messages.different_num_quadrats_se'),
+    different_transect_length_se: () => i18n.t('validation_messages.different_transect_length_se'),
+    different_transect_width_se: () => i18n.t('validation_messages.different_transect_width_se'),
+    different_quadrat_size_se: () => i18n.t('validation_messages.different_quadrat_size_se'),
+    duplicate_benthic_transect: () => getDuplicateSampleUnitLink(context, projectId),
+    duplicate_fishbelt_transect: () => getDuplicateSampleUnitLink(context, projectId),
+    duplicate_quadrat_collection: () => getDuplicateSampleUnitLink(context, projectId),
+    duplicate_quadrat_transect: () => getDuplicateSampleUnitLink(context, projectId),
+    duplicate_transect: () => i18n.t('validation_messages.duplicate_transect'),
+    duplicate_values: () =>
+      fields?.length
+        ? getDuplicateValuesValidationMessage(fields[0], context?.duplicates)
+        : i18n.t('validation_messages.duplicate_generic'),
+    invalid_count: () => getInvalidBleachingObsMessage(context, 'colony_count'),
+    invalid_intervals: () => i18n.t('validation_messages.invalid_intervals'),
+    invalid_percent_value: () => getInvalidBleachingObsMessage(context, 'percent_cover'),
+    invalid_total: () => getInvalidBleachingObsTotalMessage(context),
+    exceed_total_colonies: () => i18n.t('validation_messages.exceed_total_colonies'),
+    implausibly_old_date: () => i18n.t('validation_messages.date_before_1900'),
+    future_sample_date: () => i18n.t('validation_messages.date_in_future'),
+    high_density: () =>
+      i18n.t('validation_messages.high_density', {
+        max: context?.biomass_range?.[1] ?? '',
+      }),
+    incorrect_observation_count: () =>
+      i18n.t('validation_messages.incorrect_observation_count', {
+        expectedCount: context?.expected_count ?? '',
+      }),
+    invalid_interval_size: () => i18n.t('validation_messages.size_not_positive'),
+    max_interval_size: () =>
+      i18n.t('validation_messages.maximum_metres', {
+        max: context?.interval_size_range?.[1] ?? '',
+      }),
+    invalid_interval_start: () => i18n.t('validation_messages.zero_or_greater'),
+    max_interval_start: () =>
+      i18n.t('validation_messages.maximum_metres', {
+        max: context?.interval_start_range?.[1] ?? '',
+      }),
+    invalid_benthic_transect: () => i18n.t('validation_messages.invalid_benthic_transect'),
+    invalid_depth: () => getDepthMessage(context),
+    excessive_precision: () =>
+      i18n.t('validation_messages.decimal_places_exceeded', {
+        count: context?.decimal_places,
+      }),
+    // An observation row has one Validations cell, so its message names the column.
+    invalid_fish_count: () => i18n.t('validation_messages.count_zero_or_greater'),
+    invalid_fish_size: () => i18n.t('validation_messages.invalid_size'),
+    invalid_fishbelt_transect: () => i18n.t('validation_messages.invalid_fishbelt_transect'),
+    invalid_invert_count: () => i18n.t('validation_messages.count_not_positive'),
+    invert_count_high: () => i18n.t('validation_messages.count_unusually_high'),
+    invert_size_exceeds_maximum: () =>
+      i18n.t('validation_messages.size_larger_than_maximum_expected'),
+    duplicate_invert_belt_transect: () => getDuplicateSampleUnitLink(context, projectId),
+    invalid_invert_belt_transect: () => i18n.t('validation_messages.invalid_invert_belt_transect'),
+    invalid_number_of_points: () =>
+      i18n.t('validation_messages.invalid_number_of_points', {
+        invalidQuadratNumbers: context?.invalid_quadrat_numbers ?? '',
+      }),
+    invalid_quadrat_collection: () => i18n.t('validation_messages.invalid_quadrat_collection'),
+    invalid_quadrat_size: () => i18n.t('validation_messages.size_not_positive'),
+    max_quadrat_size: () =>
+      i18n.t('validation_messages.less_than_square_metres', {
+        max: context?.quadrat_size_range?.[1] ?? '',
+      }),
+    invalid_quadrat_transect: () => i18n.t('validation_messages.invalid_quadrat_transect'),
+    invalid_sample_date: () => i18n.t('validation_messages.invalid_sample_date'),
+    invalid_score: () => i18n.t('validation_messages.invalid_score'),
+    large_num_quadrats: () => i18n.t('validation_messages.large_num_quadrats'),
+    len_surveyed_not_positive: () => i18n.t('validation_messages.len_surveyed_not_positive'),
+    len_surveyed_out_of_range: () => getOutsideOfRangeMessage(context?.len_surveyed_range),
+    low_density: () =>
+      i18n.t('validation_messages.low_density', {
+        min: context?.biomass_range?.[0] ?? '',
+      }),
+    management_not_found: () => i18n.t('validation_messages.management_not_found'),
+    max_depth: () => getDepthMessage(context),
+    max_fish_size: () => i18n.t('validation_messages.size_larger_than_maximum_observed'),
+    minimum_total_fish_count: () =>
+      i18n.t('validation_messages.minimum_total_fish_count', {
+        minimumFishCount: context?.minimum_fish_count ?? '',
+      }),
+    missing_quadrat_numbers: () =>
+      i18n.t('validation_messages.missing_quadrats', {
+        count: context?.missing_quadrat_numbers?.length ?? 0,
+        // Intl.ListFormat, behind the list format, only accepts strings
+        numbers: (context?.missing_quadrat_numbers ?? []).map(String),
+      }),
+    missing_intervals: () =>
+      i18n.t('validation_messages.missing_intervals', {
+        intervals: context?.missing_intervals ?? '',
+      }),
+    no_region_match: () => i18n.t('validation_messages.no_region_match'),
+    not_part_of_fish_family_subset: () =>
+      i18n.t('validation_messages.not_part_of_fish_family_subset'),
+    not_positive_integer: () => i18n.t('validation_messages.zero_or_greater'),
+    not_unique_site: () => i18n.t('validation_messages.not_unique_site'),
+    not_unique_management: () => goToManagementOverviewPageLink(projectId),
+    obs_total_length_toolarge: () =>
+      i18n.t('validation_messages.obs_total_length_toolarge', {
+        totalLength: context?.total_obs_length ?? '',
+        transectLength: context?.len_surveyed ?? '',
+      }),
+    obs_total_length_toosmall: () =>
+      i18n.t('validation_messages.obs_total_length_toosmall', {
+        totalLength: context?.total_obs_length ?? '',
+        transectLength: context?.len_surveyed ?? '',
+      }),
+    required: () => getRequiredMessage(name),
+    required_management_rules: () => i18n.t('validation_messages.required_management_rules'),
+    sample_time_out_of_range: () => getOutsideOfRangeMessage(context?.time_range?.map(formatTime)),
+    similar_name: () => i18n.t('validation_messages.similar_name'),
+    size_bin_required: () => i18n.t('validation_messages.size_bin_required'),
+    similar_date_sample_unit: () => i18n.t('validation_messages.similar_date_sample_unit'),
+    site_not_found: () => i18n.t('validation_messages.site_not_found_short'),
+    too_many_observations: () =>
+      i18n.t('validation_messages.too_many_observations', {
+        max: context?.observation_count_range?.[1] ?? '',
+      }),
+    too_few_observations: () =>
+      i18n.t('validation_messages.too_few_observations', {
+        min: context?.observation_count_range?.[0] ?? '',
+      }),
+    unknown_protocol: () => i18n.t('validation_messages.unknown_protocol'),
+    unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
+    value_not_set: () => i18n.t('validation_messages.value_not_set'),
+    default: () => code || name,
+    unclassified_annotation: () => i18n.t('validation_messages.unclassified_annotation'),
+    unconfirmed_annotation: () => i18n.t('validation_messages.unconfirmed_annotation'),
+  }
+
+  return (validationMessages[code] || validationMessages.default)()
+}

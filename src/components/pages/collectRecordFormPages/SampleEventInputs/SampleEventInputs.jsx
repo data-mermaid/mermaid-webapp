@@ -28,8 +28,8 @@ const SampleEventInputs = ({
   sites,
   handleSitesChange,
   ignoreNonObservationFieldValidations,
-  resetNonObservationFieldValidations,
-  validationPropertiesWithDirtyResetOnInputChange,
+  markFieldValidationsStale,
+  unignoreNonObservationFieldValidations,
 }) => {
   const { t } = useTranslation()
   const managementRegimeOptions = getManagementRegimeOptions(managementRegimes)
@@ -53,21 +53,21 @@ const SampleEventInputs = ({
   )
 
   const handleSiteChange = (event) => {
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: SITE_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
 
   const handleManagementChange = (event) => {
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: MANAGEMENT_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
 
   const handleSampleDateChange = (event) => {
-    resetNonObservationFieldValidations({
+    markFieldValidationsStale({
       validationPath: SAMPLE_DATE_VALIDATION_PATH,
     })
     formik.handleChange(event)
@@ -76,13 +76,13 @@ const SampleEventInputs = ({
   const updateValueAndResetValidationForSite = (value, options) => {
     formik.setFieldValue('site', value)
     handleSitesChange(options)
-    resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
+    markFieldValidationsStale({ validationPath: SITE_VALIDATION_PATH })
   }
 
   const updateValueAndResetValidationForMR = (value, options) => {
     formik.setFieldValue('management', value)
     handleManagementRegimesChange(options)
-    resetNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
+    markFieldValidationsStale({ validationPath: MANAGEMENT_VALIDATION_PATH })
   }
 
   return (
@@ -95,14 +95,10 @@ const SampleEventInputs = ({
           id="site"
           testId="site"
           options={siteOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
-          }}
+          validationPath={SITE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...siteValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(siteValidationProperties, 'site')}
           onBlur={formik.handleBlur}
           value={formik.values.site}
           onChange={handleSiteChange}
@@ -116,16 +112,10 @@ const SampleEventInputs = ({
           id="management"
           testId="management"
           options={managementRegimeOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
-          }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            managementValidationProperties,
-            'management',
-          )}
+          validationPath={MANAGEMENT_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          {...managementValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.management}
           onChange={handleManagementChange}
@@ -139,17 +129,10 @@ const SampleEventInputs = ({
           id="sample_date"
           testId="sample-date"
           type="date"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SAMPLE_DATE_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SAMPLE_DATE_VALIDATION_PATH })
-          }}
+          validationPath={SAMPLE_DATE_VALIDATION_PATH}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           {...sampleDateValidationProperties}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            sampleDateValidationProperties,
-            'sample_date',
-          )}
           onBlur={formik.handleBlur}
           value={formik.values.sample_date}
           onChange={handleSampleDateChange}
@@ -169,8 +152,8 @@ SampleEventInputs.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   handleSitesChange: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
-  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
+  markFieldValidationsStale: PropTypes.func.isRequired,
+  unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
 }
 
 export default SampleEventInputs

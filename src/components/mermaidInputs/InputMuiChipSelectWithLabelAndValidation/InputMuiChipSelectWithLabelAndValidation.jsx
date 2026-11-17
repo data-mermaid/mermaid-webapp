@@ -16,11 +16,12 @@ import theme from '../../../theme'
 const InputMuiChipSelectWithLabelAndValidation = ({
   id,
   required,
-  ignoreNonObservationFieldValidations = () => {},
+  ignoreNonObservationFieldValidations = undefined,
   label,
   onChange,
   options,
-  resetNonObservationFieldValidations = () => {},
+  unignoreNonObservationFieldValidations = undefined,
+  validationPath = undefined,
   validationMessages,
   validationType = undefined,
   value,
@@ -76,7 +77,8 @@ const InputMuiChipSelectWithLabelAndValidation = ({
 
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+        validationPath={validationPath}
         validationMessages={validationMessages}
         validationType={validationType}
       />
@@ -97,7 +99,8 @@ InputMuiChipSelectWithLabelAndValidation.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
+  validationPath: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   value: PropTypes.arrayOf(

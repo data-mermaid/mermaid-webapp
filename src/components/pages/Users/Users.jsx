@@ -792,8 +792,8 @@ function UsersTableSection({
       const disabledRemoveTooltipText = isDemoProject
         ? t('projects.demo.delete_users_unavailable')
         : isOnlyAdmin
-        ? lastAdminTooltipText
-        : null
+          ? lastAdminTooltipText
+          : null
 
       const getCursorType = () => {
         if (isOnlyAdmin) {

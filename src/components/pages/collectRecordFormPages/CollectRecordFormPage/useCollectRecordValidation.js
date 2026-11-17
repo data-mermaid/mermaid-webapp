@@ -1,75 +1,47 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import getValidationSummary from './getValidationSummary'
-import theme from '../../../../theme'
+import { VALIDATION_STATUS } from '../../Collect/collectConstants'
+import {
+  getIsEligibleForValidationAnnouncement,
+  startValidationAnnouncement,
+} from '../../../../library/validationAnnouncement'
 
-const HIGHLIGHT_CLASS = 'validation-target-highlight'
-const HIGHLIGHT_COLOR_VAR = '--validation-target-highlight-color'
-
-// A pale wash of the validation type's colour. Ignored uses the row's own stripe colour, not
-// the ignored chip fill, which is a solid grey and too heavy across a full-width row.
-const highlightColorByType = {
-  error: theme.color.chipErrorBackground,
-  warning: theme.color.chipWarningBackground,
-  ignore: theme.color.ignore,
-}
+// Marks the item Next last landed on, valued by the chip's type, until Next selects another (see
+// globalStyles). An attribute rather than a class, because React rewrites a styled row's class
+// when its validations change.
+const SELECTED_ATTRIBUTE = 'data-validation-selected'
 
 const findTargetElement = (target) =>
   document.querySelector(`[${target.attribute}="${target.value}"]`)
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const STILL_FRAMES_REQUIRED = 3
-const MAX_SETTLE_FRAMES = 60
-
-/**
- * Calls back once `element` has stopped moving. Smooth scrolling is asynchronous and `scrollend`
- * is too new to rely on, so this watches the element's position instead. The frame cap stops a
- * user who is scrolling by hand from holding the callback off indefinitely.
- */
-const whenScrollSettles = (element, onSettled) => {
-  let previousTop = null
-  let stillFrames = 0
-  let framesWaited = 0
-  let frameId
-
-  const check = () => {
-    const { top } = element.getBoundingClientRect()
-
-    stillFrames = top === previousTop ? stillFrames + 1 : 0
-    previousTop = top
-    framesWaited += 1
-
-    if (stillFrames >= STILL_FRAMES_REQUIRED || framesWaited >= MAX_SETTLE_FRAMES) {
-      onSettled()
-
-      return
-    }
-
-    frameId = requestAnimationFrame(check)
-  }
-
-  frameId = requestAnimationFrame(check)
-
-  return () => cancelAnimationFrame(frameId)
-}
-
 // Focus stays on the chip, so this text is the only way a screen reader learns where the
 // page went. The cap stops a wide observation row reciting every cell.
 const describeTarget = (element) => element.textContent.replace(/\s+/g, ' ').trim().slice(0, 120)
 
+const getIsErrorOrWarning = (collectRecord) =>
+  collectRecord.validations?.status === VALIDATION_STATUS.error ||
+  collectRecord.validations?.status === VALIDATION_STATUS.warning
+
+const getIsValidationResultCurrent = (collectRecord) =>
+  collectRecord.validations?.status === VALIDATION_STATUS.ok || getIsErrorOrWarning(collectRecord)
+
 const useCollectRecordValidation = ({
+  areValidationsShowing,
   collectRecordBeingEdited,
+  currentUser,
   databaseSwitchboardInstance,
-  formikInstance,
+  disclosureStore,
   handleCollectRecordChange,
   isParentDataLoading,
   observationIdsOnPage,
-  observationTableRef,
   projectId,
   recordId,
   setAreValidationsShowing,
@@ -81,6 +53,7 @@ const useCollectRecordValidation = ({
   const { t } = useTranslation()
   const validationIgnoreText = t('sample_units.errors.validation_ignore')
   const validationResetText = t('sample_units.errors.validation_reset')
+  const validationUnignoreText = t('sample_units.errors.validation_unignore')
 
   // Per-chip cursors — refs so advancing doesn't trigger a render.
   // Reset to 0 whenever validations get refreshed (see handleValidate below).
@@ -91,53 +64,30 @@ const useCollectRecordValidation = ({
 
   const [nextAnnouncement, setNextAnnouncement] = useState('')
 
-  // The highlight in flight. Tracked so a second Next restarts the fade instead of letting
-  // the previous timer strip the class part way through, and so nothing fires after unmount.
-  const highlightRef = useRef({ element: null, timeoutId: null, cancelScrollWatch: null })
+  const selectedElementRef = useRef(null)
+  const { open: openDisclosure, close: closeDisclosure } = disclosureStore
 
-  const clearHighlight = useCallback(() => {
-    const { element, timeoutId, cancelScrollWatch } = highlightRef.current
-
-    cancelScrollWatch?.()
-    clearTimeout(timeoutId)
-
-    if (element) {
-      element.classList.remove(HIGHLIGHT_CLASS)
-      element.style.removeProperty(HIGHLIGHT_COLOR_VAR)
-    }
-
-    highlightRef.current = { element: null, timeoutId: null, cancelScrollWatch: null }
+  const clearSelection = useCallback(() => {
+    selectedElementRef.current?.removeAttribute(SELECTED_ATTRIBUTE)
+    selectedElementRef.current = null
   }, [])
 
-  useEffect(() => clearHighlight, [clearHighlight])
-
-  const scrollToAndHighlight = (element, type) => {
-    clearHighlight()
-
-    element.scrollIntoView({
-      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      block: 'center',
-    })
-
-    element.style.setProperty(HIGHLIGHT_COLOR_VAR, highlightColorByType[type])
-
-    // The fade starts once the page has arrived, so a jump the length of the record cannot
-    // finish before the row it is marking comes into view.
-    const startFade = () => {
-      void element.offsetWidth // restart the CSS animation
-      element.classList.add(HIGHLIGHT_CLASS)
-      highlightRef.current.timeoutId = setTimeout(
-        clearHighlight,
-        theme.timing.validationTargetHighlightMs,
-      )
-    }
-
-    highlightRef.current = {
-      element,
-      timeoutId: null,
-      cancelScrollWatch: whenScrollSettles(element, startFade),
-    }
+  const select = (element, type) => {
+    clearSelection()
+    element.setAttribute(SELECTED_ATTRIBUTE, type)
+    selectedElementRef.current = element
   }
+
+  // Saving hides every finding, and another record (same route, same page) brings its own, so
+  // neither leaves anything for Next's stop to point at.
+  useEffect(
+    function clearNextStop() {
+      clearSelection()
+      closeDisclosure()
+    },
+    [areValidationsShowing, recordId, clearSelection, closeDisclosure],
+  )
+
   const getValidationButtonStatus = useCallback((collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
       ? buttonGroupStates.validated
@@ -158,18 +108,57 @@ const useCollectRecordValidation = ({
     ],
   )
 
+  // Any save marks a record's validations stale, so a stored ok, warning, or error result is
+  // current, whether Collect or another client (such as mermaidr) ran the validation.
+  const recordIdShownOnLoadRef = useRef(null)
+
+  useEffect(
+    function showStoredValidationsOnLoad() {
+      if (
+        isParentDataLoading ||
+        !collectRecordBeingEdited ||
+        collectRecordBeingEdited.id !== recordId ||
+        recordIdShownOnLoadRef.current === recordId
+      ) {
+        return
+      }
+
+      recordIdShownOnLoadRef.current = recordId
+
+      if (getIsValidationResultCurrent(collectRecordBeingEdited)) {
+        setAreValidationsShowing(true)
+        setIsSubmitWarningVisible(getIsErrorOrWarning(collectRecordBeingEdited))
+      }
+    },
+    [
+      isParentDataLoading,
+      collectRecordBeingEdited,
+      recordId,
+      setAreValidationsShowing,
+      setIsSubmitWarningVisible,
+    ],
+  )
+
   // Shows a record the API has just validated, whether from Validate or from a Submit the API
   // refused after re-validating.
   const showValidationResult = (validatedRecord) => {
-    const isErrorOrWarning =
-      validatedRecord.validations.status === 'error' ||
-      validatedRecord.validations.status === 'warning'
     setAreValidationsShowing(true)
     resetNextCursors()
+    clearSelection()
+    closeDisclosure()
     handleCollectRecordChange(validatedRecord)
     setValidateButtonState(getValidationButtonStatus(validatedRecord))
-    setIsSubmitWarningVisible(isErrorOrWarning)
+    setIsSubmitWarningVisible(getIsErrorOrWarning(validatedRecord))
   }
+
+  const closeAnnouncementRef = useRef(null)
+
+  useEffect(
+    function closeAnnouncementOnLeavingRecord() {
+      return () => closeAnnouncementRef.current?.()
+    },
+    [recordId],
+  )
 
   const handleValidate = () => {
     setValidateButtonState(buttonGroupStates.validating)
@@ -177,7 +166,15 @@ const useCollectRecordValidation = ({
     databaseSwitchboardInstance
       .validateSampleUnit({ recordId, projectId })
       .then((validatedRecordResponse) => {
-        showValidationResult(validatedRecordResponse)
+        // Committed before announcing, so the counts bar the announcement points at is on the page.
+        flushSync(() => showValidationResult(validatedRecordResponse))
+
+        if (
+          getIsErrorOrWarning(validatedRecordResponse) &&
+          getIsEligibleForValidationAnnouncement(currentUser)
+        ) {
+          closeAnnouncementRef.current = startValidationAnnouncement(currentUser, t)
+        }
 
         if (validatedRecordResponse.validations.status === 'ok') {
           toast.success(...getToastArguments(t('sample_units.success.record_validated')))
@@ -194,228 +191,133 @@ const useCollectRecordValidation = ({
       })
   }
 
-  // Has the user edited this input since the record was last validated? Formik reinitialises
-  // from the record on save and on validate, so initialValues is always the last validated
-  // state. Both the inline badge below and the status indicator chips read this one function,
-  // so a field that stops showing a badge also stops being counted and navigated to.
-  const isFieldValueDirty = (property) =>
-    formikInstance.values[property] !== formikInstance.initialValues[property]
+  // Every ignore, un-ignore and mark-stale change is written to IndexedDB by the switchboard;
+  // the updated record is shown and a save pushes it. A new record has no stored validations
+  // to change yet.
+  const applyValidationChange = useCallback(
+    (getChange, failureText) => {
+      if (!collectRecordBeingEdited) {
+        return
+      }
 
-  const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
-    // for UX purpose only, validation is cleared when input is on change after page is validated
-    const validationDirtyCheck = isFieldValueDirty(property)
-      ? null
-      : validationProperties.validationType
-
-    return {
-      ...validationProperties,
-      validationType: validationDirtyCheck,
-    }
-  }
-
-  // Bleaching is the only protocol with two observation tables, so the validation's `fields`
-  // decide which one to scroll to.
-  const handleScrollToObservation = (fields = []) => {
-    const namedTable = fields
-      .map((field) =>
-        document.querySelector(`[data-observation-table="${field.replace('data.', '')}"]`),
-      )
-      .find(Boolean)
-
-    const target = namedTable ?? observationTableRef.current
-
-    target?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
-  }
-
-  const ignoreObservationValidations = useCallback(
-    ({ observationId }) => {
-      databaseSwitchboardInstance
-        .ignoreObservationValidations({
-          recordId: collectRecordBeingEdited.id,
-          observationId,
-        })
-        .then((recordWithIgnoredValidations) => {
-          handleCollectRecordChange(recordWithIgnoredValidations)
+      getChange(collectRecordBeingEdited)
+        .then((updatedRecord) => {
+          handleCollectRecordChange(updatedRecord)
           setIsFormDirty(true)
         })
         .catch((error) => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(validationIgnoreText))
+              toast.error(...getToastArguments(failureText))
             },
           })
         })
     },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationIgnoreText,
-    ],
-  )
-
-  const ignoreNonObservationFieldValidations = useCallback(
-    ({ validationPath }) => {
-      if (collectRecordBeingEdited && validationPath) {
-        databaseSwitchboardInstance
-          .ignoreNonObservationFieldValidations({
-            record: collectRecordBeingEdited,
-            validationPath,
-          })
-          .then((recordWithIgnoredValidations) => {
-            handleCollectRecordChange(recordWithIgnoredValidations)
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(validationIgnoreText))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationIgnoreText,
-    ],
-  )
-
-  const resetObservationValidations = useCallback(
-    ({ observationId }) => {
-      if (collectRecordBeingEdited && observationId) {
-        databaseSwitchboardInstance
-          .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
-          .then((recordWithResetValidations) => {
-            handleCollectRecordChange(recordWithResetValidations)
-
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(validationResetText))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationResetText,
-    ],
-  )
-
-  const resetRecordLevelValidation = useCallback(
-    ({ validationId }) => {
-      databaseSwitchboardInstance
-        .resetRecordLevelValidation({
-          record: collectRecordBeingEdited,
-          validationId,
-        })
-        .then((recordWithResetValidations) => {
-          handleCollectRecordChange(recordWithResetValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(validationResetText))
-            },
-          })
-        })
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationResetText,
-    ],
-  )
-
-  const resetNonObservationFieldValidations = useCallback(
-    ({ validationPath }) => {
-      if (collectRecordBeingEdited && validationPath) {
-        databaseSwitchboardInstance
-          .resetNonObservationFieldValidations({
-            record: collectRecordBeingEdited,
-            validationPath,
-          })
-          .then((recordWithResetValidations) => {
-            handleCollectRecordChange(recordWithResetValidations)
-            setIsFormDirty(true)
-          })
-          .catch((error) => {
-            handleHttpResponseError({
-              error,
-              callback: () => {
-                toast.error(...getToastArguments(validationResetText))
-              },
-            })
-          })
-      }
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationResetText,
-    ],
+    [collectRecordBeingEdited, handleCollectRecordChange, handleHttpResponseError, setIsFormDirty],
   )
 
   const ignoreRecordLevelValidation = useCallback(
-    ({ validationId }) => {
-      databaseSwitchboardInstance
-        .ignoreRecordLevelValidation({
-          record: collectRecordBeingEdited,
-          validationId,
-        })
-        .then((recordWithIgnoredValidations) => {
-          handleCollectRecordChange(recordWithIgnoredValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(validationIgnoreText))
-            },
-          })
-        })
-    },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      handleCollectRecordChange,
-      handleHttpResponseError,
-      setIsFormDirty,
-      validationIgnoreText,
-    ],
+    ({ validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.ignoreRecordLevelValidation({ record, validationId }),
+        validationIgnoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationIgnoreText],
   )
 
-  // Rebuilt every render on purpose: isFieldValueDirty reads formik values, so an edited
-  // field has to drop out of the counts on the next keystroke.
+  const unignoreRecordLevelValidation = useCallback(
+    ({ validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.unignoreRecordLevelValidation({ record, validationId }),
+        validationUnignoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationUnignoreText],
+  )
+
+  const ignoreNonObservationFieldValidations = useCallback(
+    ({ validationPath, validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.ignoreNonObservationFieldValidations({
+            record,
+            validationPath,
+            validationId,
+          }),
+        validationIgnoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationIgnoreText],
+  )
+
+  const unignoreNonObservationFieldValidations = useCallback(
+    ({ validationPath, validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.unignoreNonObservationFieldValidations({
+            record,
+            validationPath,
+            validationId,
+          }),
+        validationUnignoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationUnignoreText],
+  )
+
+  const markFieldValidationsStale = useCallback(
+    ({ validationPath }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.markFieldValidationsStale({ record, validationPath }),
+        validationResetText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationResetText],
+  )
+
+  const ignoreObservationValidations = useCallback(
+    ({ observationId, validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.ignoreObservationValidations({
+            recordId: record.id,
+            observationId,
+            validationId,
+          }),
+        validationIgnoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationIgnoreText],
+  )
+
+  const unignoreObservationValidations = useCallback(
+    ({ observationId, validationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.unignoreObservationValidations({
+            recordId: record.id,
+            observationId,
+            validationId,
+          }),
+        validationUnignoreText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationUnignoreText],
+  )
+
+  const markObservationValidationsStale = useCallback(
+    ({ observationId }) =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.markObservationValidationsStale({
+            recordId: record.id,
+            observationId,
+          }),
+        validationResetText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationResetText],
+  )
+
   const validationSummary = getValidationSummary(
     collectRecordBeingEdited?.validations?.results,
-    isFieldValueDirty,
     observationIdsOnPage,
   )
   const validationCounts = {
@@ -451,9 +353,18 @@ const useCollectRecordValidation = ({
     const cursor = nextCursorsRef.current[type] % resolved.length
     nextCursorsRef.current[type] = cursor + 1
 
-    const { element } = resolved[cursor]
+    const { element, target } = resolved[cursor]
 
-    scrollToAndHighlight(element, type)
+    // Committed before scrolling, so the scroll measures the field or row open. A record-level
+    // message has nothing to open, so landing on one closes whatever was open.
+    flushSync(() =>
+      target.disclosureKey ? openDisclosure(target.disclosureKey) : closeDisclosure(),
+    )
+    element.scrollIntoView({
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      block: 'center',
+    })
+    select(element, type)
     setNextAnnouncement(
       t('sample_units.validation_status.next_announcement', {
         position: cursor + 1,
@@ -464,16 +375,16 @@ const useCollectRecordValidation = ({
   }
 
   return {
-    handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,
     ignoreObservationValidations,
     ignoreRecordLevelValidation,
-    resetNonObservationFieldValidations,
-    resetObservationValidations,
-    resetRecordLevelValidation,
+    markFieldValidationsStale,
+    markObservationValidationsStale,
     showValidationResult,
-    validationPropertiesWithDirtyResetOnInputChange,
+    unignoreNonObservationFieldValidations,
+    unignoreObservationValidations,
+    unignoreRecordLevelValidation,
     validationCounts,
     goToNextValidation,
     nextAnnouncement,

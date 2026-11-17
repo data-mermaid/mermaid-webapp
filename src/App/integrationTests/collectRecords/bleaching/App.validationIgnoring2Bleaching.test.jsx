@@ -17,7 +17,7 @@ import mockBleachingCollectRecords from '../../../../testUtilities/mockCollectRe
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Bleaching validation: user can reset ignored observation warnings (colonies bleached) ', async () => {
+test('Bleaching validation: user can un-ignore observation warnings (colonies bleached)', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const observationsValidations = [
     [
@@ -107,26 +107,23 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
 
   const coloniesBleachedObservationTable = screen.getByTestId('observations-section-table')
 
-  // only one observation will have warnings
-
+  // Row 9's two ignored warnings stay on screen, each with its own ticked box.
   await waitFor(() =>
     expect(
-      within(coloniesBleachedObservationTable).queryByText('firstWarning'),
-    ).not.toBeInTheDocument(),
+      within(coloniesBleachedObservationTable).getAllByTestId('ignore-warning-checkbox'),
+    ).toHaveLength(2),
   )
-  expect(
-    within(coloniesBleachedObservationTable).queryByText('secondWarning'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(coloniesBleachedObservationTable).getByTestId('ignore-warning-label'),
-  ).toBeInTheDocument()
+  expect(coloniesBleachedObservationTable.querySelectorAll('li.ignore-indicator')).toHaveLength(2)
 
   // other two passing
   expect(
     within(coloniesBleachedObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 
-  await user.click(within(coloniesBleachedObservationTable).getByTestId('ignore-warning-checkbox'))
+  // Unticking one brings that warning back and leaves the other ignored.
+  await user.click(
+    within(coloniesBleachedObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+  )
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
@@ -134,21 +131,20 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
 
   await waitFor(() =>
     expect(
-      within(coloniesBleachedObservationTable).queryByTestId('ignore-warning-label'),
-    ).not.toBeInTheDocument(),
+      within(coloniesBleachedObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+    ).not.toBeChecked(),
   )
   expect(
-    within(coloniesBleachedObservationTable).queryByText('firstWarning'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(coloniesBleachedObservationTable).queryByText('secondWarning'),
-  ).not.toBeInTheDocument()
+    within(coloniesBleachedObservationTable).getAllByTestId('ignore-warning-checkbox')[1],
+  ).toBeChecked()
+  expect(coloniesBleachedObservationTable.querySelectorAll('li.warning-indicator')).toHaveLength(1)
+  expect(coloniesBleachedObservationTable.querySelectorAll('li.ignore-indicator')).toHaveLength(1)
   expect(
     within(coloniesBleachedObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 })
 
-test('Bleaching validation: user can reset ignored observation warnings (percent cover) ', async () => {
+test('Bleaching validation: user can un-ignore observation warnings (percent cover)', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const observationsValidations = [
     [
@@ -238,24 +234,23 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
 
   const percentCoverObservationTable = screen.getByTestId('observations2-section-table')
 
-  // only one observation will have warnings
-
+  // Row 9's two ignored warnings stay on screen, each with its own ticked box.
   await waitFor(() =>
     expect(
-      within(percentCoverObservationTable).queryByText('firstWarning'),
-    ).not.toBeInTheDocument(),
+      within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox'),
+    ).toHaveLength(2),
   )
-  expect(within(percentCoverObservationTable).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(
-    within(percentCoverObservationTable).getByTestId('ignore-warning-label'),
-  ).toBeInTheDocument()
+  expect(percentCoverObservationTable.querySelectorAll('li.ignore-indicator')).toHaveLength(2)
 
   // other two passing
   expect(
     within(percentCoverObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
 
-  await user.click(within(percentCoverObservationTable).getByTestId('ignore-warning-checkbox'))
+  // Unticking one brings that warning back and leaves the other ignored.
+  await user.click(
+    within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+  )
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
@@ -263,11 +258,14 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
 
   await waitFor(() =>
     expect(
-      within(percentCoverObservationTable).queryByTestId('ignore-warning-label'),
-    ).not.toBeInTheDocument(),
+      within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox')[0],
+    ).not.toBeChecked(),
   )
-  expect(within(percentCoverObservationTable).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(percentCoverObservationTable).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(
+    within(percentCoverObservationTable).getAllByTestId('ignore-warning-checkbox')[1],
+  ).toBeChecked()
+  expect(percentCoverObservationTable.querySelectorAll('li.warning-indicator')).toHaveLength(1)
+  expect(percentCoverObservationTable.querySelectorAll('li.ignore-indicator')).toHaveLength(1)
   expect(
     within(percentCoverObservationTable).queryAllByTestId('passed-validation-indicator').length,
   ).toEqual(2)
@@ -352,7 +350,7 @@ test('user can reset dismissed record-level warnings', async () => {
   expect(isFormDirtyAfterReset)
 })
 
-test('Bleaching validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
+test('Bleaching validation: user edits non-observation input with ignored validation keeps the ignored status for that input.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -547,33 +545,49 @@ test('Bleaching validation: user edits non-observation input with ignored valida
   expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
   await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
-  await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() => expect(within(siteRow).getAllByTestId('message-pill-ignore')).toHaveLength(2))
 
   await user.selectOptions(within(managementRow).getByTestId('management-select'), '1')
-  await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(managementRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(depthRow).getByTestId('depth-input'), '1')
-  await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(depthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(sampleDateRow).getByTestId('sample-date-input'), '2021-11-09')
-  await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleDateRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(sampleTimeRow).getByTestId('sample-time-input'), '02:39 PM')
-  await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleTimeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(labelRow).getByTestId('label-input'), '1')
-  await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(labelRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(quadratSizeRow).getByTestId('quadrat-size-input'), '1')
-  await waitFor(() => expect(within(quadratSizeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(quadratSizeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   await user.type(within(notesRow).getByTestId('notes-textarea'), '1')
-  await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(notesRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   const observerSelect = within(observersRow).getByTestId('observers-select')
 
   await user.click(within(observerSelect).getByText('Melissa Nunes'))
-  await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
 
   // make act error go away
   expect(

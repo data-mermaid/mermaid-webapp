@@ -3,6 +3,7 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 import axios from '../../../library/axiosRetry'
 import i18n from '../../../../i18n'
 import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
+import { skipApiDuplicateCheck } from '../skipApiDuplicateCheck'
 
 const SitesMixin = (Base) =>
   class extends Base {
@@ -105,11 +106,11 @@ const SitesMixin = (Base) =>
 
     getSite = function getSite(id) {
       if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
+        return Promise.reject(this._operationMissingIdParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
-        Promise.reject(this._notAuthenticatedAndReadyError)
+        return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
       return this._dexiePerUserDataInstance.project_sites.get(id)
@@ -142,7 +143,7 @@ const SitesMixin = (Base) =>
           .post(
             `${this._apiBaseUrl}/push/`,
             {
-              project_sites: [siteToSubmit],
+              project_sites: [skipApiDuplicateCheck(siteToSubmit)],
             },
             {
               params: {

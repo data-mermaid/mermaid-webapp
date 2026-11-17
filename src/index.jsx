@@ -7,8 +7,7 @@ import { StyledEngineProvider } from '@mui/material'
 import * as Sentry from '@sentry/react'
 import { setWorkerUrl } from 'maplibre-gl'
 // Use ?worker&url, not ?url: only Vite's worker pipeline bundles the chunk the worker imports,
-// and without it production maps load no data. ESLint's resolver cannot resolve query imports.
-// eslint-disable-next-line import/no-unresolved
+// and without it production maps load no data.
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 
 import { initSentry } from './sentry'

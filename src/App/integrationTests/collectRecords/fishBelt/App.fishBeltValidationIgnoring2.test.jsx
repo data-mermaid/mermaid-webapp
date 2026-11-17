@@ -16,7 +16,7 @@ import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 
 const apiBaseUrl = import.meta.env.VITE_MERMAID_API
 
-test('Validation: user can reset ignored observation warnings ', async () => {
+test('Validation: user can un-ignore observation warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -104,30 +104,32 @@ test('Validation: user can reset ignored observation warnings ', async () => {
 
   const observationsTable = await screen.findByTestId('observations-section')
 
-  // only one observation will have warnings
-
+  // Row 9's two ignored warnings stay on screen, each with its own ticked box.
   await waitFor(() =>
-    expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument(),
+    expect(within(observationsTable).getAllByTestId('ignore-warning-checkbox')).toHaveLength(2),
   )
-  expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).getByTestId('ignore-warning-label')).toBeInTheDocument()
+  expect(observationsTable.querySelectorAll('li.ignore-indicator')).toHaveLength(2)
 
   // other two passing
   expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
     2,
   )
 
-  await user.click(within(observationsTable).getByTestId('ignore-warning-checkbox'))
+  // Unticking one brings that warning back and leaves the other ignored.
+  await user.click(within(observationsTable).getAllByTestId('ignore-warning-checkbox')[0])
 
   const isFormDirtyAfterReset = await screen.findByTestId('save-button')
 
   expect(isFormDirtyAfterReset)
 
   await waitFor(() =>
-    expect(within(observationsTable).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(
+      within(observationsTable).getAllByTestId('ignore-warning-checkbox')[0],
+    ).not.toBeChecked(),
   )
-  expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(observationsTable).getAllByTestId('ignore-warning-checkbox')[1]).toBeChecked()
+  expect(observationsTable.querySelectorAll('li.warning-indicator')).toHaveLength(1)
+  expect(observationsTable.querySelectorAll('li.ignore-indicator')).toHaveLength(1)
   expect(within(observationsTable).queryAllByTestId('passed-validation-indicator').length).toEqual(
     2,
   )
@@ -210,7 +212,7 @@ test('user can reset dismissed record-level warnings', async () => {
   expect(isFormDirtyAfterReset)
 })
 
-test('Validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
+test('Validation: user edits non-observation input with ignored validation keeps the ignored status for that input.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -449,61 +451,94 @@ test('Validation: user edits non-observation input with ignored validation reset
   expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2)
 
   await user.selectOptions(within(siteRow).getByTestId('site-select'), '1')
-  await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() => expect(within(siteRow).getAllByTestId('message-pill-ignore')).toHaveLength(2))
+  expect(within(siteRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   await user.selectOptions(within(managementRow).getByTestId('management-select'), '1')
-  await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(managementRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(managementRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   await user.type(screen.getByTestId('depth-input'), '1')
-  await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(depthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(depthRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   await user.type(screen.getByTestId('sample-date-input'), '2021-11-09')
-  await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleDateRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(sampleDateRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   await user.type(screen.getByTestId('sample-time-input'), '02:39 PM')
-  await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sampleTimeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(sampleTimeRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   await user.type(screen.getByTestId('transect-number-input'), '12')
   await waitFor(() =>
-    expect(within(transectNumberRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(transectNumberRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
+  expect(within(transectNumberRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   await user.type(screen.getByTestId('label-input'), '1')
-  await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(labelRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(labelRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   await user.type(screen.getByTestId('len-surveyed-input'), '1')
   await waitFor(() =>
-    expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
+    expect(within(lengthSurveyedRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
   )
+  expect(within(lengthSurveyedRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   // Width selection 10m
   await user.selectOptions(
     screen.getByTestId('width-select'),
     '228c932d-b5da-4464-b0df-d15a05c05c02',
   )
-  await waitFor(() => expect(within(widthRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(widthRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(widthRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   // Fish Size Bin selection AGRRA
   await user.selectOptions(
     screen.getByTestId('size-bin-select'),
     'ccef720a-a1c9-4956-906d-09ed56f16249',
   )
-  await waitFor(() => expect(within(sizeBinRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(sizeBinRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(sizeBinRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   // Reef Slope select on crest
   await user.selectOptions(
     screen.getByTestId('reef-slope-select'),
     '12dc11ae-3a4b-4309-8fae-66f51398d96f',
   )
-  await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(reefSlopeRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(reefSlopeRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   await user.type(screen.getByTestId('notes-textarea'), '1')
-  await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(notesRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(notesRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   const observerSelect = screen.getByTestId('observers-select')
 
   await user.click(within(observerSelect).getByText('Melissa Nunes'))
-  await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
+  await waitFor(() =>
+    expect(within(observersRow).getAllByTestId('message-pill-ignore')).toHaveLength(2),
+  )
+  expect(within(observersRow).queryByTestId('message-pill-warning')).not.toBeInTheDocument()
 
   // make act error go away
   expect(

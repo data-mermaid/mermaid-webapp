@@ -21,7 +21,7 @@ interface ImageClassificationContainerProps {
   }
   areValidationsShowing: boolean
   ignoreObservationValidations: () => void
-  resetObservationValidations: () => void
+  unignoreObservationValidations: () => void
   onPhotosChanged?: () => void
   onObservationIdsChange?: (observationIds: Set<string>) => void
 }
@@ -117,7 +117,7 @@ const ImageClassificationContainer = (props: ImageClassificationContainerProps) 
         collectRecord={props.collectRecord}
         areValidationsShowing={props.areValidationsShowing}
         ignoreObservationValidations={props.ignoreObservationValidations}
-        resetObservationValidations={props.resetObservationValidations}
+        unignoreObservationValidations={props.unignoreObservationValidations}
         onObservationIdsChange={props.onObservationIdsChange}
         onPhotosChanged={onPhotosChanged}
       />

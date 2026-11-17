@@ -119,7 +119,9 @@ const TdWithHoverText = styled(StyledTd)<StyledTdProps>`
     z-index: 10;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
+    transition:
+      opacity 0.5s ease,
+      visibility 0.5s ease;
   }
 
   &:hover {

@@ -27,13 +27,16 @@ import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import { HelperTextLink } from '../../../generic/links'
 
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -73,8 +76,9 @@ const BenthicPhotoQuadratObservationTable = ({
   choices,
   collectRecord = undefined,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
   setObservationIdToAddNewBenthicAttributeTo,
@@ -169,10 +173,8 @@ const BenthicPhotoQuadratObservationTable = ({
       const numberOfPointsOrEmptyStringToAvoidInputValueErrors = num_points ?? ''
 
       const {
+        cellMarks,
         isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
       } = getObservationValidationInfo({
@@ -193,7 +195,7 @@ const BenthicPhotoQuadratObservationTable = ({
           type: 'updateQuadratNumber',
           payload: { newQuadratNumber: event.target.value, observationId },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -209,7 +211,7 @@ const BenthicPhotoQuadratObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -225,7 +227,7 @@ const BenthicPhotoQuadratObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -239,7 +241,7 @@ const BenthicPhotoQuadratObservationTable = ({
           type: 'updateNumberOfPoints',
           payload: { newNumberOfPoints: newValue, observationId },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -260,7 +262,7 @@ const BenthicPhotoQuadratObservationTable = ({
           $messageType={observationValidationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'quadrat_number')} $align="right">
             <InputNumberNumericCharactersOnly
               type="number"
               // eslint-disable-next-line jsx-a11y/no-autofocus
@@ -273,7 +275,7 @@ const BenthicPhotoQuadratObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="left">
+          <Td {...getCellMarkProps(cellMarks, 'attribute')} $align="left">
             {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
@@ -308,7 +310,7 @@ const BenthicPhotoQuadratObservationTable = ({
               ))}
             </Select>
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'num_points')} $align="right">
             <InputNumberNumericCharactersOnly
               value={numberOfPointsOrEmptyStringToAvoidInputValueErrors}
               step="any"
@@ -321,15 +323,11 @@ const BenthicPhotoQuadratObservationTable = ({
           </Td>
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
-              observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -351,9 +349,10 @@ const BenthicPhotoQuadratObservationTable = ({
     choices.growthforms.data,
     collectRecord,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
     setIsNewBenthicAttributeModalOpen,
     setObservationIdToAddNewBenthicAttributeTo,
@@ -363,6 +362,7 @@ const BenthicPhotoQuadratObservationTable = ({
   return (
     <InputWrapper data-testid={testId}>
       <H2 id="table-label">{t('observations.observations')}</H2>
+      <ObservationsHeadingValidations />
       <StyledOverflowWrapper>
         <StickyObservationTable aria-labelledby="table-label">
           <StyledColgroup>
@@ -473,8 +473,9 @@ BenthicPhotoQuadratObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

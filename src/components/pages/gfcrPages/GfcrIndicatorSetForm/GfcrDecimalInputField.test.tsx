@@ -84,39 +84,54 @@ describe('GfcrDecimalInputField', () => {
     expect(captured.values?.f4_1).toBe('12.5')
   })
 
-  it('clamps to maxValue on blur', async () => {
+  it('refuses a keystroke that would go over maxValue', async () => {
     const { user } = renderUnauthenticatedOffline(
       <Harness initial={null} maxValue={GFCR_MAX_PERCENTAGE} />,
     )
 
-    await user.type(screen.getByRole('textbox'), '150')
+    await user.type(screen.getByRole('textbox'), '101')
+
+    expect(screen.getByRole('textbox')).toHaveValue('10')
+    expect(screen.getByRole('status')).toHaveTextContent('forms.number_maximum')
+
     await user.tab()
 
-    expect(captured.values?.f4_1).toBe(100)
+    expect(captured.values?.f4_1).toBe(10)
   })
 
-  it('clamps to a ceiling the field can actually represent', async () => {
-    // The km² ceiling carries 5 decimals but F 1.1 allows 2. Clamping to 999999.99999 and
-    // then rounding produced 1000000, which the API rejects for having 7 leading digits.
+  it('refuses a value that would round over a ceiling the field cannot represent', async () => {
+    // The km² ceiling carries 5 decimals but F 1.1 allows 2. Accepting 999999.999 and then
+    // rounding would produce 1000000, which the API rejects for having 7 leading digits.
     const { user } = renderUnauthenticatedOffline(
       <Harness initial={null} maxValue={GFCR_MAX_AREA_SQ_KM} maxNumberOfDecimals={2} />,
     )
 
-    await user.type(screen.getByRole('textbox'), '9999999')
+    await user.type(screen.getByRole('textbox'), '999999.999')
     await user.tab()
 
     expect(captured.values?.f4_1).toBe(999999.99)
   })
 
-  it('keeps the full ceiling when the field has the decimals for it', async () => {
+  it('accepts the full ceiling when the field has the decimals for it', async () => {
     const { user } = renderUnauthenticatedOffline(
       <Harness initial={null} maxValue={GFCR_MAX_AREA_SQ_KM} maxNumberOfDecimals={5} />,
     )
 
-    await user.type(screen.getByRole('textbox'), '9999999')
+    await user.type(screen.getByRole('textbox'), '999999.99999')
     await user.tab()
 
     expect(captured.values?.f4_1).toBe(999999.99999)
+  })
+
+  it('keeps a saved value over maxValue rather than replacing it', async () => {
+    const { user } = renderUnauthenticatedOffline(
+      <Harness initial={150} maxValue={GFCR_MAX_PERCENTAGE} />,
+    )
+
+    await user.click(screen.getByRole('textbox'))
+    await user.tab()
+
+    expect(captured.values?.f4_1).toBe(150)
   })
 
   it('leaves a value within maxValue alone', async () => {

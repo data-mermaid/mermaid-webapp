@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
+import { groupBy } from 'lodash'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
@@ -46,6 +47,7 @@ import {
 import getDuplicateValidationInfo, {
   ValidationResult,
 } from '../../collectRecordFormPages/CollectRecordFormPage/getDuplicateValidationInfo'
+import ObservationsHeadingValidations from '../../collectRecordFormPages/ObservationsHeadingValidations'
 
 interface TableHeaderProps {
   align: 'left' | 'right' | 'center'
@@ -95,7 +97,7 @@ interface ImageClassificationObservationTableProps {
   }
   areValidationsShowing: boolean
   ignoreObservationValidations: () => void
-  resetObservationValidations: () => void
+  unignoreObservationValidations: () => void
   images: ImageClassificationImage[]
   setImages: React.Dispatch<React.SetStateAction<ImageClassificationImage[]>>
   onPhotosChanged?: () => void
@@ -187,7 +189,7 @@ const ImageClassificationObservationTable = ({
   collectRecord = undefined,
   areValidationsShowing,
   ignoreObservationValidations,
-  resetObservationValidations,
+  unignoreObservationValidations,
   images: imageSet,
   setImages,
   onPhotosChanged,
@@ -311,9 +313,9 @@ const ImageClassificationObservationTable = ({
         const classifiedPoints = file.points.filter(({ annotations }) => annotations.length > 0)
         let totalConfirmed = 0
         let totalUnconfirmed = 0
-        let totalUnknown = 0
 
-        const imageAnnotationData = Object.groupBy(
+        // lodash rather than Object.groupBy, which some older mobile browsers lack
+        const imageAnnotationData = groupBy(
           classifiedPoints,
           ({ annotations }) => annotations[0].benthic_attribute + '_' + annotations[0].growth_form,
         )
@@ -330,7 +332,7 @@ const ImageClassificationObservationTable = ({
           totalUnconfirmed += item.unconfirmedCount
         })
 
-        totalUnknown = numPointsPerQuadrat - totalConfirmed - totalUnconfirmed
+        const totalUnknown = numPointsPerQuadrat - totalConfirmed - totalUnconfirmed
 
         return {
           file,
@@ -621,9 +623,7 @@ const ImageClassificationObservationTable = ({
                   isObservationValid,
                   hasObservationWarningValidation,
                   hasObservationErrorValidation,
-                  hasObservationIgnoredValidation,
                   observationValidationMessages,
-                  observationValidationType,
                 } = getObservationValidationInfo({
                   observationId: obsId,
                   collectRecord,
@@ -642,6 +642,21 @@ const ImageClassificationObservationTable = ({
                 const shouldDisplayObservationValidation = Boolean(
                   hasObservationErrorValidation && annotation?.unconfirmedCount,
                 )
+
+                // ObservationValidationInfo renders its own cell, so it must not be wrapped in another
+                const validationCell =
+                  areValidationsShowing &&
+                  (shouldDisplayObservationValidation ? (
+                    <ObservationValidationInfo
+                      ignoreObservationValidations={ignoreObservationValidations}
+                      unignoreObservationValidations={unignoreObservationValidations}
+                      isObservationValid={isObservationValid}
+                      observationId={obsId}
+                      observationValidationMessages={observationValidationMessages}
+                    />
+                  ) : (
+                    <StyledTd />
+                  ))
 
                 return (
                   <StyledTr
@@ -686,23 +701,7 @@ const ImageClassificationObservationTable = ({
                     </StyledTd>
                     {subIndex === 0 && (
                       <>
-                        {areValidationsShowing && (
-                          <StyledTd>
-                            {shouldDisplayObservationValidation && (
-                              <ObservationValidationInfo
-                                hasObservationErrorValidation={hasObservationErrorValidation}
-                                hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-                                hasObservationWarningValidation={hasObservationWarningValidation}
-                                ignoreObservationValidations={ignoreObservationValidations}
-                                isObservationValid={isObservationValid}
-                                observationId={obsId}
-                                observationValidationMessages={observationValidationMessages}
-                                observationValidationType={observationValidationType}
-                                resetObservationValidations={resetObservationValidations}
-                              />
-                            )}
-                          </StyledTd>
-                        )}
+                        {validationCell}
                         <StyledTd
                           style={{ textAlign: 'center' }}
                           rowSpan={numSubRows + (totalUnknown > 0 ? 1 : 0)}
@@ -736,23 +735,7 @@ const ImageClassificationObservationTable = ({
                         </StyledTd>
                       </>
                     )}
-                    {areValidationsShowing && subIndex >= 1 && (
-                      <StyledTd>
-                        {shouldDisplayObservationValidation && (
-                          <ObservationValidationInfo
-                            hasObservationErrorValidation={hasObservationErrorValidation}
-                            hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-                            hasObservationWarningValidation={hasObservationWarningValidation}
-                            ignoreObservationValidations={ignoreObservationValidations}
-                            isObservationValid={isObservationValid}
-                            observationId={obsId}
-                            observationValidationMessages={observationValidationMessages}
-                            observationValidationType={observationValidationType}
-                            resetObservationValidations={resetObservationValidations}
-                          />
-                        )}
-                      </StyledTd>
-                    )}
+                    {subIndex >= 1 && validationCell}
                   </StyledTr>
                 )
               })}
@@ -772,33 +755,20 @@ const ImageClassificationObservationTable = ({
                       count: totalUnknown,
                     })}
                   </StyledTd>
-                  {areValidationsShowing && (
-                    <StyledTd>
-                      {unclassifiedValidation.hasObservationErrorValidation && (
-                        <ObservationValidationInfo
-                          hasObservationErrorValidation={
-                            unclassifiedValidation.hasObservationErrorValidation
-                          }
-                          hasObservationIgnoredValidation={
-                            unclassifiedValidation.hasObservationIgnoredValidation
-                          }
-                          hasObservationWarningValidation={
-                            unclassifiedValidation.hasObservationWarningValidation
-                          }
-                          ignoreObservationValidations={ignoreObservationValidations}
-                          isObservationValid={unclassifiedValidation.isObservationValid}
-                          observationId={unclassifiedObsId}
-                          observationValidationMessages={
-                            unclassifiedValidation.observationValidationMessages
-                          }
-                          observationValidationType={
-                            unclassifiedValidation.observationValidationType
-                          }
-                          resetObservationValidations={resetObservationValidations}
-                        />
-                      )}
-                    </StyledTd>
-                  )}
+                  {areValidationsShowing &&
+                    (unclassifiedValidation.hasObservationErrorValidation ? (
+                      <ObservationValidationInfo
+                        ignoreObservationValidations={ignoreObservationValidations}
+                        unignoreObservationValidations={unignoreObservationValidations}
+                        isObservationValid={unclassifiedValidation.isObservationValid}
+                        observationId={unclassifiedObsId}
+                        observationValidationMessages={
+                          unclassifiedValidation.observationValidationMessages
+                        }
+                      />
+                    ) : (
+                      <StyledTd />
+                    ))}
                 </StyledTr>
               )}
             </React.Fragment>
@@ -812,6 +782,7 @@ const ImageClassificationObservationTable = ({
     <>
       <InputWrapper>
         <H2 id="table-label">{t('observations.observations')}</H2>
+        <ObservationsHeadingValidations />
         <StyledOverflowWrapper>
           <StickyObservationTable aria-labelledby="table-label">
             <thead>

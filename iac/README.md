@@ -19,28 +19,29 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 ### How it works
 
-1. `index.ts` attaches the `AwsSolutionsChecks` aspect to the CDK app.
-2. During `cdk synth`, cdk-nag inspects every resource and reports errors/warnings.
-3. `nag-suppressions.ts` contains **stack-level** suppressions for findings that have been triaged — each one is tagged with a reason and status via `applyNagSuppressions()`.
-4. The PR workflow (`pr.yml`) runs `cdk synth`, posts the results as a PR comment, and **fails the check** if any unsuppressed errors exist.
+1. `index.ts` registers `AwsSolutionsChecks` as a CDK policy validation plugin (`Validations.of(app).addPlugins(...)`, cdk-nag v3).
+2. During `cdk synth`, cdk-nag inspects every resource. Any unacknowledged finding, error **or warning**, makes `cdk synth` exit non-zero and is listed in `cdk.out/validation-report.json`.
+3. `nag-suppressions.ts` acknowledges findings that have been triaged (`Validations.of(construct).acknowledge(...)`). Each one is tagged with a reason and status via `applyNagSuppressions()`.
+4. The PR workflow (`pr.yml`) runs `cdk synth`, posts the findings from `validation-report.json` as a PR comment, and **fails the check** if there are any.
 
-### Adding a suppression
+### Adding an acknowledgment (suppression)
 
 When cdk-nag flags a new resource:
 
-1. Decide whether the finding should be **fixed** (change infra code) or **suppressed** (accepted risk / future TODO).
-2. If suppressing, add an entry in `nag-suppressions.ts` inside `applyNagSuppressions()`.
+1. Decide whether the finding should be **fixed** (change infra code) or **acknowledged** (accepted risk / future TODO).
+2. If acknowledging, add an entry in `nag-suppressions.ts` inside `applyNagSuppressions()`.
+   - Granular rules (e.g. `AwsSolutions-IAM5`) report one finding per wildcard. List each in `appliesTo`. v3 matches the exact `RuleId[finding]` string (copy it from the report), with no regex support.
 3. Tag the reason with `ACCEPTED` (intentional) or `TODO` (to be addressed later).
-4. Run `cdk synth` locally to confirm the error is resolved.
+4. Run `cdk synth` locally to confirm the finding is gone.
 
 ### Running locally
 
-Check for unsuppressed Error-level findings:
-
 ```bash
-cd iac && npx cdk synth --quiet 2>&1 | tee /tmp/cdk-nag.log || true; grep '^\[Error' /tmp/cdk-nag.log
+cd iac
+rm -f cdk.out/validation-report.json  # so a synth that fails early can't leave a stale report
+npx cdk synth --quiet; synth_exit=$?
+jq '[.pluginReports[] | select(.conclusion == "failure") | .violations[].ruleName]' cdk.out/validation-report.json
+(exit "$synth_exit")
 ```
 
-The `|| true` prevents `cdk synth` from aborting the command when cdk-nag finds errors (or if `pipefail` is active), while `; grep` ensures the grep always runs regardless of the synth exit code.
-
-No `[Error` output means all Error-level findings are suppressed. Warnings may still appear.
+The block exits with `cdk synth`'s status: non-zero if any finding is unacknowledged or synth failed (then `jq` reports a missing file). `jq` lists the unacknowledged rule IDs; `[]` means none. CDK's built-in "CloudFormation Validate" plugin may also report advisory warnings under a `success` conclusion; those don't fail the check.

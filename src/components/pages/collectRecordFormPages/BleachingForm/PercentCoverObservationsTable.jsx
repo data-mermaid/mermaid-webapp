@@ -19,12 +19,15 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -47,8 +50,9 @@ const PercentCoverObservationTable = ({
   areValidationsShowing,
   collectRecord = undefined,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   testId,
 }) => {
@@ -106,10 +110,8 @@ const PercentCoverObservationTable = ({
       } = observation
 
       const {
+        cellMarks,
         isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
       } = getObservationValidationInfo({
@@ -140,7 +142,7 @@ const PercentCoverObservationTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -156,9 +158,11 @@ const PercentCoverObservationTable = ({
           $messageType={observationValidationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="center">{quadrat_number}</Td>
+          <Td {...getCellMarkProps(cellMarks, 'quadrat_number')} $align="center">
+            {quadrat_number}
+          </Td>
 
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'percent_hard', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="hard-coral-percent-cover-label"
               value={percent_hard}
@@ -173,7 +177,7 @@ const PercentCoverObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'percent_soft', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="soft-coral-percent-cover-label"
               value={percent_soft}
@@ -186,7 +190,7 @@ const PercentCoverObservationTable = ({
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
-          <Td $align="right">
+          <Td {...getCellMarkProps(cellMarks, 'percent_algae', 'total')} $align="right">
             <InputNumberNumericCharactersOnly
               aria-labelledby="microalgae-percent-cover-label"
               value={percent_algae}
@@ -204,15 +208,11 @@ const PercentCoverObservationTable = ({
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
-              observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -234,9 +234,10 @@ const PercentCoverObservationTable = ({
     collectRecord,
     deleteObservationText,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
   ])
 
@@ -244,6 +245,7 @@ const PercentCoverObservationTable = ({
     <>
       <InputWrapper data-testid={testId}>
         <H2 id="percent-cover-label">{t('observations.percent_cover')}</H2>
+        <ObservationsHeadingValidations />
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable
@@ -335,6 +337,7 @@ PercentCoverObservationTable.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   collectRecord: bleachingRecordPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({
       interval_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -342,7 +345,7 @@ PercentCoverObservationTable.propTypes = {
     }),
   }).isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   testId: PropTypes.string.isRequired,
 }

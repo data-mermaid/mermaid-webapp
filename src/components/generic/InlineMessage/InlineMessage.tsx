@@ -9,12 +9,17 @@ interface InlineMessageProps {
   type?: MessageType
   children: React.ReactNode
   className?: string
+  // Lets a control beside the message point at it with aria-describedby.
+  id?: string
 }
 
-const MessagePill = styled.span<{ type: MessageType }>`
+export const MessagePill = styled.span<{ type: MessageType }>`
   border: solid 1px ${theme.color.border};
   text-transform: uppercase;
-  background: ${(props) => theme.color.getMessageColorBackground(props.type)};
+  /* Doubled to outrank the observation table's white background for spans in a cell's div. */
+  && {
+    background: ${(props) => theme.color.getMessageColorBackground(props.type)};
+  }
   color: ${theme.color.textColor};
   padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
   border-radius: 5px;
@@ -44,6 +49,7 @@ const InlineMessage = ({
   type = 'warning',
   children,
   className = undefined,
+  id = undefined,
 }: InlineMessageProps) => {
   const { t } = useTranslation()
 
@@ -54,7 +60,7 @@ const InlineMessage = ({
           {t(`message_type.${type}`)}
         </MessagePill>
       )}
-      <InlineMessageWrapper className={className} data-testid={`inline-message-${type}`}>
+      <InlineMessageWrapper className={className} id={id} data-testid={`inline-message-${type}`}>
         {children}
       </InlineMessageWrapper>
     </>

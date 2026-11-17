@@ -15,6 +15,23 @@ import { getSampleDateLabel } from '../getSampleDateLabel'
 import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 
+// A validation result can be changed in three ways, all written back by the mappers in the
+// mixin. Only a warning can be ignored, so un-ignoring turns it back into one.
+const matchesValidationId = (validation, validationId) =>
+  !validationId || validation.validation_id === validationId
+
+const isOnObservation = (validation, observationId) =>
+  (validation.context?.observation_id ?? validation.context?.id) === observationId
+
+const toIgnored = (validation) => ({ ...validation, status: 'ignore' })
+
+const toWarning = (validation) => ({ ...validation, status: 'warning' })
+
+// `isStale` means the field or row was edited after this result. Every result takes it, an
+// ignored warning included: it keeps its status and its count, but if it is unticked later the
+// warning comes back greyed, since the value it judged has changed.
+const toStale = (validation) => ({ ...validation, isStale: true })
+
 const CollectRecordsMixin = (Base) =>
   class extends Base {
     #formatFishbeltRecordForPush = function formatFishbeltRecordForPush({
@@ -168,9 +185,18 @@ const CollectRecordsMixin = (Base) =>
         protocol,
       })
 
+      // The API marks validations stale on every save. The IDB copy is marked stale too, so a
+      // record whose save hasn't reached the API yet doesn't read its last result as current.
+      const recordForOfflineStorage = recordToSubmit.validations
+        ? {
+            ...recordToSubmit,
+            validations: { ...recordToSubmit.validations, status: VALIDATION_STATUS.stale },
+          }
+        : recordToSubmit
+
       if (this._isOnlineAuthenticatedAndReady) {
         // Add to IDB in case the there are network issues before the API responds
-        await this._dexiePerUserDataInstance.collect_records.put(recordToSubmit)
+        await this._dexiePerUserDataInstance.collect_records.put(recordForOfflineStorage)
 
         return axios
           .post(
@@ -210,8 +236,8 @@ const CollectRecordsMixin = (Base) =>
       }
       if (this._isOfflineAuthenticatedAndReady) {
         return this._dexiePerUserDataInstance.collect_records
-          .put(recordToSubmit)
-          .then(() => recordToSubmit)
+          .put(recordForOfflineStorage)
+          .then(() => recordForOfflineStorage)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -420,75 +446,149 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    ignoreRecordLevelValidation = function ignoreRecordLevelValidation({ record, validationId }) {
-      if (!record || !validationId) {
-        throw new Error('IgnoreRecordLevelValidation requires record and validationId parameters')
-      }
-
-      const originalRecordLevelValidations = record.validations.results.$record
-      const recordLevelValidationsWithIgnored = originalRecordLevelValidations.map((validation) => {
-        if (validation.validation_id === validationId) {
-          return { ...validation, status: 'ignore' }
-        }
-
-        return validation
-      })
-
-      const recordWithIgnoredValidations = setObjectPropertyOnClone({
+    // Every change to a stored validation result goes through one of the three mappers below,
+    // which apply `mapValidation` to each result on the record level, on one field, or on one
+    // observation row, then store the record. A save pushes it.
+    _mapRecordLevelValidations = function _mapRecordLevelValidations(record, mapValidation) {
+      const updatedRecord = setObjectPropertyOnClone({
         object: record,
         path: 'validations.results.$record',
-        value: recordLevelValidationsWithIgnored,
+        value: record.validations.results.$record.map(mapValidation),
       })
 
       return this._dexiePerUserDataInstance.collect_records
-        .put(recordWithIgnoredValidations)
-        .then(() => recordWithIgnoredValidations)
+        .put(updatedRecord)
+        .then(() => updatedRecord)
     }
 
+    _mapFieldValidations = function _mapFieldValidations(record, validationPath, mapValidation) {
+      const path = `validations.results.${validationPath}`
+      const fieldValidations = getObjectProperty({ object: record, path })
+
+      if (!fieldValidations) {
+        return Promise.resolve(record)
+      }
+
+      // The API keys a field's results by validator name; they are stored back as an array.
+      const updatedRecord = setObjectPropertyOnClone({
+        object: record,
+        path,
+        value: Object.values(fieldValidations).map(mapValidation),
+      })
+
+      return this._dexiePerUserDataInstance.collect_records
+        .put(updatedRecord)
+        .then(() => updatedRecord)
+    }
+
+    _mapObservationValidations = async function _mapObservationValidations(
+      recordId,
+      observationId,
+      mapValidation,
+    ) {
+      const record = await this._dexiePerUserDataInstance.collect_records.get(recordId)
+
+      if (!record?.validations?.results?.data) {
+        return record
+      }
+
+      // Bleaching has two observation tables, and a table can have no results yet.
+      const updatedRecord = getObservationsPropertyNames(record).reduce((updated, tableName) => {
+        const path = `validations.results.data.${tableName}`
+        const table = getObjectProperty({ object: updated, path })
+
+        if (!table) {
+          return updated
+        }
+
+        return setObjectPropertyOnClone({
+          object: updated,
+          path,
+          value: table.map((rowValidations) =>
+            rowValidations.map((validation) =>
+              isOnObservation(validation, observationId) ? mapValidation(validation) : validation,
+            ),
+          ),
+        })
+      }, record)
+
+      return this._dexiePerUserDataInstance.collect_records
+        .put(updatedRecord)
+        .then(() => updatedRecord)
+    }
+
+    ignoreRecordLevelValidation = function ignoreRecordLevelValidation({ record, validationId }) {
+      if (!record || !validationId) {
+        throw new Error('ignoreRecordLevelValidation requires record and validationId parameters')
+      }
+
+      return this._mapRecordLevelValidations(record, (validation) =>
+        validation.validation_id === validationId ? toIgnored(validation) : validation,
+      )
+    }
+
+    unignoreRecordLevelValidation = function unignoreRecordLevelValidation({
+      record,
+      validationId,
+    }) {
+      if (!record || !validationId) {
+        throw new Error('unignoreRecordLevelValidation requires record and validationId parameters')
+      }
+
+      return this._mapRecordLevelValidations(record, (validation) =>
+        validation.validation_id === validationId ? toWarning(validation) : validation,
+      )
+    }
+
+    // Without a validationId, the field functions act on every warning on the field.
     ignoreNonObservationFieldValidations = function ignoreNonObservationFieldValidations({
       record,
       validationPath,
+      validationId,
     }) {
       if (!record || !validationPath) {
         throw new Error(
           'ignoreNonObservationFieldValidations requires record and validationPath parameters',
         )
       }
-      const path = `validations.results.${validationPath}`
-      const currentValidations = getObjectProperty({
-        object: record,
-        path,
-      })
 
-      const currentValidationsProperties = Object.keys(currentValidations)
-
-      const ignoredValidations = currentValidationsProperties.map((currentValidationsProperty) => {
-        const currentValidationObject = currentValidations[currentValidationsProperty]
-        const currentValidationStatus = currentValidationObject.status
-
-        return {
-          ...currentValidationObject,
-          status:
-            currentValidationStatus === 'warning' || currentValidationStatus === 'reset'
-              ? 'ignore'
-              : currentValidationStatus,
-        }
-      })
-
-      const recordWithIgnoredValidations = setObjectPropertyOnClone({
-        object: record,
-        path,
-        value: ignoredValidations,
-      })
-
-      return this._dexiePerUserDataInstance.collect_records
-        .put(recordWithIgnoredValidations)
-        .then(() => recordWithIgnoredValidations)
+      return this._mapFieldValidations(record, validationPath, (validation) =>
+        validation.status === 'warning' && matchesValidationId(validation, validationId)
+          ? toIgnored(validation)
+          : validation,
+      )
     }
 
-    ignoreObservationValidations = async function ignoreObservationValidations({
+    unignoreNonObservationFieldValidations = function unignoreNonObservationFieldValidations({
+      record,
+      validationPath,
+      validationId,
+    }) {
+      if (!record || !validationPath) {
+        throw new Error(
+          'unignoreNonObservationFieldValidations requires record and validationPath parameters',
+        )
+      }
+
+      return this._mapFieldValidations(record, validationPath, (validation) =>
+        validation.status === 'ignore' && matchesValidationId(validation, validationId)
+          ? toWarning(validation)
+          : validation,
+      )
+    }
+
+    markFieldValidationsStale = function markFieldValidationsStale({ record, validationPath }) {
+      if (!record || !validationPath) {
+        throw new Error('markFieldValidationsStale requires record and validationPath parameters')
+      }
+
+      return this._mapFieldValidations(record, validationPath, toStale)
+    }
+
+    ignoreObservationValidations = function ignoreObservationValidations({
       recordId,
       observationId,
+      validationId,
     }) {
       if (!recordId || !observationId) {
         throw new Error(
@@ -496,179 +596,42 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const unmodifiedCollectRecord = await this._dexiePerUserDataInstance.collect_records.get(
-        recordId,
+      return this._mapObservationValidations(recordId, observationId, (validation) =>
+        validation.status === 'warning' && matchesValidationId(validation, validationId)
+          ? toIgnored(validation)
+          : validation,
       )
-
-      const observationTableNames = getObservationsPropertyNames(unmodifiedCollectRecord)
-
-      let modifiedCollectRegordWithIgnoredObservationValidation = { ...unmodifiedCollectRecord }
-
-      // some records have multiple observation tables, eg: bleaching records
-      observationTableNames.forEach((observationTableName) => {
-        const observationTable =
-          modifiedCollectRegordWithIgnoredObservationValidation.validations.results.data[
-            observationTableName
-          ]
-        const observationsValidationsWithIgnored = observationTable?.map(
-          (singleObservationValidations) => {
-            return singleObservationValidations.map((validation) => {
-              const isValidationBelongingToObservation =
-                validation.context?.observation_id === observationId
-              const isWarning = validation.status === 'warning'
-              const isReset = validation.status === 'reset'
-
-              return {
-                ...validation,
-                status:
-                  isValidationBelongingToObservation && (isWarning || isReset)
-                    ? 'ignore'
-                    : validation.status,
-              }
-            })
-          },
-        )
-
-        const validationPath = `validations.results.data.${observationTableName}`
-
-        modifiedCollectRegordWithIgnoredObservationValidation = setObjectPropertyOnClone({
-          object: modifiedCollectRegordWithIgnoredObservationValidation,
-          path: validationPath,
-          value: observationsValidationsWithIgnored,
-        })
-      })
-
-      // user form will be dirty, and a save will cause a push to the api
-      return this._dexiePerUserDataInstance.collect_records
-        .put(modifiedCollectRegordWithIgnoredObservationValidation)
-        .then(() => modifiedCollectRegordWithIgnoredObservationValidation)
     }
 
-    resetRecordLevelValidation = function resetRecordLevelValidation({ record, validationId }) {
-      if (!record || !validationId) {
-        throw new Error('resetRecordLevelValidation requires record and validationId parameters')
-      }
-
-      const originalRecordLevelValidations = record.validations.results.$record
-      const recordLevelValidationsWithReset = originalRecordLevelValidations.map((validation) => {
-        if (validation.validation_id === validationId) {
-          return {
-            ...validation,
-            status: 'reset',
-          }
-        }
-
-        return validation
-      })
-
-      const recordWithResetValidation = setObjectPropertyOnClone({
-        object: record,
-        path: 'validations.results.$record',
-        value: recordLevelValidationsWithReset,
-      })
-
-      return this._dexiePerUserDataInstance.collect_records
-        .put(recordWithResetValidation)
-        .then(() => recordWithResetValidation)
-    }
-
-    resetNonObservationFieldValidations = async function resetNonObservationFieldValidations({
-      record,
-      validationPath,
+    unignoreObservationValidations = function unignoreObservationValidations({
+      recordId,
+      observationId,
+      validationId,
     }) {
-      if (!record || !validationPath) {
+      if (!recordId || !observationId) {
         throw new Error(
-          'resetNonObservationFieldValidations requires record and validationPath parameters',
+          'unignoreObservationValidations requires recordId and observationId parameters',
         )
       }
-      const path = `validations.results.${validationPath}`
-      const currentValidations = getObjectProperty({
-        object: record,
-        path,
-      })
 
-      if (!currentValidations) {
-        return record
-      }
-
-      const currentValidationsProperties = Object.keys(currentValidations)
-
-      const resettedValidations = currentValidationsProperties.map((currentValidationsProperty) => {
-        const currentValidationObject = currentValidations[currentValidationsProperty]
-
-        return {
-          ...currentValidationObject,
-          status: 'reset',
-        }
-      })
-
-      const recordWithResetValidations = setObjectPropertyOnClone({
-        object: record,
-        path,
-        value: resettedValidations,
-      })
-
-      return this._dexiePerUserDataInstance.collect_records
-        .put(recordWithResetValidations)
-        .then(() => recordWithResetValidations)
+      return this._mapObservationValidations(recordId, observationId, (validation) =>
+        validation.status === 'ignore' && matchesValidationId(validation, validationId)
+          ? toWarning(validation)
+          : validation,
+      )
     }
 
-    resetObservationValidations = async function resetObservationValidations({
+    markObservationValidationsStale = function markObservationValidationsStale({
       recordId,
       observationId,
     }) {
       if (!recordId || !observationId) {
         throw new Error(
-          'resetObservationValidations requires recordId and observationId parameters',
+          'markObservationValidationsStale requires recordId and observationId parameters',
         )
       }
 
-      const unmodifiedCollectRecord = await this._dexiePerUserDataInstance.collect_records.get(
-        recordId,
-      )
-
-      const areThereValidationsToReset = !!unmodifiedCollectRecord?.validations?.results?.data
-
-      if (!areThereValidationsToReset) {
-        return unmodifiedCollectRecord
-      }
-
-      const observationTableNames = getObservationsPropertyNames(unmodifiedCollectRecord)
-
-      let modifiedCollectRecordWithResetObservationValidations = { ...unmodifiedCollectRecord }
-
-      // some records have multiple observation tables, eg: bleaching records
-      observationTableNames.forEach((observationTableName) => {
-        const observationTable =
-          modifiedCollectRecordWithResetObservationValidations.validations.results.data[
-            observationTableName
-          ]
-        const observationsValidationsWithReset = observationTable.map(
-          (singleObservationValidations) => {
-            return singleObservationValidations.map((validation) => {
-              const isValidationBelongingToObservation =
-                validation.context?.observation_id === observationId
-
-              return {
-                ...validation,
-                status: isValidationBelongingToObservation ? 'reset' : validation.status,
-              }
-            })
-          },
-        )
-
-        const validationPath = `validations.results.data.${observationTableName}`
-
-        modifiedCollectRecordWithResetObservationValidations = setObjectPropertyOnClone({
-          object: modifiedCollectRecordWithResetObservationValidations,
-          path: validationPath,
-          value: observationsValidationsWithReset,
-        })
-      })
-
-      return this._dexiePerUserDataInstance.collect_records
-        .put(modifiedCollectRecordWithResetObservationValidations)
-        .then(() => modifiedCollectRecordWithResetObservationValidations)
+      return this._mapObservationValidations(recordId, observationId, toStale)
     }
 
     markCollectRecordValidationsStale = async function markCollectRecordValidationsStale(recordId) {
@@ -690,11 +653,11 @@ const CollectRecordsMixin = (Base) =>
 
     getCollectRecord = function getCollectRecord(id) {
       if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
+        return Promise.reject(this._operationMissingIdParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
-        Promise.reject(this._notAuthenticatedAndReadyError)
+        return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
       return this._dexiePerUserDataInstance.collect_records.get(id)

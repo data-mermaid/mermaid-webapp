@@ -22,9 +22,12 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPage/getObservationValidationInfo'
+import getObservationValidationInfo, {
+  getCellMarkProps,
+} from '../CollectRecordFormPage/getObservationValidationInfo'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
+import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -46,8 +49,9 @@ const HabitatComplexityObservationsTable = ({
   collectRecord = undefined,
   formik,
   ignoreObservationValidations,
+  unignoreObservationValidations,
   observationsReducer = [],
-  resetObservationValidations,
+  markObservationValidationsStale,
   setAreObservationsInputsDirty,
   testId,
 }) => {
@@ -115,10 +119,8 @@ const HabitatComplexityObservationsTable = ({
       const rowNumber = index + 1
       const { id: observationId, score: habitatComplexityScore = '', interval } = observation
       const {
+        cellMarks,
         isObservationValid,
-        hasObservationWarningValidation,
-        hasObservationErrorValidation,
-        hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
       } = getObservationValidationInfo({
@@ -148,7 +150,7 @@ const HabitatComplexityObservationsTable = ({
             observationId,
           },
         })
-        resetObservationValidations({
+        markObservationValidationsStale({
           observationId,
         })
       }
@@ -160,12 +162,17 @@ const HabitatComplexityObservationsTable = ({
           $messageType={observationValidationType}
         >
           <Td $align="center">{rowNumber}</Td>
-          <Td $align="right" aria-labelledby="interval-label" data-testid="interval-cell">
+          <Td
+            {...getCellMarkProps(cellMarks, 'interval')}
+            $align="right"
+            aria-labelledby="interval-label"
+            data-testid="interval-cell"
+          >
             {interval}
             {metersShort}
           </Td>
 
-          <Td $align="center">
+          <Td {...getCellMarkProps(cellMarks, 'score')} $align="center">
             <Select
               data-testid="habitat-complexity-score-select"
               onChange={handleHabitatComplexityScoreChange}
@@ -188,15 +195,11 @@ const HabitatComplexityObservationsTable = ({
 
           {areValidationsShowing ? (
             <ObservationValidationInfo
-              hasObservationErrorValidation={hasObservationErrorValidation}
-              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
+              unignoreObservationValidations={unignoreObservationValidations}
               isObservationValid={isObservationValid}
               observationId={observationId}
               observationValidationMessages={observationValidationMessages}
-              observationValidationType={observationValidationType}
-              resetObservationValidations={resetObservationValidations}
             />
           ) : null}
           <Td $align="center">
@@ -219,11 +222,12 @@ const HabitatComplexityObservationsTable = ({
     choices,
     collectRecord,
     ignoreObservationValidations,
+    unignoreObservationValidations,
     intervalSize,
     intervalStart,
     observationsDispatch,
     observationsState,
-    resetObservationValidations,
+    markObservationValidationsStale,
     setAreObservationsInputsDirty,
     deleteObservationText,
     metersShort,
@@ -233,6 +237,7 @@ const HabitatComplexityObservationsTable = ({
     <>
       <InputWrapper data-testid={testId}>
         <H2 id="table-label">{t('observations.observations')}</H2>
+        <ObservationsHeadingValidations />
         <>
           <StyledOverflowWrapper>
             <StickyObservationTable aria-labelledby="table-label">
@@ -289,8 +294,9 @@ HabitatComplexityObservationsTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: habitatComplexityPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  unignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
-  resetObservationValidations: PropTypes.func.isRequired,
+  markObservationValidationsStale: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

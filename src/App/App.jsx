@@ -191,7 +191,8 @@ function App({ dexieCurrentUserInstance }) {
   })
 
   const deleteMermaidData = () => {
-    dexiePerUserDataInstance.delete()
+    // Not created until the current user loads, and logout can be clicked before then
+    dexiePerUserDataInstance?.delete()
     dexieCurrentUserInstance.delete()
   }
 

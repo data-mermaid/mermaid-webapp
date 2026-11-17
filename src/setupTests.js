@@ -3,7 +3,7 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 import { configure } from '@testing-library/react'
 import axiosInstance from './library/axiosRetry'
 
@@ -69,7 +69,7 @@ vi.mock('maplibre-gl', function mapLibreMock() {
 })
 
 // Mock the i18n instance using cimode so i18n.t() returns the translation key.
-// Non-component code (e.g. validationMessageHelpers.jsx, handleHttpResponseError.ts) imports
+// Non-component code (e.g. validationMessageHelpers.tsx, handleHttpResponseError.ts) imports
 // i18n directly and calls i18n.t(). We use i18next's built-in 'cimode' language which always
 // returns the key, so tests assert against stable keys rather than English text that may change.
 vi.mock('../i18n', async () => {
@@ -77,8 +77,7 @@ vi.mock('../i18n', async () => {
 
   i18next.init({
     lng: 'cimode',
-    initImmediate: false,
-    showSupportNotice: false,
+    initAsync: false,
   })
 
   return { default: i18next }

@@ -25,8 +25,9 @@ const InputNoRowSelectWithLabelAndValidation = ({
   options,
   helperText = undefined,
   validationMessages = [],
-  ignoreNonObservationFieldValidations = () => {},
-  resetNonObservationFieldValidations = () => {},
+  ignoreNonObservationFieldValidations = undefined,
+  unignoreNonObservationFieldValidations = undefined,
+  validationPath = undefined,
   validationType = undefined,
   value = '',
   updateValueAndResetValidationForDuplicateWarning = () => {},
@@ -103,7 +104,8 @@ const InputNoRowSelectWithLabelAndValidation = ({
       </div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+        validationPath={validationPath}
         validationMessages={validationMessages}
         validationType={validationType}
         currentSelectValue={value}
@@ -123,7 +125,8 @@ InputNoRowSelectWithLabelAndValidation.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func,
+  unignoreNonObservationFieldValidations: PropTypes.func,
+  validationPath: PropTypes.string,
   testId: PropTypes.string,
   value: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
