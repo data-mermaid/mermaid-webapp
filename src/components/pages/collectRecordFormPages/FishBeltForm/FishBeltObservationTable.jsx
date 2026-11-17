@@ -266,18 +266,6 @@ const FishBeltObservationTable = ({
         })
       }
 
-      const sizeSelect = !showNumericSizeInput ? (
-        <ObservationSizeSelect
-          onValueEntered={handleUpdateSize}
-          onKeyDown={handleObservationKeyDown}
-          options={fishBeltBins[fishBinSelectedLabel] ?? []}
-          value={sizeOrEmptyStringToAvoidInputValueErrors}
-          labelledBy="fish-size-label"
-          testid="fish-size-select"
-          plusInputTestId="fish-size-50-input"
-        />
-      ) : null
-
       const sizeInput = showNumericSizeInput ? (
         <InputNumberNumericCharactersOnly
           value={sizeOrEmptyStringToAvoidInputValueErrors}
@@ -289,7 +277,15 @@ const FishBeltObservationTable = ({
           onKeyDown={handleObservationKeyDown}
         />
       ) : (
-        <> {sizeSelect} </>
+        <ObservationSizeSelect
+          onValueEntered={handleUpdateSize}
+          onKeyDown={handleObservationKeyDown}
+          options={fishBeltBins[fishBinSelectedLabel] ?? []}
+          value={sizeOrEmptyStringToAvoidInputValueErrors}
+          labelledBy="fish-size-label"
+          testid="fish-size-select"
+          plusInputTestId="fish-size-50-input"
+        />
       )
 
       const observationBiomass = roundToOneDecimal(
