@@ -51,19 +51,35 @@ const getBenthicPhotoQuadratAdditionalValues = (collectRecord) => {
   }
 }
 
+const isEmptyValue = (value) => value === undefined || value === null || value === ''
+
+const getIsIntervalSizeAsStart = ({ interval_size, interval_start, is_interval_size_as_start }) => {
+  const isSyncedFlag = is_interval_size_as_start ?? true
+
+  if (!isSyncedFlag || isEmptyValue(interval_size) || isEmptyValue(interval_start)) {
+    return isSyncedFlag
+  }
+
+  return Number(interval_size) === Number(interval_start)
+}
+
 const getBenthicPitAdditionalValues = (collectRecord) => {
+  const data = collectRecord?.data
+
   return {
-    interval_start: collectRecord?.data?.interval_start ?? '',
-    interval_size: collectRecord?.data?.interval_size ?? '',
-    is_interval_size_as_start: collectRecord?.data?.is_interval_size_as_start ?? true,
+    interval_start: data?.interval_start ?? '',
+    interval_size: data?.interval_size ?? '',
+    is_interval_size_as_start: getIsIntervalSizeAsStart({ ...data }),
   }
 }
 
 const getHabitatComplexityAdditionalValues = (collectRecord) => {
+  const data = collectRecord?.data
+
   return {
-    is_interval_size_as_start: collectRecord?.data?.is_interval_size_as_start ?? true,
-    interval_size: collectRecord?.data?.interval_size ?? '',
-    interval_start: collectRecord?.data?.interval_start ?? '',
+    is_interval_size_as_start: getIsIntervalSizeAsStart({ ...data }),
+    interval_size: data?.interval_size ?? '',
+    interval_start: data?.interval_start ?? '',
   }
 }
 
