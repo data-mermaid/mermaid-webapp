@@ -26,6 +26,15 @@ interface UseAuthenticationReturn {
   getAccessToken: () => Promise<string>
 }
 
+// auth0-spa-js throws this when another getTokenSilently call has held its token lock for
+// more than 5s, e.g. when a tab wakes from sleep and several token requests start at once.
+// It is short-lived contention, not a failed refresh.
+const isTokenLockTimeoutError = (error: unknown): boolean => {
+  const auth0Error = error as { error?: string; message?: string } | null | undefined
+
+  return auth0Error?.error === 'timeout' || auth0Error?.message === 'Timeout'
+}
+
 const useAuthentication = ({
   dexieCurrentUserInstance,
 }: UseAuthenticationParams): UseAuthenticationReturn => {
@@ -54,6 +63,15 @@ const useAuthentication = ({
       // Offline is a supported state. The app runs from the session already stored, so a
       // refresh that fails without a connection is expected and needs no message.
       if (!isAppOnline) {
+        return
+      }
+
+      if (isTokenLockTimeoutError(error)) {
+        // Only reached once a retry has also timed out. Reported as a warning so it can still be
+        // watched (a rising rate may mean slow Auth0 responses) without counting as a failed refresh.
+        Sentry.captureMessage('Auth0 token lock timed out twice', { level: 'warning' })
+        toast.error(...getToastArguments(authenticationFailedText))
+
         return
       }
 
@@ -94,6 +112,19 @@ const useAuthentication = ({
     user: auth0User,
   } = useAuth0()
 
+  const getAccessTokenRetryingLockTimeout = useCallback(async () => {
+    try {
+      return await getAuth0AccessTokenSilently()
+    } catch (error) {
+      if (!isTokenLockTimeoutError(error)) {
+        throw error
+      }
+
+      // The call holding the lock has usually finished by now, so one retry is enough.
+      return getAuth0AccessTokenSilently()
+    }
+  }, [getAuth0AccessTokenSilently])
+
   const _sentryUserContext = useEffect(() => {
     // Without this every Sentry issue reports zero users, so there is no way to tell one stuck
     // browser apart from a fault hitting everyone. The Auth0 subject id is opaque: no email or
@@ -110,7 +141,7 @@ const useAuthentication = ({
 
   const _silentAuthentication = useEffect(() => {
     const silentAuth = async () => {
-      await getAuth0AccessTokenSilently()
+      await getAccessTokenRetryingLockTimeout()
       setAuthenticatedStates()
     }
 
@@ -119,7 +150,7 @@ const useAuthentication = ({
     }
   }, [
     isAuth0Authenticated,
-    getAuth0AccessTokenSilently,
+    getAccessTokenRetryingLockTimeout,
     isAppOnline,
     isAuth0Loading,
     setAuthenticatedStates,
@@ -173,7 +204,7 @@ const useAuthentication = ({
 
     if (isUserOnlineAndLoggedIn) {
       // this is where logged in state gets set after successful login. (because of redirect)
-      getAuth0AccessTokenSilently()
+      getAccessTokenRetryingLockTimeout()
         .then(() => {
           if (isMounted) {
             setAuthenticatedStates()
@@ -191,7 +222,7 @@ const useAuthentication = ({
     }
   }, [
     auth0LoginWithRedirect,
-    getAuth0AccessTokenSilently,
+    getAccessTokenRetryingLockTimeout,
     setAuthenticatedStates,
     setUnauthenticatedStates,
     isAuth0Authenticated,
