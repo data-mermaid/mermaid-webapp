@@ -7,7 +7,6 @@ import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
-  waitFor,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
@@ -104,47 +103,38 @@ const renderRecordWithBleachingResults = () => {
   )
 }
 
-const findBleachingField = () => screen.findByTestId('include-bleaching', {}, { timeout: 10000 })
-
-// The element that greys a message once its field or row has been edited
-const getFieldMessageRow = (field) =>
-  within(field).getByText('validation_messages.required').closest('[data-stale]')
-
-const getRowMessageRow = () =>
-  within(screen.getByTestId('observations-section'))
-    .getByText('validation_messages.bleaching_status_not_coral')
-    .closest('[data-stale]')
-
-test('Bleaching validation messages show at the field, on the row with its cell marked, and under the observations heading', async () => {
+test('Bleaching validation messages show at the field, on the row, and under the observations heading', async () => {
   renderRecordWithBleachingResults()
 
-  const field = await findBleachingField()
+  const field = await screen.findByTestId('include-bleaching', {}, { timeout: 10000 })
 
-  await waitFor(() => expect(getFieldMessageRow(field)).toHaveAttribute('data-stale', 'false'))
-  expect(getRowMessageRow()).toHaveAttribute('data-stale', 'false')
+  expect(await within(field).findByText('validation_messages.required')).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('observations-section')).getByText(
+      'validation_messages.bleaching_status_not_coral',
+    ),
+  ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('observations-heading-validations')).getByText(
       'validation_messages.missing_bleaching_status',
     ),
   ).toBeInTheDocument()
-  expect(screen.getAllByTestId('bleaching-status-select')[0].closest('td')).toHaveAttribute(
-    'data-validation-mark',
-    'error',
-  )
-  expect(screen.getAllByTestId('bleaching-status-select')[3].closest('td')).not.toHaveAttribute(
-    'data-validation-mark',
-  )
+  expect(screen.queryByText('validations.edited_revalidate')).not.toBeInTheDocument()
 }, 50000)
 
-test('Confirming No greys the bleaching messages on the field and the rows', async () => {
+test('Confirming No marks the bleaching messages on the field and the row as edited since the last Validate', async () => {
   const { user } = renderRecordWithBleachingResults()
 
-  const field = await findBleachingField()
+  const field = await screen.findByTestId('include-bleaching', {}, { timeout: 10000 })
 
   await within(field).findByText('validation_messages.required')
   await user.selectOptions(screen.getByTestId('include-bleaching-select'), 'false')
   await user.click(await screen.findByTestId('turn-off-bleaching-confirm'))
 
-  await waitFor(() => expect(getFieldMessageRow(field)).toHaveAttribute('data-stale', 'true'))
-  expect(getRowMessageRow()).toHaveAttribute('data-stale', 'true')
+  expect(await within(field).findByText('validations.edited_revalidate')).toBeInTheDocument()
+  expect(
+    await within(screen.getByTestId('observations-section')).findByText(
+      'validations.edited_revalidate',
+    ),
+  ).toBeInTheDocument()
 }, 50000)
