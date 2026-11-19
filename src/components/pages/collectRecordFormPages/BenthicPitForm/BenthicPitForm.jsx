@@ -27,6 +27,7 @@ import BenthicPitTransectInputs from './BenthicPitTransectInputs'
 import CollectRecordFormPage from '../CollectRecordFormPage'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
+import { getCoralAttributeIds } from '../../../../library/bleachingStatus'
 import ErrorBoundary from '../../../ErrorBoundary'
 import { useTranslation } from 'react-i18next'
 
@@ -52,6 +53,10 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
   const observationsReducer = useReducer(benthicPitObservationReducer, [])
 
   const [, observationsDispatch] = observationsReducer
+  const coralAttributeIds = useMemo(
+    () => getCoralAttributeIds(benthicAttributeSelectOptions),
+    [benthicAttributeSelectOptions],
+  )
   const errorMessage = isNewRecord
     ? t('sample_units.errors.supporting_data_unavailable')
     : t('sample_units.errors.data_unavailable')
@@ -195,6 +200,10 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
         observationsDispatch({
           type: 'updateBenthicAttribute',
           payload: {
+            // The proposed attribute is not in the options yet. It is coral if its parent is.
+            coralAttributeIds: coralAttributeIds.has(benthicAttributeParentId)
+              ? new Set([...coralAttributeIds, newBenthicAttribute.id])
+              : coralAttributeIds,
             observationId: observationIdToAddNewBenthicAttributeTo,
             newBenthicAttribute: newBenthicAttribute.id,
           },
@@ -226,6 +235,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
               observationsDispatch({
                 type: 'updateBenthicAttribute',
                 payload: {
+                  coralAttributeIds,
                   observationId: observationIdToAddNewBenthicAttributeTo,
                   newBenthicAttribute: error.existingBenthicAttribute.id,
                 },
@@ -252,6 +262,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
         return (
           <BenthicPitObservationsTable
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+            coralAttributeIds={coralAttributeIds}
             {...props}
           />
         )
@@ -260,7 +271,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
       return null
     },
 
-    [benthicAttributeSelectOptions],
+    [benthicAttributeSelectOptions, coralAttributeIds],
   )
 
   return (
@@ -278,6 +289,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicPitRecord}
         sampleUnitName="benthicpit"
         SampleUnitTransectInputs={BenthicPitTransectInputs}
+        sampleUnitTransectInputsProps={{ coralAttributeIds, observationsDispatch }}
         setAreObservationsInputsDirty={setAreObservationsInputsDirty}
         setIdsNotAssociatedWithData={setIdsNotAssociatedWithData}
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}

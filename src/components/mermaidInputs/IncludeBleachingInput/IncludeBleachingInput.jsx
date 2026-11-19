@@ -14,9 +14,11 @@ const INCLUDE_BLEACHING_VALIDATION_PATH = 'data.include_bleaching'
 
 const IncludeBleachingInput = ({
   areValidationsShowing,
+  coralAttributeIds,
   formik,
   ignoreNonObservationFieldValidations,
   markFieldValidationsStale,
+  observationsDispatch,
   unignoreNonObservationFieldValidations,
   validationsApiData,
 }) => {
@@ -27,8 +29,16 @@ const IncludeBleachingInput = ({
     areValidationsShowing,
   )
 
+  // Statuses change here, on the diver's switch, and never in response to the form's value:
+  // formik holds the default No until a record's values arrive, and clearing on that would wipe
+  // its saved statuses.
   const handleChange = (event) => {
     formik.handleChange(event)
+    observationsDispatch(
+      event.target.value === INCLUDE_BLEACHING_YES
+        ? { type: 'fillBleachingStatuses', payload: { coralAttributeIds } }
+        : { type: 'clearBleachingStatuses' },
+    )
     markFieldValidationsStale({ validationPath: INCLUDE_BLEACHING_VALIDATION_PATH })
   }
 
@@ -78,9 +88,11 @@ const IncludeBleachingInput = ({
 
 IncludeBleachingInput.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
+  coralAttributeIds: PropTypes.instanceOf(Set).isRequired,
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   markFieldValidationsStale: PropTypes.func.isRequired,
+  observationsDispatch: PropTypes.func.isRequired,
   unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({
     include_bleaching: mermaidInputsPropTypes.validationMessagesPropType,

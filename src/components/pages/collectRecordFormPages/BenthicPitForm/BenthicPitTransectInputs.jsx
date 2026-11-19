@@ -35,9 +35,11 @@ const INTERVAL_START_VALIDATION_PATH = 'data.interval_start'
 const BenthicPitTransectInputs = ({
   areValidationsShowing,
   choices,
+  coralAttributeIds,
   formik,
   ignoreNonObservationFieldValidations,
   markFieldValidationsStale,
+  observationsDispatch,
   unignoreNonObservationFieldValidations,
   validationsApiData,
 }) => {
@@ -349,9 +351,11 @@ const BenthicPitTransectInputs = ({
         />
         <IncludeBleachingInput
           areValidationsShowing={areValidationsShowing}
+          coralAttributeIds={coralAttributeIds}
           formik={formik}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           markFieldValidationsStale={markFieldValidationsStale}
+          observationsDispatch={observationsDispatch}
           unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           validationsApiData={validationsApiData}
         />
@@ -476,9 +480,11 @@ const BenthicPitTransectInputs = ({
 BenthicPitTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
+  coralAttributeIds: PropTypes.instanceOf(Set).isRequired,
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   markFieldValidationsStale: PropTypes.func.isRequired,
+  observationsDispatch: PropTypes.func.isRequired,
   unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,
 }

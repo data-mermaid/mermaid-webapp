@@ -1,5 +1,10 @@
 import { createUuid } from '../../../../library/createUuid'
-import { clearBleachingStatuses, fillBleachingStatuses } from '../../../../library/bleachingStatus'
+import {
+  BLEACHING_STATUS_NORMAL,
+  clearBleachingStatuses,
+  fillBleachingStatuses,
+  getBleachingStatusAfterAttributeChange,
+} from '../../../../library/bleachingStatus'
 import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
 const benthicPitObservationReducer = (state, action) => {
@@ -97,12 +102,15 @@ const benthicPitObservationReducer = (state, action) => {
     }
 
     case 'duplicateLastObservation': {
-      const { intervalSize, intervalStart, referenceObservation } = action.payload
-      // A new row starts not assessed for bleaching; fillBleachingStatuses makes it Normal if coral.
+      const { coralAttributeIds, intervalSize, intervalStart, referenceObservation } =
+        action.payload
+      // The copy is a new observation: Normal if coral, whatever status the copied row has.
       const observationWithNewId = {
         ...referenceObservation,
         id: createUuid(),
-        bleaching_status: null,
+        bleaching_status: coralAttributeIds.has(referenceObservation.attribute)
+          ? BLEACHING_STATUS_NORMAL
+          : null,
       }
 
       return getObservationsWithRecalculatedIntervals({
@@ -114,10 +122,18 @@ const benthicPitObservationReducer = (state, action) => {
     case 'updateBenthicAttribute':
       return state.map((observation) => {
         const isObservationToUpdate = observation?.id === action.payload.observationId
-        const { newBenthicAttribute } = action.payload
+        const { newBenthicAttribute, coralAttributeIds } = action.payload
 
         return isObservationToUpdate
-          ? { ...observation, attribute: newBenthicAttribute }
+          ? {
+              ...observation,
+              attribute: newBenthicAttribute,
+              bleaching_status: getBleachingStatusAfterAttributeChange(
+                observation,
+                newBenthicAttribute,
+                coralAttributeIds,
+              ),
+            }
           : observation
       })
     case 'updateGrowthForm':

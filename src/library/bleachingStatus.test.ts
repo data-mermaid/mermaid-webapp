@@ -3,7 +3,9 @@ import {
   BLEACHING_STATUS_NORMAL,
   clearBleachingStatuses,
   fillBleachingStatuses,
+  getBleachingStatusAfterAttributeChange,
   getCoralAttributeIds,
+  parseBleachingStatusValue,
 } from './bleachingStatus'
 
 const options = [
@@ -42,20 +44,10 @@ describe('fillBleachingStatuses', () => {
       { id: '4', attribute: '' },
     ])
   })
-
-  it('returns the same array when every coral observation already has a status', () => {
-    const observations = [
-      { id: '1', attribute: 'acropora', bleaching_status: 1 },
-      { id: '2', attribute: 'sand' },
-    ]
-
-    expect(fillBleachingStatuses(observations, coralAttributeIds)).toBe(observations)
-    expect(fillBleachingStatuses(observations, new Set())).toBe(observations)
-  })
 })
 
 describe('clearBleachingStatuses', () => {
-  it('clears every status and returns the same array when there is none', () => {
+  it('clears every status and leaves observations without one alone', () => {
     expect(
       clearBleachingStatuses([
         { id: '1', attribute: 'acropora', bleaching_status: 1 },
@@ -65,9 +57,56 @@ describe('clearBleachingStatuses', () => {
       { id: '1', attribute: 'acropora', bleaching_status: null },
       { id: '2', attribute: 'sand' },
     ])
+  })
+})
 
-    const untouched = [{ id: '1', attribute: 'acropora' }]
+describe('parseBleachingStatusValue', () => {
+  it('reads Not recorded as no status, not as Normal', () => {
+    expect(parseBleachingStatusValue('')).toBeNull()
+  })
 
-    expect(clearBleachingStatuses(untouched)).toBe(untouched)
+  it('reads a status as its id', () => {
+    expect(parseBleachingStatusValue('0')).toBe(BLEACHING_STATUS_NORMAL)
+    expect(parseBleachingStatusValue('1')).toBe(1)
+  })
+})
+
+describe('getBleachingStatusAfterAttributeChange', () => {
+  const coralAttributeIds = getCoralAttributeIds(options)
+
+  it('drops the status when the new attribute is not coral', () => {
+    expect(
+      getBleachingStatusAfterAttributeChange(
+        { attribute: 'acropora', bleaching_status: 2 },
+        'sand',
+        coralAttributeIds,
+      ),
+    ).toBeNull()
+  })
+
+  it('gives Normal to an observation that becomes coral', () => {
+    expect(
+      getBleachingStatusAfterAttributeChange({ attribute: 'sand' }, 'acropora', coralAttributeIds),
+    ).toBe(BLEACHING_STATUS_NORMAL)
+    expect(
+      getBleachingStatusAfterAttributeChange({ attribute: '' }, 'acropora', coralAttributeIds),
+    ).toBe(BLEACHING_STATUS_NORMAL)
+  })
+
+  it('keeps the status, Not recorded included, between two coral attributes', () => {
+    expect(
+      getBleachingStatusAfterAttributeChange(
+        { attribute: 'acropora', bleaching_status: 3 },
+        'hard-coral',
+        coralAttributeIds,
+      ),
+    ).toBe(3)
+    expect(
+      getBleachingStatusAfterAttributeChange(
+        { attribute: 'acropora', bleaching_status: null },
+        'hard-coral',
+        coralAttributeIds,
+      ),
+    ).toBeNull()
   })
 })

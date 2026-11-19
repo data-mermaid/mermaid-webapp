@@ -1,5 +1,10 @@
 import { createUuid } from '../../../../library/createUuid'
-import { clearBleachingStatuses, fillBleachingStatuses } from '../../../../library/bleachingStatus'
+import {
+  BLEACHING_STATUS_NORMAL,
+  clearBleachingStatuses,
+  fillBleachingStatuses,
+  getBleachingStatusAfterAttributeChange,
+} from '../../../../library/bleachingStatus'
 import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
 const benthicLitObservationReducer = (state, action) => {
@@ -42,12 +47,14 @@ const benthicLitObservationReducer = (state, action) => {
     }
 
     case 'duplicateLastObservation': {
-      const { referenceObservation } = action.payload
-      // A new row starts not assessed for bleaching; fillBleachingStatuses makes it Normal if coral.
+      const { coralAttributeIds, referenceObservation } = action.payload
+      // The copy is a new observation: Normal if coral, whatever status the copied row has.
       const observationWithNewId = {
         ...referenceObservation,
         id: createUuid(),
-        bleaching_status: null,
+        bleaching_status: coralAttributeIds.has(referenceObservation.attribute)
+          ? BLEACHING_STATUS_NORMAL
+          : null,
       }
 
       return [...state, observationWithNewId]
@@ -55,9 +62,19 @@ const benthicLitObservationReducer = (state, action) => {
     case 'updateBenthicAttribute':
       return state.map((observation) => {
         const isObservationToUpdate = observation?.id === action.payload.observationId
-        const { newValue } = action.payload
+        const { newValue, coralAttributeIds } = action.payload
 
-        return isObservationToUpdate ? { ...observation, attribute: newValue } : observation
+        return isObservationToUpdate
+          ? {
+              ...observation,
+              attribute: newValue,
+              bleaching_status: getBleachingStatusAfterAttributeChange(
+                observation,
+                newValue,
+                coralAttributeIds,
+              ),
+            }
+          : observation
       })
     case 'updateGrowthForm':
       return updateObservationReducerValue({ state, action, propertyToUpdate: 'growth_form' })

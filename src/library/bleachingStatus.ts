@@ -2,7 +2,8 @@ import type { TFunction } from 'i18next'
 
 // Bleaching on a Benthic PIT or LIT observation, on the NOAA scale. The ids match
 // BLEACHING_STATUS_CHOICES in mermaid-api, which stores the integer. A null or missing
-// bleaching_status means the observation was not assessed (shown as NA).
+// bleaching_status means the observation was not assessed: a coral observation shows it as
+// Not recorded, any other observation as NA.
 export const BLEACHING_STATUS_NORMAL = 0
 
 const BLEACHING_STATUSES = [
@@ -13,8 +14,17 @@ const BLEACHING_STATUSES = [
   { id: 4, translationKey: 'bleaching_status.recent_bleaching_mortality' },
 ] as const
 
-export const getBleachingStatusOptions = (t: TFunction) =>
-  BLEACHING_STATUSES.map(({ id, translationKey }) => ({ value: id, label: t(translationKey) }))
+const NOT_RECORDED_OPTION_VALUE = ''
+
+// What a coral observation's select offers: the scale, then Not recorded.
+export const getBleachingStatusOptions = (t: TFunction) => [
+  ...BLEACHING_STATUSES.map(({ id, translationKey }) => ({ value: id, label: t(translationKey) })),
+  { value: NOT_RECORDED_OPTION_VALUE, label: t('bleaching_status.not_recorded') },
+]
+
+// Number('') is 0, which is Normal, so Not recorded has to be mapped before converting.
+export const parseBleachingStatusValue = (optionValue: string) =>
+  optionValue === NOT_RECORDED_OPTION_VALUE ? null : Number(optionValue)
 
 // The "Include bleaching observations" select holds its choice as the strings a select
 // produces; the record stores a boolean.
@@ -58,44 +68,38 @@ interface ObservationWithBleachingStatus {
   bleaching_status?: number | null
 }
 
-// Both helpers return the same array when nothing changes, so a reducer can apply them on every
-// render without looping, and a record that was never assessed is saved as it was.
-const mapChangedObservations = <T>(observations: T[], getChanged: (observation: T) => T | null) => {
-  let hasChanged = false
-
-  const mappedObservations = observations.map((observation) => {
-    const changedObservation = getChanged(observation)
-
-    if (changedObservation === null) {
-      return observation
-    }
-
-    hasChanged = true
-
-    return changedObservation
-  })
-
-  return hasChanged ? mappedObservations : observations
-}
-
-// While bleaching is included, a coral observation is Normal until the diver picks a status. This
-// only adds statuses, so it is safe to run before the form has finished loading.
+// Switching bleaching on: every coral observation with no status becomes Normal. Run it only on
+// that switch. A coral observation with no status afterwards is one the diver set to Not recorded.
 export const fillBleachingStatuses = <T extends ObservationWithBleachingStatus>(
   observations: T[],
   coralAttributeIds: Set<string>,
 ) =>
-  mapChangedObservations(observations, (observation) =>
+  observations.map((observation) =>
     coralAttributeIds.has(observation.attribute) && (observation.bleaching_status ?? null) === null
       ? { ...observation, bleaching_status: BLEACHING_STATUS_NORMAL }
-      : null,
+      : observation,
   )
+
+// An observation's status once its attribute changes. A status only carries over between two
+// coral attributes, so Not recorded survives that change too.
+export const getBleachingStatusAfterAttributeChange = (
+  { attribute, bleaching_status: bleachingStatus }: ObservationWithBleachingStatus,
+  newAttribute: string,
+  coralAttributeIds: Set<string>,
+) => {
+  if (!coralAttributeIds.has(newAttribute)) {
+    return null
+  }
+
+  return coralAttributeIds.has(attribute) ? (bleachingStatus ?? null) : BLEACHING_STATUS_NORMAL
+}
 
 // Bleaching not included: every observation is not assessed.
 export const clearBleachingStatuses = <T extends ObservationWithBleachingStatus>(
   observations: T[],
 ) =>
-  mapChangedObservations(observations, (observation) =>
+  observations.map((observation) =>
     (observation.bleaching_status ?? null) === null
-      ? null
+      ? observation
       : { ...observation, bleaching_status: null },
   )

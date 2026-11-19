@@ -96,6 +96,70 @@ describe('Benthic LIT bleaching', () => {
     expect(savedRecord.data.obs_benthic_lits[3].bleaching_status).toBeNull()
   })
 
+  test('Not recorded stays through other edits and an attribute change between corals, and saves as no status', async () => {
+    const dexieInstances = getMockDexieInstancesAllSuccess()
+    const { dexiePerUserDataInstance } = dexieInstances
+
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+    const { user } = renderBenthicLitRecord(dexieInstances)
+
+    await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
+    await addAcroporaRow(user)
+
+    const getNewRowBleachingSelect = () => screen.getAllByTestId('bleaching-status-select')[3]
+
+    await user.selectOptions(getNewRowBleachingSelect(), '')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+
+    await user.selectOptions(screen.getAllByTestId('growth-form-select')[0], 'Columnar')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+
+    const attributeInput = screen.getAllByTestId('observation-benthic-attribute-input')[3]
+
+    await user.clear(attributeInput)
+    await user.type(attributeInput, 'hard')
+    await user.selectOptions(
+      screen.getAllByRole('listbox')[3],
+      screen.getByRole('option', { name: 'Hard coral' }),
+    )
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+
+    await user.click(screen.getByTestId('save-button'))
+    expect(await screen.findByTestId('saved-button'))
+
+    const savedRecord = await getSavedRecord(dexiePerUserDataInstance)
+
+    expect(savedRecord.data.obs_benthic_lits[3].attribute).toBe(
+      'hard-coral-category-0000-0000-000000000000',
+    )
+    expect(savedRecord.data.obs_benthic_lits[3].bleaching_status).toBeNull()
+  })
+
+  test('Tab from the last Bleaching cell adds a coral row at Normal', async () => {
+    const dexieInstances = getMockDexieInstancesAllSuccess()
+    const { dexiePerUserDataInstance } = dexieInstances
+
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+    const { user } = renderBenthicLitRecord(dexieInstances)
+
+    await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
+    await addAcroporaRow(user)
+
+    const lastBleachingSelect = screen.getAllByTestId('bleaching-status-select')[3]
+
+    await user.selectOptions(lastBleachingSelect, '1')
+    lastBleachingSelect.focus()
+    await user.tab()
+
+    const bleachingSelects = screen.getAllByTestId('bleaching-status-select')
+
+    expect(bleachingSelects).toHaveLength(5)
+    expect(bleachingSelects[3]).toHaveDisplayValue('bleaching_status.pale')
+    expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.normal')
+  })
+
   test('a record saved with bleaching reopens at Yes with its statuses', async () => {
     const dexieInstances = getMockDexieInstancesAllSuccess()
     const { dexiePerUserDataInstance } = dexieInstances
@@ -112,6 +176,7 @@ describe('Benthic LIT bleaching', () => {
         obs_benthic_lits: [
           ...record.data.obs_benthic_lits,
           { id: '4', length: '6', attribute: ACROPORA_ID, growth_form: '', bleaching_status: 2 },
+          { id: '5', length: '7', attribute: ACROPORA_ID, growth_form: '', bleaching_status: null },
         ],
       },
     })
@@ -124,5 +189,7 @@ describe('Benthic LIT bleaching', () => {
 
     expect(bleachingSelects[0]).toHaveDisplayValue('bleaching_status.na')
     expect(bleachingSelects[3]).toHaveDisplayValue('bleaching_status.partially_bleached')
+    // No status on a coral row is Not recorded, and reopening does not turn it into Normal
+    expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.not_recorded')
   })
 })

@@ -35,7 +35,10 @@ import ObservationAutocomplete from '../../../ObservationAutocomplete/Observatio
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
 import ObservationsHeadingValidations from '../ObservationsHeadingValidations'
 import BleachingStatusCell from '../BleachingStatusCell'
-import { getCoralAttributeIds, isIncludeBleachingOn } from '../../../../library/bleachingStatus'
+import {
+  isIncludeBleachingOn,
+  parseBleachingStatusValue,
+} from '../../../../library/bleachingStatus'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -73,6 +76,7 @@ const BenthicPitObservationsTable = ({
   areValidationsShowing,
   benthicAttributeSelectOptions,
   choices,
+  coralAttributeIds,
   collectRecord = undefined,
   formik,
   ignoreObservationValidations,
@@ -99,10 +103,6 @@ const BenthicPitObservationsTable = ({
     include_bleaching: includeBleaching,
   } = formik.values
   const isBleachingOn = isIncludeBleachingOn(includeBleaching)
-  const coralAttributeIds = useMemo(
-    () => getCoralAttributeIds(benthicAttributeSelectOptions),
-    [benthicAttributeSelectOptions],
-  )
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -120,30 +120,6 @@ const BenthicPitObservationsTable = ({
     [intervalSize, intervalStart, observationsDispatch],
   )
 
-  // Filling only adds Normal to coral rows with no status, so it can run on every change. Clearing
-  // waits for the diver to switch the field off: formik holds the default No until the record's
-  // values arrive, and clearing on that would wipe the saved statuses.
-  useEffect(
-    function fillBleachingStatusesWhileIncluded() {
-      if (isBleachingOn) {
-        observationsDispatch({ type: 'fillBleachingStatuses', payload: { coralAttributeIds } })
-      }
-    },
-    [coralAttributeIds, isBleachingOn, observationsDispatch, observationsState],
-  )
-
-  const wasBleachingOnRef = useRef(isBleachingOn)
-
-  useEffect(
-    function clearBleachingStatusesWhenSwitchedOff() {
-      if (wasBleachingOnRef.current && !isBleachingOn) {
-        observationsDispatch({ type: 'clearBleachingStatuses' })
-      }
-      wasBleachingOnRef.current = isBleachingOn
-    },
-    [isBleachingOn, observationsDispatch],
-  )
-
   const observationsRows = useMemo(() => {
     const growthFormOptions = getOptions(choices.growthforms.data)
 
@@ -157,7 +133,12 @@ const BenthicPitObservationsTable = ({
         setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
-          payload: { referenceObservation: observation, intervalStart, intervalSize },
+          payload: {
+            coralAttributeIds,
+            referenceObservation: observation,
+            intervalStart,
+            intervalSize,
+          },
         })
         setAreObservationsInputsDirty(true)
       }
@@ -217,18 +198,11 @@ const BenthicPitObservationsTable = ({
         observationsDispatch({
           type: 'updateBenthicAttribute',
           payload: {
+            coralAttributeIds,
             newBenthicAttribute,
             observationId,
           },
         })
-        // A row that stops being coral is no longer assessed. One that becomes coral is filled
-        // with Normal by fillBleachingStatuses.
-        if (isBleachingCellEditable && !coralAttributeIds.has(newBenthicAttribute)) {
-          observationsDispatch({
-            type: 'updateBleachingStatus',
-            payload: { newValue: null, observationId },
-          })
-        }
         markObservationValidationsStale({
           observationId,
         })
@@ -255,7 +229,7 @@ const BenthicPitObservationsTable = ({
         observationsDispatch({
           type: 'updateBleachingStatus',
           payload: {
-            newValue: Number(event.target.value),
+            newValue: parseBleachingStatusValue(event.target.value),
             observationId,
           },
         })
@@ -483,6 +457,7 @@ BenthicPitObservationsTable.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
+  coralAttributeIds: PropTypes.instanceOf(Set).isRequired,
   collectRecord: benthicPitRecordPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
   unignoreObservationValidations: PropTypes.func.isRequired,
