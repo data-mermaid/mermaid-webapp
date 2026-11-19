@@ -703,6 +703,7 @@
   "no_notifications": "Kasalukuyang walang mga abiso",
   "notes": "Mga Tala",
   "notification_not_removed": "Hindi maalis ang notification.",
+  "notifications_heading": "Mga Abiso",
   "notifications_unavailable": "Hindi available ang mga notification.",
   "number": "Numero",
   "number_info": "Awtomatikong nabubuo ang numero ng MERMAID bilang identifier para sa isang bleaching sample unit, at hindi ito mae-edit.",
@@ -1016,6 +1017,12 @@
     "transect_number": "Numero ng transek",
     "transfer": "Maglipat ng Mga Sample na Yunit",
     "transfer_unsubmitted": "Maglipat ng mga hindi naisumiteng sample unit",
+    "validation_announcement": {
+      "description": "Mas mabilis na ngayon ang paggana ng Validate at ipinapakita nito ang bawat error at babala sa iyong sample unit nang sabay-sabay. Pindutin ang Susunod para dumiretso sa bawat isa, ayusin ito, at pagkatapos ay isumite.",
+      "done": "Tapos na",
+      "read_the_guide": "Basahin ang gabay",
+      "title": "Mas mabilis i-validate, mas madaling isumite"
+    },
     "validation_status": {
       "chip_label_error_one": "{{count}} Mali",
       "chip_label_error_other": "{{count}} Mga pagkakamali",
@@ -1125,6 +1132,7 @@
   "transect_number_info": "Sample unit number, bilang integer (hal 1). Karaniwan, ang mga sample na unit ay sunud-sunod na binibilang sa bawat site, na may parehong bilang bawat site sa isang proyekto.",
   "try_again": "Subukan Muli",
   "type": "Uri",
+  "updates_heading": "Mga Update",
   "use_interval_size_as_start": "Gamitin ang Laki ng Interval bilang Simula ng Interval",
   "users": {
     "add_user_email": "Ilagay ang email address ng user na idaragdag",
@@ -1219,7 +1227,8 @@
     "maximum_metres": "Dapat ay {{max}} m o mas mababa",
     "minimum_total_fish_count": "Ang kabuuang bilang ng isda ay mas mababa sa {{minimumFishCount}}",
     "missing_intervals": "Mga nawawalang pagitan: {{intervals}}",
-    "missing_quadrat_numbers": "Mga nawawalang numero ng quadrat {{numbers}}",
+    "missing_quadrats_one": "Nawawalang numero ng quadrat {{numbers, list}}",
+    "missing_quadrats_other": "Mga nawawalang numero ng quadrat {{numbers, list}}",
     "no_region_match": "Korales o isda na hindi pa naoobserbahan sa rehiyon ng lugar",
     "not_part_of_fish_family_subset": "Ang isda ay hindi bahagi ng mga pamilya ng isda na tinukoy ng proyekto",
     "not_unique_site": "Site: May nakitang mga katulad na tala",

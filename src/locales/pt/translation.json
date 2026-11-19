@@ -703,6 +703,7 @@
   "no_notifications": "De momento, não há notificações",
   "notes": "Notas",
   "notification_not_removed": "Não foi possível eliminar a notificação.",
+  "notifications_heading": "Notificações",
   "notifications_unavailable": "As notificações não estão disponíveis.",
   "number": "Número",
   "number_info": "O número é gerado automaticamente pelo MERMAID como identificador de uma unidade de amostra de branqueamento e não pode ser editado.",
@@ -1016,6 +1017,12 @@
     "transect_number": "Número do transecto",
     "transfer": "Transferir unidades de amostra",
     "transfer_unsubmitted": "Transferir unidades amostrais não submetidas",
+    "validation_announcement": {
+      "description": "A validação agora é mais rápida e exibe todos os erros e avisos da sua unidade de exemplo de uma só vez. Clique em Avançar para ir diretamente a cada um deles, corrigi-los e, em seguida, enviar.",
+      "done": "Feito",
+      "read_the_guide": "Leia o guia",
+      "title": "Validação mais rápida, envio mais fácil"
+    },
     "validation_status": {
       "chip_label_error_one": "{{count}} Erro",
       "chip_label_error_other": "{{count}} Erros",
@@ -1125,6 +1132,7 @@
   "transect_number_info": "Número da unidade de amostragem, expresso como número inteiro (por exemplo, 1). Normalmente, as unidades de amostragem são numeradas consecutivamente em cada local, mantendo-se o mesmo número por local num projeto.",
   "try_again": "Tenta novamente",
   "type": "Tipo",
+  "updates_heading": "Atualizações",
   "use_interval_size_as_start": "Utilizar o tamanho do intervalo como ponto de partida do intervalo",
   "users": {
     "add_user_email": "Introduza o endereço de e-mail do utilizador a adicionar",
@@ -1219,7 +1227,8 @@
     "maximum_metres": "O valor deve ser {{max}} m ou menos",
     "minimum_total_fish_count": "Número total de peixes inferior a {{minimumFishCount}}",
     "missing_intervals": "Intervalos em falta: {{intervals}}",
-    "missing_quadrat_numbers": "Números de quadrados em falta {{numbers}}",
+    "missing_quadrats_one": "Número do quadrante ausente {{numbers, list}}",
+    "missing_quadrats_other": "Números de quadrantes ausentes {{numbers, list}}",
     "no_region_match": "Corais ou peixes que não tinham sido observados anteriormente na região do local",
     "not_part_of_fish_family_subset": "O peixe não faz parte das famílias de peixes definidas no projeto",
     "not_unique_site": "Site: foram detetados registos semelhantes",

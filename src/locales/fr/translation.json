@@ -703,6 +703,7 @@
   "no_notifications": "Aucune notification n'est actuellement disponible.",
   "notes": "Notes",
   "notification_not_removed": "Impossible de supprimer la notification.",
+  "notifications_heading": "Notifications",
   "notifications_unavailable": "Les notifications ne sont pas disponibles.",
   "number": "Nombre",
   "number_info": "Ce numéro est généré automatiquement par MERMAID comme identifiant pour une unité d'échantillon de blanchiment et n'est pas modifiable.",
@@ -1016,6 +1017,12 @@
     "transect_number": "numéro de transect",
     "transfer": "Transférer des unités d’échantillonnage",
     "transfer_unsubmitted": "Transférer les unités d'échantillons non soumises",
+    "validation_announcement": {
+      "description": "La validation est désormais plus rapide et affiche simultanément toutes les erreurs et tous les avertissements de votre échantillon. Cliquez sur Suivant pour accéder directement à chaque erreur, la corriger, puis soumettre.",
+      "done": "Fait",
+      "read_the_guide": "Lisez le guide",
+      "title": "Validation plus rapide, soumission plus simple"
+    },
     "validation_status": {
       "chip_label_error_one": "{{count}} Erreur",
       "chip_label_error_other": "{{count}} Erreurs",
@@ -1125,6 +1132,7 @@
   "transect_number_info": "Numéro d'unité d'échantillonnage, sous forme d'entier (par ex. 1). En général, les unités d'échantillonnage sont numérotées de manière consécutive à chaque site, avec le même nombre par site dans un projet.",
   "try_again": "Essayer à nouveau",
   "type": "Taper",
+  "updates_heading": "Mises à jour",
   "use_interval_size_as_start": "Utiliser la taille de l'intervalle comme début de l'intervalle",
   "users": {
     "add_user_email": "Saisissez l'adresse e-mail de l'utilisateur à ajouter",
@@ -1219,7 +1227,8 @@
     "maximum_metres": "La valeur doit être {{max}} m ou moins",
     "minimum_total_fish_count": "Nombre total de poissons inférieur à {{minimumFishCount}}",
     "missing_intervals": "Intervalles manquants : {{intervals}}",
-    "missing_quadrat_numbers": "Numéros de quadrat manquants {{numbers}}",
+    "missing_quadrats_one": "Numéro de quadrat manquant {{numbers, list}}",
+    "missing_quadrats_other": "Numéros de quadrat manquants {{numbers, list}}",
     "no_region_match": "Coraux ou poissons non observés auparavant dans la région du site",
     "not_part_of_fish_family_subset": "Le poisson ne fait pas partie des familles de poissons définies par le projet.",
     "not_unique_site": "Site : Enregistrements similaires détectés",

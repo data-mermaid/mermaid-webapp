@@ -10,6 +10,7 @@ import {
   renderAuthenticated,
   waitForElementToBeRemoved,
   screen,
+  waitFor,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
@@ -118,6 +119,7 @@ test('Server is unreachable - Toggle switch is not checked, and is enabled', asy
 
   const offlineToggleSwitchTestId = await screen.findByTestId('offline-toggle-switch-test')
 
-  expect(offlineToggleSwitchTestId).toBeChecked()
+  // the app only switches offline after a failed health check is retried
+  await waitFor(() => expect(offlineToggleSwitchTestId).toBeChecked())
   expect(offlineToggleSwitchTestId).toBeDisabled()
 })

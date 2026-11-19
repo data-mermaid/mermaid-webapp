@@ -696,6 +696,7 @@
   "no_notifications": "Saat ini tidak ada pemberitahuan",
   "notes": "Catatan",
   "notification_not_removed": "Pemberitahuan tidak dapat dihapus.",
+  "notifications_heading": "Pemberitahuan",
   "notifications_unavailable": "Pemberitahuan tidak tersedia.",
   "number": "Nomor",
   "number_info": "Nomor secara otomatis dibuat oleh MERMAID sebagai pengenal untuk unit sampel pemutihan, dan tidak dapat diedit.",
@@ -1001,6 +1002,12 @@
     "transect_number": "Nomor transek",
     "transfer": "Transfer unit sampel",
     "transfer_unsubmitted": "Mentransfer unit sampel yang tidak dikirim",
+    "validation_announcement": {
+      "description": "Fitur Validate kini berjalan lebih cepat dan menampilkan semua kesalahan serta peringatan dalam unit contoh Anda sekaligus. Tekan \"Next\" untuk langsung menuju masing-masing kesalahan atau peringatan, perbaiki, lalu kirimkan.",
+      "done": "Selesai",
+      "read_the_guide": "Baca panduannya",
+      "title": "Proses validasi lebih cepat, pengiriman lebih mudah"
+    },
     "validation_status": {
       "chip_label_error_other": "{{count}} Kesalahan",
       "chip_label_ignored_other": "{{count}} Diabaikan",
@@ -1107,6 +1114,7 @@
   "transect_number_info": "Nomor unit sampel dalam bilangan bulat (misalnya 1). Biasanya, unit sampel diberi nomor berurutan di setiap situs, dengan nomor yang sama per situs dalam satu proyek.",
   "try_again": "Coba Lagi",
   "type": "Jenis",
+  "updates_heading": "Pembaruan",
   "use_interval_size_as_start": "Gunakan Ukuran Interval sebagai Awal Interval",
   "users": {
     "add_user_email": "Masukkan alamat email pengguna yang akan ditambahkan",
@@ -1198,7 +1206,7 @@
     "maximum_metres": "Nilainya harus {{max}} m atau kurang",
     "minimum_total_fish_count": "Jumlah total ikan kurang dari {{minimumFishCount}}",
     "missing_intervals": "Interval yang hilang: {{intervals}}",
-    "missing_quadrat_numbers": "Angka kuadrat yang hilang {{numbers}}",
+    "missing_quadrats_other": "Bilangan kuadrat yang hilang {{numbers, list}}",
     "no_region_match": "Karang atau ikan belum pernah diamati sebelumnya di wilayah situs",
     "not_part_of_fish_family_subset": "Ikan bukan merupakan bagian dari famili ikan yang ditetapkan proyek",
     "not_unique_site": "Situs: catatan serupa terdeteksi",

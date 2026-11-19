@@ -287,13 +287,25 @@ const stickyStyles = css`
   }
 `
 
-export const StickyOverviewTable = styled(Table)`
+// A page translator rewrites text nodes into <font> wrappers, which moves nodes out from under
+// React and crashes its commit phase (MERMAID-WEBAPP-N). Both sticky roots below opt out, because
+// every table built on them either reorders rows (react-table useSortBy), paginates, or lets the
+// user add and remove rows, which is when React places siblings and hits the moved nodes.
+//
+// The cost is real: these tables carry text with no i18next path, such as the API choices
+// vocabulary (growth forms, habitat-complexity descriptions) and the literals interpolated in
+// validationMessageHelpers.tsx. Browser translation was the only thing that translated those.
+//
+// Plain Table is deliberately left translatable. Its consumers are modals and static info tables
+// (UserRolesInfoModal, DataSharingInfoModal, the sample unit popups) that hold explanatory prose
+// worth translating and never reorder rows.
+export const StickyOverviewTable = styled(Table).attrs({ translate: 'no' })`
   thead tr:nth-child(2) th {
     ${stickyStyles}
   }
 `
 
-export const GenericStickyTable = styled(Table)`
+export const GenericStickyTable = styled(Table).attrs({ translate: 'no' })`
   tr th {
     ${stickyStyles}
   }

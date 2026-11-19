@@ -110,6 +110,14 @@ describe('getValidationsToDisplay', () => {
     expect(getValidationsToDisplay([siteNotFound])).toEqual([siteNotFound])
   })
 
+  // The API keeps `ignore` on a check that has since passed, with a null code.
+  test('hides an ignored check that has since passed, and keeps one that still warns', () => {
+    const passedIgnore: Validation = { status: 'ignore', code: null, name: 'max_depth_validator' }
+    const stillIgnored = validation('ignore', 'max_depth')
+
+    expect(getValidationsToDisplay([passedIgnore, stillIgnored])).toEqual([stillIgnored])
+  })
+
   test('keeps a greyed message in its place, so an edited row still shows it', () => {
     const staleError = { ...validation('error', 'invalid_depth'), isStale: true }
     const warning = validation('warning', 'max_depth')
@@ -129,6 +137,15 @@ describe('getValidationPropertiesForInput colour', () => {
 
     expect(validationType).toBe('warning')
     expect(validationMessages?.map(({ isStale }) => isStale)).toEqual([true, false])
+  })
+
+  test('is ok when the only result is an ignored check that has since passed', () => {
+    const passedIgnore: Validation = { status: 'ignore', code: null, name: 'max_depth_validator' }
+
+    expect(getValidationPropertiesForInput([passedIgnore], true)).toEqual({
+      validationType: 'ok',
+      validationMessages: [],
+    })
   })
 
   test('is info when every message is greyed', () => {
