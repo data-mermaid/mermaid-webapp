@@ -292,7 +292,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicPitRecord}
         sampleUnitName="benthicpit"
         SampleUnitTransectInputs={BenthicPitTransectInputs}
-        sampleUnitTransectInputsProps={{ coralAttributeIds, observationsDispatch }}
+        sampleUnitTransectInputsProps={{ coralAttributeIds, observationsReducer }}
         setAreObservationsInputsDirty={setAreObservationsInputsDirty}
         setIdsNotAssociatedWithData={setIdsNotAssociatedWithData}
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}

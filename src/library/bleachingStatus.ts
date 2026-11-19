@@ -94,6 +94,14 @@ export const getBleachingStatusAfterAttributeChange = (
   return coralAttributeIds.has(attribute) ? (bleachingStatus ?? null) : BLEACHING_STATUS_NORMAL
 }
 
+// Observations the diver marked as bleached: any status above Normal. These are what switching
+// bleaching off would lose, since Normal is the default and Not recorded is no status at all.
+export const countBleachedStatuses = (observations: ObservationWithBleachingStatus[]) =>
+  observations.filter(
+    ({ bleaching_status: bleachingStatus }) =>
+      (bleachingStatus ?? BLEACHING_STATUS_NORMAL) !== BLEACHING_STATUS_NORMAL,
+  ).length
+
 // Bleaching not included: every observation is not assessed.
 export const clearBleachingStatuses = <T extends ObservationWithBleachingStatus>(
   observations: T[],

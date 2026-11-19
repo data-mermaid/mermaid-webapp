@@ -222,6 +222,37 @@ test('every validation message key the helper uses exists in the English transla
   expect(missing).toEqual([])
 })
 
+describe('getValidationMessage for bleaching on Benthic PIT and LIT', () => {
+  test('each row and field code has its own message', () => {
+    expect(getValidationMessage({ code: 'bleaching_status_not_assessed' })).toBe(
+      'validation_messages.bleaching_status_not_assessed',
+    )
+    expect(getValidationMessage({ code: 'bleaching_status_not_coral' })).toBe(
+      'validation_messages.bleaching_status_not_coral',
+    )
+    expect(getValidationMessage({ code: 'invalid_bleaching_status' })).toBe(
+      'validation_messages.invalid_bleaching_status',
+    )
+    expect(getValidationMessage({ code: 'include_bleaching_required' })).toBe(
+      'validation_messages.required',
+    )
+  })
+
+  test('coral rows with no status are counted, with "observation" for one', async () => {
+    // Tests run i18n in cimode, which skips plural keys, so this renders the helper's own call
+    // through a real English instance
+    const english = i18next.createInstance()
+    await english.init({ lng: 'en', resources: { en: { translation: en } } })
+    vi.spyOn(i18n, 't').mockImplementation(english.t.bind(english))
+
+    const getMessage = (count: number) =>
+      getValidationMessage({ code: 'missing_bleaching_status', context: { count } })
+
+    expect(getMessage(1)).toBe('Bleaching not recorded on 1 coral observation')
+    expect(getMessage(3)).toBe('Bleaching not recorded on 3 coral observations')
+  })
+})
+
 describe('getMessageColumns', () => {
   test.each([
     [{ code: 'required', name: 'size_list_required_validator' }, ['size']],

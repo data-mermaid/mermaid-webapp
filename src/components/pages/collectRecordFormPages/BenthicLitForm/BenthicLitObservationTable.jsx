@@ -292,6 +292,7 @@ const BenthicLitObservationsTable = ({
           {isBleachingOn ? (
             <BleachingStatusCell
               bleachingStatus={bleachingStatus}
+              cellMarkProps={getCellMarkProps(cellMarks, 'bleaching_status')}
               isCoral={isCoral}
               onChange={handleBleachingStatusChange}
               onKeyDown={(event) => handleKeyDown({ event, index, observation, isLastCell: true })}

@@ -32,6 +32,13 @@ const toWarning = (validation) => ({ ...validation, status: 'warning' })
 // warning comes back greyed, since the value it judged has changed.
 const toStale = (validation) => ({ ...validation, isStale: true })
 
+// The API validator that judges each Benthic PIT or LIT observation's bleaching status.
+const BLEACHING_STATUS_VALIDATOR_NAME = 'bleaching_status_validator'
+const INCLUDE_BLEACHING_VALIDATION_PATH = 'validations.results.data.include_bleaching'
+
+const toStaleIfAboutBleachingStatus = (validation) =>
+  validation.name === BLEACHING_STATUS_VALIDATOR_NAME ? toStale(validation) : validation
+
 const CollectRecordsMixin = (Base) =>
   class extends Base {
     #formatFishbeltRecordForPush = function formatFishbeltRecordForPush({
@@ -632,6 +639,53 @@ const CollectRecordsMixin = (Base) =>
       }
 
       return this._mapObservationValidations(recordId, observationId, toStale)
+    }
+
+    // Switching "Include bleaching observations" changes what the field's result and every row's
+    // bleaching result judged. They are marked in one write, because separate writes for the field
+    // and each row would overwrite each other. The record-level count of coral rows with no status
+    // stays as it is, like every record-level result, until the next Validate.
+    markBleachingValidationsStale = async function markBleachingValidationsStale({ recordId }) {
+      if (!recordId) {
+        throw new Error('markBleachingValidationsStale requires a recordId parameter')
+      }
+
+      const record = await this._dexiePerUserDataInstance.collect_records.get(recordId)
+
+      if (!record?.validations?.results?.data) {
+        return record
+      }
+
+      const includeBleachingValidations = getObjectProperty({
+        object: record,
+        path: INCLUDE_BLEACHING_VALIDATION_PATH,
+      })
+      const recordWithStaleField = includeBleachingValidations
+        ? setObjectPropertyOnClone({
+            object: record,
+            path: INCLUDE_BLEACHING_VALIDATION_PATH,
+            value: Object.values(includeBleachingValidations).map(toStale),
+          })
+        : record
+
+      const updatedRecord = getObservationsPropertyNames(record).reduce((updated, tableName) => {
+        const path = `validations.results.data.${tableName}`
+        const table = getObjectProperty({ object: updated, path })
+
+        return table
+          ? setObjectPropertyOnClone({
+              object: updated,
+              path,
+              value: table.map((rowValidations) =>
+                rowValidations.map(toStaleIfAboutBleachingStatus),
+              ),
+            })
+          : updated
+      }, recordWithStaleField)
+
+      return this._dexiePerUserDataInstance.collect_records
+        .put(updatedRecord)
+        .then(() => updatedRecord)
     }
 
     markCollectRecordValidationsStale = async function markCollectRecordValidationsStale(recordId) {
