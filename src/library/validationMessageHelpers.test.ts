@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { describe, expect, test, vi } from 'vitest'
-import i18next from 'i18next'
+import i18next, { createInstance } from 'i18next'
 import i18n from '../../i18n'
 import en from '../locales/en/translation.json'
 import { getMessageColumns, getValidationMessage } from './validationMessageHelpers'
@@ -241,7 +241,7 @@ describe('getValidationMessage for bleaching on Benthic PIT and LIT', () => {
   test('coral rows with no status are counted, with "observation" for one', async () => {
     // Tests run i18n in cimode, which skips plural keys, so this renders the helper's own call
     // through a real English instance
-    const english = i18next.createInstance()
+    const english = createInstance()
     await english.init({ lng: 'en', resources: { en: { translation: en } } })
     vi.spyOn(i18n, 't').mockImplementation(english.t.bind(english))
 
