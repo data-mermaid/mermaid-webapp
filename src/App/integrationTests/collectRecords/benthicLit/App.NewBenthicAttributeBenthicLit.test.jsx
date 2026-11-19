@@ -133,7 +133,7 @@ test('Benthic LIT observations add new benthic attribute - proposing new attribu
     await dexiePerUserDataInstance.benthic_attributes.toArray()
   ).length
 
-  expect(attributesInOfflineStorageCount).toEqual(2)
+  expect(attributesInOfflineStorageCount).toEqual(4)
 
   const firstBenthicAttributeInput =
     within(observationsTable).getAllByDisplayValue('Dead Coral with Algae')[0]

@@ -127,6 +127,7 @@ const CollectRecordFormPage = ({
   sampleUnitFormatSaveFunction,
   sampleUnitName,
   SampleUnitTransectInputs,
+  sampleUnitTransectInputsProps = {},
   setAreObservationsInputsDirty,
   setIdsNotAssociatedWithData,
   setIsNewBenthicAttributeModalOpen = () => {},
@@ -600,6 +601,7 @@ const CollectRecordFormPage = ({
         )}
         {!isBenthicPQTNewRecordWithImageClassificationEnabled && (
           <SampleUnitTransectInputs
+            {...sampleUnitTransectInputsProps}
             areValidationsShowing={areValidationsShowing}
             choices={choices}
             formik={formik}
@@ -776,6 +778,8 @@ CollectRecordFormPage.propTypes = {
   sampleUnitFormatSaveFunction: PropTypes.func.isRequired,
   sampleUnitName: PropTypes.string.isRequired,
   SampleUnitTransectInputs: PropTypes.elementType.isRequired,
+  // Protocol-specific props for SampleUnitTransectInputs.
+  sampleUnitTransectInputsProps: PropTypes.shape({}),
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   setIdsNotAssociatedWithData: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func,

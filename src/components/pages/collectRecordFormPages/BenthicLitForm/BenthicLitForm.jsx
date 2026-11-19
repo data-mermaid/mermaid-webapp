@@ -5,6 +5,7 @@ import React, { useState, useReducer, useEffect, useMemo, useCallback } from 're
 
 import {
   getCollectRecordDataInitialValues,
+  getIncludeBleachingInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
@@ -22,6 +23,7 @@ import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsaved
 import CollectRecordFormPage from '../CollectRecordFormPage'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
+import { getCoralAttributeIds } from '../../../../library/bleachingStatus'
 import { BenthicLitTransectInputs } from './BenthicLitTransectInputs'
 import { BenthicLitObservationsTable } from './BenthicLitObservationTable'
 import { benthicLitObservationReducer } from './benthicLitObservationReducer'
@@ -49,6 +51,9 @@ const BenthicLitform = ({ isNewRecord = true }) => {
   const [sites, setSites] = useState()
 
   const [, observationsDispatch] = observationsReducer
+  // Built from every loaded attribute, not only the selectable ones: a row can hold an attribute
+  // another user proposed, which the picker leaves out but which is still coral if its category is.
+  const [coralAttributeIds, setCoralAttributeIds] = useState(new Set())
   const errorMessage = isNewRecord
     ? t('sample_units.errors.supporting_data_unavailable')
     : t('sample_units.errors.data_unavailable')
@@ -108,6 +113,9 @@ const BenthicLitform = ({ isNewRecord = true }) => {
                   getSelectableAttributes(resolvedBenthicAttributes, currentUser.id),
                 ),
               )
+              setCoralAttributeIds(
+                getCoralAttributeIds(getBenthicOptions(resolvedBenthicAttributes)),
+              )
               setSites(sitesResponse)
 
               setIsLoading(false)
@@ -145,6 +153,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
         ...getSampleInfoInitialValues(collectRecordBeingEdited),
         ...getTransectInitialValues(collectRecordBeingEdited, 'benthic_transect'),
+        ...getIncludeBleachingInitialValues(collectRecordBeingEdited),
       }
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
@@ -167,6 +176,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
         setBenthicAttributeSelectOptions(
           getBenthicOptions(getSelectableAttributes(benthicAttributes, currentUser.id)),
         )
+        setCoralAttributeIds(getCoralAttributeIds(getBenthicOptions(benthicAttributes)))
       })
     }
   }, [databaseSwitchboardInstance, currentUser])
@@ -190,6 +200,10 @@ const BenthicLitform = ({ isNewRecord = true }) => {
         observationsDispatch({
           type: 'updateBenthicAttribute',
           payload: {
+            // The proposed attribute is not in the options yet. It is coral if its parent is.
+            coralAttributeIds: coralAttributeIds.has(benthicAttributeParentId)
+              ? new Set([...coralAttributeIds, newBenthicAttribute.id])
+              : coralAttributeIds,
             observationId: observationIdToAddNewBenthicAttributeTo,
             newValue: newBenthicAttribute.id,
           },
@@ -221,6 +235,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
               observationsDispatch({
                 type: 'updateBenthicAttribute',
                 payload: {
+                  coralAttributeIds,
                   observationId: observationIdToAddNewBenthicAttributeTo,
                   newValue: error.existingBenthicAttribute.id,
                 },
@@ -247,6 +262,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
         return (
           <BenthicLitObservationsTable
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+            coralAttributeIds={coralAttributeIds}
             {...props}
           />
         )
@@ -255,7 +271,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
       return null
     },
 
-    [benthicAttributeSelectOptions],
+    [benthicAttributeSelectOptions, coralAttributeIds],
   )
 
   return (
@@ -273,6 +289,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicLitRecord}
         sampleUnitName="benthiclit"
         SampleUnitTransectInputs={BenthicLitTransectInputs}
+        sampleUnitTransectInputsProps={{ coralAttributeIds, observationsDispatch }}
         setAreObservationsInputsDirty={setAreObservationsInputsDirty}
         setIdsNotAssociatedWithData={setIdsNotAssociatedWithData}
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}

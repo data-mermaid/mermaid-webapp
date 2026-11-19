@@ -15,6 +15,7 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import IntervalCheckbox from '../../../mermaidInputs/IntervalCheckbox'
+import IncludeBleachingInput from '../../../mermaidInputs/IncludeBleachingInput'
 import { HelperTextLink } from '../../../generic/links'
 
 const CURRENT_VALIDATION_PATH = 'data.benthic_transect.current'
@@ -34,9 +35,11 @@ const INTERVAL_START_VALIDATION_PATH = 'data.interval_start'
 const BenthicPitTransectInputs = ({
   areValidationsShowing,
   choices,
+  coralAttributeIds,
   formik,
   ignoreNonObservationFieldValidations,
   markFieldValidationsStale,
+  observationsDispatch,
   unignoreNonObservationFieldValidations,
   validationsApiData,
 }) => {
@@ -346,6 +349,16 @@ const BenthicPitTransectInputs = ({
           }
           isInputDisabled={isIntervalSizeAsStartChecked}
         />
+        <IncludeBleachingInput
+          areValidationsShowing={areValidationsShowing}
+          coralAttributeIds={coralAttributeIds}
+          formik={formik}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          markFieldValidationsStale={markFieldValidationsStale}
+          observationsDispatch={observationsDispatch}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          validationsApiData={validationsApiData}
+        />
         <InputSelectWithLabelAndValidation
           label={t('reef_slope')}
           required={false}
@@ -467,9 +480,11 @@ const BenthicPitTransectInputs = ({
 BenthicPitTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
+  coralAttributeIds: PropTypes.instanceOf(Set).isRequired,
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   markFieldValidationsStale: PropTypes.func.isRequired,
+  observationsDispatch: PropTypes.func.isRequired,
   unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,
 }
