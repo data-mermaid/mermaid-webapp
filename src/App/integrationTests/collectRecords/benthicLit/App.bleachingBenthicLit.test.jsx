@@ -192,4 +192,50 @@ describe('Benthic LIT bleaching', () => {
     // No status on a coral row is Not recorded, and reopening does not turn it into Normal
     expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.not_recorded')
   })
+
+  test('a coral attribute another user proposed still takes a status', async () => {
+    const dexieInstances = getMockDexieInstancesAllSuccess()
+    const { dexiePerUserDataInstance } = dexieInstances
+
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+    const acropora = await dexiePerUserDataInstance.benthic_attributes.get(ACROPORA_ID)
+
+    // Status 10 from another profile: left out of the attribute picker, still coral
+    await dexiePerUserDataInstance.benthic_attributes.put({
+      ...acropora,
+      id: 'proposed-by-another-user',
+      name: 'Acropora proposed by another user',
+      parent: ACROPORA_ID,
+      status: 10,
+      created_by: 'another-profile',
+    })
+
+    const record = await dexiePerUserDataInstance.collect_records.get('70')
+
+    await dexiePerUserDataInstance.collect_records.put({
+      ...record,
+      data: {
+        ...record.data,
+        include_bleaching: true,
+        obs_benthic_lits: [
+          ...record.data.obs_benthic_lits,
+          {
+            id: '4',
+            length: '6',
+            attribute: 'proposed-by-another-user',
+            growth_form: '',
+            bleaching_status: 1,
+          },
+        ],
+      },
+    })
+
+    renderBenthicLitRecord(dexieInstances)
+
+    const bleachingSelects = await screen.findAllByTestId('bleaching-status-select')
+
+    expect(bleachingSelects[3]).toBeEnabled()
+    expect(bleachingSelects[3]).toHaveDisplayValue('bleaching_status.pale')
+  })
 })

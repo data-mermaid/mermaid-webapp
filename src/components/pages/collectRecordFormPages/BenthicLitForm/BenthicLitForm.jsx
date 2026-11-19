@@ -51,10 +51,9 @@ const BenthicLitform = ({ isNewRecord = true }) => {
   const [sites, setSites] = useState()
 
   const [, observationsDispatch] = observationsReducer
-  const coralAttributeIds = useMemo(
-    () => getCoralAttributeIds(benthicAttributeSelectOptions),
-    [benthicAttributeSelectOptions],
-  )
+  // Built from every loaded attribute, not only the selectable ones: a row can hold an attribute
+  // another user proposed, which the picker leaves out but which is still coral if its category is.
+  const [coralAttributeIds, setCoralAttributeIds] = useState(new Set())
   const errorMessage = isNewRecord
     ? t('sample_units.errors.supporting_data_unavailable')
     : t('sample_units.errors.data_unavailable')
@@ -113,6 +112,9 @@ const BenthicLitform = ({ isNewRecord = true }) => {
                 getBenthicOptions(
                   getSelectableAttributes(resolvedBenthicAttributes, currentUser.id),
                 ),
+              )
+              setCoralAttributeIds(
+                getCoralAttributeIds(getBenthicOptions(resolvedBenthicAttributes)),
               )
               setSites(sitesResponse)
 
@@ -174,6 +176,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
         setBenthicAttributeSelectOptions(
           getBenthicOptions(getSelectableAttributes(benthicAttributes, currentUser.id)),
         )
+        setCoralAttributeIds(getCoralAttributeIds(getBenthicOptions(benthicAttributes)))
       })
     }
   }, [databaseSwitchboardInstance, currentUser])
