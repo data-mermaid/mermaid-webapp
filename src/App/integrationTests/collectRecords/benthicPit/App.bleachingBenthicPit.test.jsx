@@ -71,9 +71,6 @@ describe('Benthic PIT bleaching', () => {
 
     expect(newRowBleachingSelect).toBeEnabled()
     expect(newRowBleachingSelect).toHaveDisplayValue('bleaching_status.normal')
-    expect(
-      within(newRowBleachingSelect).queryByRole('option', { name: 'bleaching_status.na' }),
-    ).not.toBeInTheDocument()
 
     await user.selectOptions(newRowBleachingSelect, '1')
     expect(newRowBleachingSelect).toHaveDisplayValue('bleaching_status.pale')
@@ -100,7 +97,7 @@ describe('Benthic PIT bleaching', () => {
     ).toEqual([null, null, null, 3])
   })
 
-  test('No asks first when a row is Not recorded, and Cancel keeps Yes and the statuses', async () => {
+  test('No asks first when a coral row is NA, and Cancel keeps Yes and the statuses', async () => {
     const { user } = await renderBenthicPitRecord()
 
     await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
@@ -121,7 +118,7 @@ describe('Benthic PIT bleaching', () => {
     expect(screen.getByTestId('include-bleaching-select')).toHaveDisplayValue('yes')
     expect(screen.getByTestId('include-bleaching-select')).toHaveFocus()
     expect(screen.getAllByTestId('bleaching-status-select')[3]).toHaveDisplayValue(
-      'bleaching_status.not_recorded',
+      'bleaching_status.na',
     )
   })
 
@@ -208,7 +205,7 @@ describe('Benthic PIT bleaching', () => {
     )
   })
 
-  test('Not recorded stays through other edits and an attribute change between corals, and saves as no status', async () => {
+  test('NA on a coral row stays through other edits and an attribute change between corals, and saves as no status', async () => {
     const { user, dexiePerUserDataInstance } = await renderBenthicPitRecord()
 
     await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
@@ -218,13 +215,13 @@ describe('Benthic PIT bleaching', () => {
     const getNewRowBleachingSelect = () => screen.getAllByTestId('bleaching-status-select')[3]
 
     await user.selectOptions(getNewRowBleachingSelect(), '')
-    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.na')
 
     await user.selectOptions(screen.getAllByTestId('growth-form-select')[0], 'Columnar')
-    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.na')
 
     await chooseBenthicAttribute(user, 3, 'hard', 'Hard coral')
-    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.na')
 
     await user.click(screen.getByTestId('save-button'))
     expect(await screen.findByTestId('saved-button'))
@@ -297,8 +294,8 @@ describe('Benthic PIT bleaching', () => {
 
     expect(bleachingSelects[0]).toHaveDisplayValue('bleaching_status.na')
     expect(bleachingSelects[3]).toHaveDisplayValue('bleaching_status.partially_bleached')
-    // No status on a coral row is Not recorded, and reopening does not turn it into Normal
-    expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.not_recorded')
+    // Reopening must not fill a coral row's NA with Normal
+    expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.na')
   })
 
   test('a coral attribute another user proposed still takes a status', async () => {

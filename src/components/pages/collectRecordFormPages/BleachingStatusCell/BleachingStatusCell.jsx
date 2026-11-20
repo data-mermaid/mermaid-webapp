@@ -6,8 +6,6 @@ import { getBleachingStatusOptions } from '../../../../library/bleachingStatus'
 import { Select } from '../../../generic/form'
 import { Td } from '../../../generic/Table/table'
 
-// A coral observation offers the five statuses and Not recorded, which is how it shows an empty
-// status. Any other observation is not assessed for bleaching: it shows NA and cannot be changed.
 const BleachingStatusCell = ({ bleachingStatus, cellMarkProps, isCoral, onChange, onKeyDown }) => {
   const { t } = useTranslation()
 

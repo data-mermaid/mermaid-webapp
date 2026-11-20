@@ -713,7 +713,7 @@
     "avg_soft_coral_cover": "Avg soft coral cover %",
     "biomass_constants": "Biomass constants",
     "bleaching": "Bleaching",
-    "bleaching_info": "Coral records default to Normal (not bleached). Records that are not coral show NA.",
+    "bleaching_info": "Coral records default to Normal (not bleached). Records that are not coral show NA. Choose NA on a coral record if its bleaching wasn't recorded.",
     "bleaching_severity": "Bleaching severity",
     "colonies_bleached": "Observations - colonies bleached",
     "family": "Family",
@@ -1300,7 +1300,6 @@
     "pale": "Pale",
     "partially_bleached": "Partially bleached",
     "fully_bleached": "Fully bleached",
-    "recent_bleaching_mortality": "Recent bleaching mortality",
-    "not_recorded": "Not recorded"
+    "recent_bleaching_mortality": "Recent bleaching mortality"
   }
 }

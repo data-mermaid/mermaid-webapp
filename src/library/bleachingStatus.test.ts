@@ -62,7 +62,7 @@ describe('clearBleachingStatuses', () => {
 })
 
 describe('parseBleachingStatusValue', () => {
-  it('reads Not recorded as no status, not as Normal', () => {
+  it('reads NA as no status, not as Normal', () => {
     expect(parseBleachingStatusValue('')).toBeNull()
   })
 
@@ -94,7 +94,7 @@ describe('getBleachingStatusAfterAttributeChange', () => {
     ).toBe(BLEACHING_STATUS_NORMAL)
   })
 
-  it('keeps the status, Not recorded included, between two coral attributes', () => {
+  it('keeps the status, NA included, between two coral attributes', () => {
     expect(
       getBleachingStatusAfterAttributeChange(
         { attribute: 'acropora', bleaching_status: 3 },
@@ -113,7 +113,7 @@ describe('getBleachingStatusAfterAttributeChange', () => {
 })
 
 describe('countStatusesLostOnTurnOff', () => {
-  it('counts coral statuses other than Normal, Not recorded included', () => {
+  it('counts coral statuses other than Normal, NA included', () => {
     expect(
       countStatusesLostOnTurnOff(
         [
