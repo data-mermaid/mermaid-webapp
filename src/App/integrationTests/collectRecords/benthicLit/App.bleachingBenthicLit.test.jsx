@@ -163,6 +163,23 @@ describe('Benthic LIT bleaching', () => {
     expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.normal')
   })
 
+  test('the summary shows the bleached share of hard coral as statuses change', async () => {
+    const dexieInstances = getMockDexieInstancesAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstances.dexiePerUserDataInstance)
+
+    const { user } = renderBenthicLitRecord(dexieInstances)
+
+    await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
+    await addAcroporaRow(user)
+
+    expect(screen.getByRole('row', { name: '% bleaching_status.pale 0.0' })).toBeInTheDocument()
+
+    await user.selectOptions(screen.getAllByTestId('bleaching-status-select')[3], '1')
+
+    expect(screen.getByRole('row', { name: '% bleaching_status.pale 100.0' })).toBeInTheDocument()
+  })
+
   test('a record saved with bleaching reopens at Yes with its statuses', async () => {
     const dexieInstances = getMockDexieInstancesAllSuccess()
     const { dexiePerUserDataInstance } = dexieInstances

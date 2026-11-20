@@ -27,7 +27,7 @@ import BenthicPitTransectInputs from './BenthicPitTransectInputs'
 import CollectRecordFormPage from '../CollectRecordFormPage'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
-import { getCoralAttributeIds } from '../../../../library/bleachingStatus'
+import { getCoralAttributeIdsByType } from '../../../../library/bleachingStatus'
 import ErrorBoundary from '../../../ErrorBoundary'
 import { useTranslation } from 'react-i18next'
 
@@ -55,7 +55,14 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
   const [, observationsDispatch] = observationsReducer
   // Built from every loaded attribute, not only the selectable ones: a row can hold an attribute
   // another user proposed, which the picker leaves out but which is still coral if its category is.
-  const [coralAttributeIds, setCoralAttributeIds] = useState(new Set())
+  const [coralAttributeIdsByType, setCoralAttributeIdsByType] = useState({
+    hardCoral: new Set(),
+    softCoral: new Set(),
+  })
+  const coralAttributeIds = useMemo(
+    () => new Set([...coralAttributeIdsByType.hardCoral, ...coralAttributeIdsByType.softCoral]),
+    [coralAttributeIdsByType],
+  )
   const errorMessage = isNewRecord
     ? t('sample_units.errors.supporting_data_unavailable')
     : t('sample_units.errors.data_unavailable')
@@ -115,8 +122,8 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
                   getSelectableAttributes(resolvedBenthicAttributes, currentUser.id),
                 ),
               )
-              setCoralAttributeIds(
-                getCoralAttributeIds(getBenthicOptions(resolvedBenthicAttributes)),
+              setCoralAttributeIdsByType(
+                getCoralAttributeIdsByType(getBenthicOptions(resolvedBenthicAttributes)),
               )
               setSites(sitesResponse)
 
@@ -179,7 +186,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
         setBenthicAttributeSelectOptions(
           getBenthicOptions(getSelectableAttributes(benthicAttributes, currentUser.id)),
         )
-        setCoralAttributeIds(getCoralAttributeIds(getBenthicOptions(benthicAttributes)))
+        setCoralAttributeIdsByType(getCoralAttributeIdsByType(getBenthicOptions(benthicAttributes)))
       })
     }
   }, [databaseSwitchboardInstance, currentUser])
@@ -266,6 +273,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
           <BenthicPitObservationsTable
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
             coralAttributeIds={coralAttributeIds}
+            coralAttributeIdsByType={coralAttributeIdsByType}
             {...props}
           />
         )
@@ -274,7 +282,7 @@ const BenthicPitForm = ({ isNewRecord = true }) => {
       return null
     },
 
-    [benthicAttributeSelectOptions, coralAttributeIds],
+    [benthicAttributeSelectOptions, coralAttributeIds, coralAttributeIdsByType],
   )
 
   return (

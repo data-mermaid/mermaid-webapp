@@ -2,10 +2,11 @@ import { describe, expect, it } from 'vitest'
 import {
   BLEACHING_STATUS_NORMAL,
   clearBleachingStatuses,
-  countStatusesLostOnTurnOff,
+  countBleachedStatuses,
   fillBleachingStatuses,
   getBleachingStatusAfterAttributeChange,
-  getCoralAttributeIds,
+  getBleachedStatusPercents,
+  getCoralAttributeIdsByType,
   parseBleachingStatusValue,
 } from './bleachingStatus'
 
@@ -17,19 +18,18 @@ const options = [
   { value: 'bare-substrate', label: 'Bare substrate', topLevelCategory: 'bare-substrate' },
 ]
 
-describe('getCoralAttributeIds', () => {
-  it('includes the Hard coral and Soft coral categories and the attributes under them', () => {
-    expect([...getCoralAttributeIds(options)].sort()).toEqual([
-      'acropora',
-      'hard-coral',
-      'soft-coral',
-    ])
+const coralAttributeIds = new Set(['hard-coral', 'acropora', 'soft-coral'])
+
+describe('getCoralAttributeIdsByType', () => {
+  it('splits the coral categories and the attributes under them by coral type', () => {
+    const { hardCoral, softCoral } = getCoralAttributeIdsByType(options)
+
+    expect([...hardCoral].sort()).toEqual(['acropora', 'hard-coral'])
+    expect([...softCoral]).toEqual(['soft-coral'])
   })
 })
 
 describe('fillBleachingStatuses', () => {
-  const coralAttributeIds = getCoralAttributeIds(options)
-
   it('gives coral observations with no status Normal and leaves everything else alone', () => {
     const observations = [
       { id: '1', attribute: 'acropora' },
@@ -73,8 +73,6 @@ describe('parseBleachingStatusValue', () => {
 })
 
 describe('getBleachingStatusAfterAttributeChange', () => {
-  const coralAttributeIds = getCoralAttributeIds(options)
-
   it('drops the status when the new attribute is not coral', () => {
     expect(
       getBleachingStatusAfterAttributeChange(
@@ -112,19 +110,59 @@ describe('getBleachingStatusAfterAttributeChange', () => {
   })
 })
 
-describe('countStatusesLostOnTurnOff', () => {
-  it('counts coral statuses other than Normal, NA included', () => {
+describe('countBleachedStatuses', () => {
+  it('counts statuses above Normal, so neither Normal nor NA counts', () => {
     expect(
-      countStatusesLostOnTurnOff(
-        [
-          { attribute: 'acropora', bleaching_status: BLEACHING_STATUS_NORMAL },
-          { attribute: 'acropora', bleaching_status: 1 },
-          { attribute: 'acropora', bleaching_status: 4 },
-          { attribute: 'acropora', bleaching_status: null },
-          { attribute: 'sand' },
-        ],
-        new Set(['acropora']),
+      countBleachedStatuses([
+        { attribute: 'acropora', bleaching_status: BLEACHING_STATUS_NORMAL },
+        { attribute: 'acropora', bleaching_status: 1 },
+        { attribute: 'acropora', bleaching_status: 4 },
+        { attribute: 'acropora', bleaching_status: null },
+        { attribute: 'sand' },
+      ]),
+    ).toBe(2)
+  })
+})
+
+describe('getBleachedStatusPercents', () => {
+  const hardCoral = new Set(['acropora'])
+  const getPercents = (observations, recordType: 'pit' | 'lit') =>
+    getBleachedStatusPercents(observations, hardCoral, recordType).map(({ percent }) => percent)
+
+  it.each([
+    [
+      'PIT counts observations, with Normal in the base and NA and other coral types left out',
+      'pit',
+      [
+        { attribute: 'acropora', bleaching_status: BLEACHING_STATUS_NORMAL },
+        { attribute: 'acropora', bleaching_status: 1 },
+        { attribute: 'acropora', bleaching_status: 1 },
+        { attribute: 'acropora', bleaching_status: 4 },
+        { attribute: 'acropora', bleaching_status: null },
+        { attribute: 'soft-coral', bleaching_status: 3 },
+      ],
+      ['50.0', '0.0', '0.0', '25.0'],
+    ],
+    [
+      'LIT weights observations by length',
+      'lit',
+      [
+        { attribute: 'acropora', bleaching_status: BLEACHING_STATUS_NORMAL, length: 30 },
+        { attribute: 'acropora', bleaching_status: 2, length: 10 },
+      ],
+      ['0.0', '25.0', '0.0', '0.0'],
+    ],
+  ] as const)('%s', (_, recordType, observations, expectedPercents) => {
+    expect(getPercents(observations, recordType)).toEqual(expectedPercents)
+  })
+
+  it('gives nothing for a coral type with no status recorded', () => {
+    expect(
+      getBleachedStatusPercents(
+        [{ attribute: 'acropora', bleaching_status: null }],
+        hardCoral,
+        'pit',
       ),
-    ).toBe(3)
+    ).toBeNull()
   })
 })
