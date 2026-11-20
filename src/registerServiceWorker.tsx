@@ -31,6 +31,10 @@ const promptToReload = () => {
   )
 }
 
+const isGoogleRendererRejection = (error: unknown) =>
+  'wrsParams' in window ||
+  (error instanceof Error && error.constructor === Error && error.message === 'Rejected')
+
 /**
  * Registers the workbox service worker that vite-plugin-pwa emits as service-worker.js.
  *
@@ -61,6 +65,13 @@ export const registerServiceWorker = () => {
 
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).catch((error) => {
+      // Google's Web Rendering Service (Googlebot) stubs register() to reject with a plain
+      // Error('Rejected'). That is a crawler, not a user, so there is nothing to report or show.
+      // Real browser failures are DOMExceptions or TypeErrors with descriptive messages.
+      if (isGoogleRendererRejection(error)) {
+        return
+      }
+
       Sentry.captureException(error, {
         extra: {
           isNavigatorOnline: navigator.onLine,
