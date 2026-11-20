@@ -148,4 +148,30 @@ describe('BenthicPitLitObservationSummaryStats', () => {
 
     expect(screen.queryByText('observations.bleaching_summary_heading')).not.toBeInTheDocument()
   })
+
+  it('keeps a coral type open after its rows go away and come back', async () => {
+    const user = userEvent.setup()
+    const renderWithSoftCoralStatus = (bleachingStatus: number | null) => (
+      <BenthicPitLitObservationSummaryStats
+        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+        coralAttributeIdsByType={{ hardCoral: new Set(['attr1']), softCoral: new Set(['attr2']) }}
+        includeBleaching={true}
+        observations={[
+          { attribute: 'attr1', growth_form: '', id: '1', bleaching_status: 0 },
+          { attribute: 'attr2', growth_form: '', id: '2', bleaching_status: bleachingStatus },
+        ]}
+        recordType={'pit'}
+      />
+    )
+    const { rerender } = render(renderWithSoftCoralStatus(0))
+
+    await user.click(screen.getByRole('button', { name: /observations.soft_coral/ }))
+    rerender(renderWithSoftCoralStatus(null))
+    rerender(renderWithSoftCoralStatus(1))
+
+    expect(screen.getByRole('button', { name: /observations.soft_coral/ })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    )
+  })
 })

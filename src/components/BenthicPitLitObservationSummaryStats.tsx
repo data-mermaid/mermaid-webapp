@@ -50,18 +50,19 @@ interface BleachedStatusPercent {
 }
 
 interface BleachingCoralTypeRowsProps {
-  isOpenOnLoad: boolean
+  isOpen: boolean
   label: string
+  onToggle: () => void
   statusPercents: BleachedStatusPercent[]
 }
 
 const BleachingCoralTypeRows = ({
-  isOpenOnLoad,
+  isOpen,
   label,
+  onToggle,
   statusPercents,
 }: BleachingCoralTypeRowsProps) => {
   const { t } = useTranslation()
-  const [isOpen, setIsOpen] = useState(isOpenOnLoad)
   const statusRowsId = useId()
 
   return (
@@ -73,7 +74,7 @@ const BleachingCoralTypeRows = ({
               type="button"
               aria-expanded={isOpen}
               aria-controls={statusRowsId}
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={onToggle}
             >
               {label} {isOpen ? <IconUp /> : <IconDown />}
             </CoralTypeToggle>
@@ -104,6 +105,10 @@ const BenthicPitLitObservationSummaryStats = ({
   recordType,
 }: BenthicPitLitObservationSummaryStatsProps) => {
   const { t } = useTranslation()
+  // Held here, not in BleachingCoralTypeRows, so a coral type keeps its open state when all its
+  // observations go to NA (which removes its rows) and then get a status again.
+  const [isHardCoralOpen, setIsHardCoralOpen] = useState(true)
+  const [isSoftCoralOpen, setIsSoftCoralOpen] = useState(false)
 
   const missingBenthicAttributeLabel = t('benthic_observations.missing_benthic_attribute')
 
@@ -198,15 +203,17 @@ const BenthicPitLitObservationSummaryStats = ({
           </tbody>
           {hardCoralPercents ? (
             <BleachingCoralTypeRows
-              isOpenOnLoad={true}
+              isOpen={isHardCoralOpen}
               label={t('observations.hard_coral')}
+              onToggle={() => setIsHardCoralOpen(!isHardCoralOpen)}
               statusPercents={hardCoralPercents}
             />
           ) : null}
           {softCoralPercents ? (
             <BleachingCoralTypeRows
-              isOpenOnLoad={false}
+              isOpen={isSoftCoralOpen}
               label={t('observations.soft_coral')}
+              onToggle={() => setIsSoftCoralOpen(!isSoftCoralOpen)}
               statusPercents={softCoralPercents}
             />
           ) : null}
