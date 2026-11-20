@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   BLEACHING_STATUS_NORMAL,
   clearBleachingStatuses,
+  countStatusesLostOnTurnOff,
   fillBleachingStatuses,
   getBleachingStatusAfterAttributeChange,
   getCoralAttributeIds,
@@ -61,7 +62,7 @@ describe('clearBleachingStatuses', () => {
 })
 
 describe('parseBleachingStatusValue', () => {
-  it('reads Not recorded as no status, not as Normal', () => {
+  it('reads NA as no status, not as Normal', () => {
     expect(parseBleachingStatusValue('')).toBeNull()
   })
 
@@ -93,7 +94,7 @@ describe('getBleachingStatusAfterAttributeChange', () => {
     ).toBe(BLEACHING_STATUS_NORMAL)
   })
 
-  it('keeps the status, Not recorded included, between two coral attributes', () => {
+  it('keeps the status, NA included, between two coral attributes', () => {
     expect(
       getBleachingStatusAfterAttributeChange(
         { attribute: 'acropora', bleaching_status: 3 },
@@ -108,5 +109,22 @@ describe('getBleachingStatusAfterAttributeChange', () => {
         coralAttributeIds,
       ),
     ).toBeNull()
+  })
+})
+
+describe('countStatusesLostOnTurnOff', () => {
+  it('counts coral statuses other than Normal, NA included', () => {
+    expect(
+      countStatusesLostOnTurnOff(
+        [
+          { attribute: 'acropora', bleaching_status: BLEACHING_STATUS_NORMAL },
+          { attribute: 'acropora', bleaching_status: 1 },
+          { attribute: 'acropora', bleaching_status: 4 },
+          { attribute: 'acropora', bleaching_status: null },
+          { attribute: 'sand' },
+        ],
+        new Set(['acropora']),
+      ),
+    ).toBe(3)
   })
 })

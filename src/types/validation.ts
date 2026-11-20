@@ -7,6 +7,7 @@ export interface ValidationContext {
   id?: string
   biomass_range?: [number, number]
   category?: string
+  count?: number
   decimal_places?: number
   depth_range?: [number, number]
   dry_submit_results?: Record<string, string>

@@ -289,7 +289,7 @@ const BenthicLitform = ({ isNewRecord = true }) => {
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicLitRecord}
         sampleUnitName="benthiclit"
         SampleUnitTransectInputs={BenthicLitTransectInputs}
-        sampleUnitTransectInputsProps={{ coralAttributeIds, observationsDispatch }}
+        sampleUnitTransectInputsProps={{ coralAttributeIds, observationsReducer }}
         setAreObservationsInputsDirty={setAreObservationsInputsDirty}
         setIdsNotAssociatedWithData={setIdsNotAssociatedWithData}
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}

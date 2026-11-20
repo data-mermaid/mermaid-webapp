@@ -69,7 +69,7 @@ describe('Benthic LIT bleaching', () => {
     ).toEqual([null, null, null, 4])
   })
 
-  test('No hides the column and clears every status', async () => {
+  test('Confirming No hides the column and clears every status', async () => {
     const dexieInstances = getMockDexieInstancesAllSuccess()
     const { dexiePerUserDataInstance } = dexieInstances
 
@@ -82,10 +82,13 @@ describe('Benthic LIT bleaching', () => {
     await user.selectOptions(screen.getAllByTestId('bleaching-status-select')[3], '1')
 
     await user.selectOptions(screen.getByTestId('include-bleaching-select'), 'false')
+    await user.click(await screen.findByTestId('turn-off-bleaching-confirm'))
 
     await waitFor(() =>
       expect(screen.queryByTestId('bleaching-status-select')).not.toBeInTheDocument(),
     )
+    expect(screen.queryByTestId('turn-off-bleaching-modal')).not.toBeInTheDocument()
+    expect(screen.getByTestId('include-bleaching-select')).toHaveDisplayValue('no')
 
     await user.click(screen.getByTestId('save-button'))
     expect(await screen.findByTestId('saved-button'))
@@ -96,7 +99,7 @@ describe('Benthic LIT bleaching', () => {
     expect(savedRecord.data.obs_benthic_lits[3].bleaching_status).toBeNull()
   })
 
-  test('Not recorded stays through other edits and an attribute change between corals, and saves as no status', async () => {
+  test('NA on a coral row stays through other edits and an attribute change between corals, and saves as no status', async () => {
     const dexieInstances = getMockDexieInstancesAllSuccess()
     const { dexiePerUserDataInstance } = dexieInstances
 
@@ -110,10 +113,10 @@ describe('Benthic LIT bleaching', () => {
     const getNewRowBleachingSelect = () => screen.getAllByTestId('bleaching-status-select')[3]
 
     await user.selectOptions(getNewRowBleachingSelect(), '')
-    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.na')
 
     await user.selectOptions(screen.getAllByTestId('growth-form-select')[0], 'Columnar')
-    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.na')
 
     const attributeInput = screen.getAllByTestId('observation-benthic-attribute-input')[3]
 
@@ -123,7 +126,7 @@ describe('Benthic LIT bleaching', () => {
       screen.getAllByRole('listbox')[3],
       screen.getByRole('option', { name: 'Hard coral' }),
     )
-    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.na')
 
     await user.click(screen.getByTestId('save-button'))
     expect(await screen.findByTestId('saved-button'))
@@ -189,8 +192,8 @@ describe('Benthic LIT bleaching', () => {
 
     expect(bleachingSelects[0]).toHaveDisplayValue('bleaching_status.na')
     expect(bleachingSelects[3]).toHaveDisplayValue('bleaching_status.partially_bleached')
-    // No status on a coral row is Not recorded, and reopening does not turn it into Normal
-    expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.not_recorded')
+    // Reopening must not fill a coral row's NA with Normal
+    expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.na')
   })
 
   test('a coral attribute another user proposed still takes a status', async () => {

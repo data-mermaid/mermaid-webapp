@@ -58,6 +58,17 @@ const cases = [
     markedLabels: ['interval-label'],
   },
   {
+    protocol: 'benthicpit',
+    record: {
+      ...mockBenthicPitCollectRecords[0],
+      data: { ...mockBenthicPitCollectRecords[0].data, include_bleaching: true },
+    },
+    observationsKey: 'obs_benthic_pits',
+    observationId: '1',
+    validation: { status: 'error', code: 'bleaching_status_not_coral' },
+    markedLabels: ['bleaching-label'],
+  },
+  {
     protocol: 'benthicpqt',
     record: mockBenthicPhotoQuadratCollectRecords[0],
     observationsKey: 'obs_benthic_photo_quadrats',

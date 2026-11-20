@@ -71,9 +71,6 @@ describe('Benthic PIT bleaching', () => {
 
     expect(newRowBleachingSelect).toBeEnabled()
     expect(newRowBleachingSelect).toHaveDisplayValue('bleaching_status.normal')
-    expect(
-      within(newRowBleachingSelect).queryByRole('option', { name: 'bleaching_status.na' }),
-    ).not.toBeInTheDocument()
 
     await user.selectOptions(newRowBleachingSelect, '1')
     expect(newRowBleachingSelect).toHaveDisplayValue('bleaching_status.pale')
@@ -100,7 +97,32 @@ describe('Benthic PIT bleaching', () => {
     ).toEqual([null, null, null, 3])
   })
 
-  test('No hides the column and clears every status', async () => {
+  test('No asks first when a coral row is NA, and Cancel keeps Yes and the statuses', async () => {
+    const { user } = await renderBenthicPitRecord()
+
+    await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
+    await user.click(screen.getByTestId('add-observation-row'))
+    await chooseBenthicAttribute(user, 3, 'acro', 'Acropora')
+    await user.selectOptions(screen.getAllByTestId('bleaching-status-select')[3], '')
+
+    await user.selectOptions(screen.getByTestId('include-bleaching-select'), 'false')
+
+    const modal = await screen.findByTestId('turn-off-bleaching-modal')
+
+    expect(within(modal).getByText('observations.turn_off_bleaching_body')).toBeInTheDocument()
+    expect(screen.getByTestId('include-bleaching-select')).toHaveDisplayValue('yes')
+
+    await user.click(within(modal).getByRole('button', { name: 'buttons.cancel' }))
+
+    expect(screen.queryByTestId('turn-off-bleaching-modal')).not.toBeInTheDocument()
+    expect(screen.getByTestId('include-bleaching-select')).toHaveDisplayValue('yes')
+    expect(screen.getByTestId('include-bleaching-select')).toHaveFocus()
+    expect(screen.getAllByTestId('bleaching-status-select')[3]).toHaveDisplayValue(
+      'bleaching_status.na',
+    )
+  })
+
+  test('Confirming No hides the column and clears every status', async () => {
     const { user, dexiePerUserDataInstance } = await renderBenthicPitRecord()
 
     await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
@@ -109,10 +131,13 @@ describe('Benthic PIT bleaching', () => {
     await user.selectOptions(screen.getAllByTestId('bleaching-status-select')[3], '1')
 
     await user.selectOptions(screen.getByTestId('include-bleaching-select'), 'false')
+    await user.click(await screen.findByTestId('turn-off-bleaching-confirm'))
 
     await waitFor(() =>
       expect(screen.queryByTestId('bleaching-status-select')).not.toBeInTheDocument(),
     )
+    expect(screen.queryByTestId('turn-off-bleaching-modal')).not.toBeInTheDocument()
+    expect(screen.getByTestId('include-bleaching-select')).toHaveDisplayValue('no')
 
     await user.click(screen.getByTestId('save-button'))
     expect(await screen.findByTestId('saved-button'))
@@ -123,6 +148,22 @@ describe('Benthic PIT bleaching', () => {
 
     expect(savedRecord.data.include_bleaching).toBe(false)
     expect(savedRecord.data.obs_benthic_pits[3].bleaching_status).toBeNull()
+  })
+
+  test('No switches off straight away when every coral row is Normal', async () => {
+    const { user } = await renderBenthicPitRecord()
+
+    await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
+    await user.click(screen.getByTestId('add-observation-row'))
+    await chooseBenthicAttribute(user, 3, 'acro', 'Acropora')
+
+    await user.selectOptions(screen.getByTestId('include-bleaching-select'), 'false')
+
+    await waitFor(() =>
+      expect(screen.queryByTestId('bleaching-status-select')).not.toBeInTheDocument(),
+    )
+    expect(screen.queryByTestId('turn-off-bleaching-modal')).not.toBeInTheDocument()
+    expect(screen.getByTestId('include-bleaching-select')).toHaveDisplayValue('no')
   })
 
   test('an attribute proposed offline under a coral attribute takes a status', async () => {
@@ -164,7 +205,7 @@ describe('Benthic PIT bleaching', () => {
     )
   })
 
-  test('Not recorded stays through other edits and an attribute change between corals, and saves as no status', async () => {
+  test('NA on a coral row stays through other edits and an attribute change between corals, and saves as no status', async () => {
     const { user, dexiePerUserDataInstance } = await renderBenthicPitRecord()
 
     await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
@@ -174,13 +215,13 @@ describe('Benthic PIT bleaching', () => {
     const getNewRowBleachingSelect = () => screen.getAllByTestId('bleaching-status-select')[3]
 
     await user.selectOptions(getNewRowBleachingSelect(), '')
-    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.na')
 
     await user.selectOptions(screen.getAllByTestId('growth-form-select')[0], 'Columnar')
-    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.na')
 
     await chooseBenthicAttribute(user, 3, 'hard', 'Hard coral')
-    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.not_recorded')
+    expect(getNewRowBleachingSelect()).toHaveDisplayValue('bleaching_status.na')
 
     await user.click(screen.getByTestId('save-button'))
     expect(await screen.findByTestId('saved-button'))
@@ -253,8 +294,8 @@ describe('Benthic PIT bleaching', () => {
 
     expect(bleachingSelects[0]).toHaveDisplayValue('bleaching_status.na')
     expect(bleachingSelects[3]).toHaveDisplayValue('bleaching_status.partially_bleached')
-    // No status on a coral row is Not recorded, and reopening does not turn it into Normal
-    expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.not_recorded')
+    // Reopening must not fill a coral row's NA with Normal
+    expect(bleachingSelects[4]).toHaveDisplayValue('bleaching_status.na')
   })
 
   test('a coral attribute another user proposed still takes a status', async () => {

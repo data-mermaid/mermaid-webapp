@@ -1,9 +1,7 @@
 import type { TFunction } from 'i18next'
 
-// Bleaching on a Benthic PIT or LIT observation, on the NOAA scale. The ids match
-// BLEACHING_STATUS_CHOICES in mermaid-api, which stores the integer. A null or missing
-// bleaching_status means the observation was not assessed: a coral observation shows it as
-// Not recorded, any other observation as NA.
+// The ids match BLEACHING_STATUS_CHOICES in mermaid-api. A null or missing bleaching_status is
+// NA: not assessed, not coral, or a coral observation whose bleaching wasn't recorded.
 export const BLEACHING_STATUS_NORMAL = 0
 
 const BLEACHING_STATUSES = [
@@ -14,20 +12,19 @@ const BLEACHING_STATUSES = [
   { id: 4, translationKey: 'bleaching_status.recent_bleaching_mortality' },
 ] as const
 
-const NOT_RECORDED_OPTION_VALUE = ''
+const NA_OPTION_VALUE = ''
 
-// What a coral observation's select offers: the scale, then Not recorded.
+/** The options a coral observation's Bleaching select offers: the five statuses, then NA. */
 export const getBleachingStatusOptions = (t: TFunction) => [
   ...BLEACHING_STATUSES.map(({ id, translationKey }) => ({ value: id, label: t(translationKey) })),
-  { value: NOT_RECORDED_OPTION_VALUE, label: t('bleaching_status.not_recorded') },
+  { value: NA_OPTION_VALUE, label: t('bleaching_status.na') },
 ]
 
-// Number('') is 0, which is Normal, so Not recorded has to be mapped before converting.
+/** The status to store for a Bleaching select value. NA is mapped first: `Number('')` is Normal. */
 export const parseBleachingStatusValue = (optionValue: string) =>
-  optionValue === NOT_RECORDED_OPTION_VALUE ? null : Number(optionValue)
+  optionValue === NA_OPTION_VALUE ? null : Number(optionValue)
 
-// The "Include bleaching observations" select holds its choice as the strings a select
-// produces; the record stores a boolean.
+// Formik holds a select's value as a string; the record stores a boolean.
 export const INCLUDE_BLEACHING_YES = 'true'
 export const INCLUDE_BLEACHING_NO = 'false'
 
@@ -36,8 +33,7 @@ export const toIncludeBleachingFormValue = (isBleachingIncluded?: boolean) =>
 
 export const isIncludeBleachingOn = (formValue?: string) => formValue === INCLUDE_BLEACHING_YES
 
-// Only observations under these top-level categories take a bleaching status, the same rule
-// as the API's BleachingStatusValidator.
+// The same rule as the API's BleachingStatusValidator.
 const CORAL_CATEGORY_NAMES = ['Hard coral', 'Soft coral']
 
 interface BenthicAttributeOption {
@@ -46,6 +42,7 @@ interface BenthicAttributeOption {
   topLevelCategory?: string
 }
 
+/** Ids of the Hard coral and Soft coral categories and every attribute under them. */
 export const getCoralAttributeIds = (benthicAttributeSelectOptions: BenthicAttributeOption[]) => {
   const coralCategoryIds = new Set(
     benthicAttributeSelectOptions
@@ -68,8 +65,10 @@ interface ObservationWithBleachingStatus {
   bleaching_status?: number | null
 }
 
-// Switching bleaching on: every coral observation with no status becomes Normal. Run it only on
-// that switch. A coral observation with no status afterwards is one the diver set to Not recorded.
+/**
+ * Sets every coral observation with no status to Normal. Call it only when bleaching is switched
+ * on: afterwards, a coral observation with no status is one the diver set to NA.
+ */
 export const fillBleachingStatuses = <T extends ObservationWithBleachingStatus>(
   observations: T[],
   coralAttributeIds: Set<string>,
@@ -80,8 +79,10 @@ export const fillBleachingStatuses = <T extends ObservationWithBleachingStatus>(
       : observation,
   )
 
-// An observation's status once its attribute changes. A status only carries over between two
-// coral attributes, so Not recorded survives that change too.
+/**
+ * An observation's status after its attribute changes: NA if the new attribute is not coral,
+ * Normal if it has just become coral, and unchanged (NA included) between two coral attributes.
+ */
 export const getBleachingStatusAfterAttributeChange = (
   { attribute, bleaching_status: bleachingStatus }: ObservationWithBleachingStatus,
   newAttribute: string,
@@ -94,7 +95,20 @@ export const getBleachingStatusAfterAttributeChange = (
   return coralAttributeIds.has(attribute) ? (bleachingStatus ?? null) : BLEACHING_STATUS_NORMAL
 }
 
-// Bleaching not included: every observation is not assessed.
+/**
+ * Coral observations that switching bleaching off would change: any status but Normal. NA counts
+ * because switching back on fills every coral observation with no status with Normal.
+ */
+export const countStatusesLostOnTurnOff = (
+  observations: ObservationWithBleachingStatus[],
+  coralAttributeIds: Set<string>,
+) =>
+  observations.filter(
+    ({ attribute, bleaching_status: bleachingStatus }) =>
+      coralAttributeIds.has(attribute) && bleachingStatus !== BLEACHING_STATUS_NORMAL,
+  ).length
+
+/** Clears every observation's status, for a sample unit that does not include bleaching. */
 export const clearBleachingStatuses = <T extends ObservationWithBleachingStatus>(
   observations: T[],
 ) =>

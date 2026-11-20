@@ -5,6 +5,7 @@ import { useTranslation, Trans } from 'react-i18next'
 import {
   benthicPitValidationPropType,
   choicesPropType,
+  observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formik/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
@@ -36,8 +37,9 @@ const BenthicLitTransectInputs = ({
   coralAttributeIds,
   formik,
   ignoreNonObservationFieldValidations,
+  markBleachingValidationsStale,
   markFieldValidationsStale,
-  observationsDispatch,
+  observationsReducer,
   unignoreNonObservationFieldValidations,
   validationsApiData,
 }) => {
@@ -258,8 +260,8 @@ const BenthicLitTransectInputs = ({
           coralAttributeIds={coralAttributeIds}
           formik={formik}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-          markFieldValidationsStale={markFieldValidationsStale}
-          observationsDispatch={observationsDispatch}
+          markBleachingValidationsStale={markBleachingValidationsStale}
+          observationsReducer={observationsReducer}
           unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
           validationsApiData={validationsApiData}
         />
@@ -387,8 +389,9 @@ BenthicLitTransectInputs.propTypes = {
   coralAttributeIds: PropTypes.instanceOf(Set).isRequired,
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
+  markBleachingValidationsStale: PropTypes.func.isRequired,
   markFieldValidationsStale: PropTypes.func.isRequired,
-  observationsDispatch: PropTypes.func.isRequired,
+  observationsReducer: observationsReducerPropType,
   unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,
 }

@@ -397,6 +397,7 @@ const CollectRecordFormPage = ({
     ignoreObservationValidations,
     unignoreObservationValidations,
     ignoreRecordLevelValidation,
+    markBleachingValidationsStale,
     markFieldValidationsStale,
     markObservationValidationsStale,
     showValidationResult,
@@ -606,6 +607,7 @@ const CollectRecordFormPage = ({
             choices={choices}
             formik={formik}
             ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+            markBleachingValidationsStale={markBleachingValidationsStale}
             markFieldValidationsStale={markFieldValidationsStale}
             unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
             validationsApiData={validationsApiData}
