@@ -1,4 +1,11 @@
 import { createUuid } from '../../../../library/createUuid'
+import {
+  BLEACHING_STATUS_NORMAL,
+  clearBleachingStatuses,
+  fillBleachingStatuses,
+  getBleachingStatusAfterAttributeChange,
+} from '../../../../library/bleachingStatus'
+import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
 const benthicPitObservationReducer = (state, action) => {
   const getObservationsWithRecalculatedIntervals = ({
@@ -95,10 +102,15 @@ const benthicPitObservationReducer = (state, action) => {
     }
 
     case 'duplicateLastObservation': {
-      const { intervalSize, intervalStart, referenceObservation } = action.payload
+      const { coralAttributeIds, intervalSize, intervalStart, referenceObservation } =
+        action.payload
+      // The copy is a new observation: Normal if coral, whatever status the copied row has.
       const observationWithNewId = {
         ...referenceObservation,
         id: createUuid(),
+        bleaching_status: coralAttributeIds.has(referenceObservation.attribute)
+          ? BLEACHING_STATUS_NORMAL
+          : null,
       }
 
       return getObservationsWithRecalculatedIntervals({
@@ -110,10 +122,18 @@ const benthicPitObservationReducer = (state, action) => {
     case 'updateBenthicAttribute':
       return state.map((observation) => {
         const isObservationToUpdate = observation?.id === action.payload.observationId
-        const { newBenthicAttribute } = action.payload
+        const { newBenthicAttribute, coralAttributeIds } = action.payload
 
         return isObservationToUpdate
-          ? { ...observation, attribute: newBenthicAttribute }
+          ? {
+              ...observation,
+              attribute: newBenthicAttribute,
+              bleaching_status: getBleachingStatusAfterAttributeChange(
+                observation,
+                newBenthicAttribute,
+                coralAttributeIds,
+              ),
+            }
           : observation
       })
     case 'updateGrowthForm':
@@ -123,6 +143,12 @@ const benthicPitObservationReducer = (state, action) => {
 
         return isObservationToUpdate ? { ...observation, growth_form: newGrowthForm } : observation
       })
+    case 'updateBleachingStatus':
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'bleaching_status' })
+    case 'fillBleachingStatuses':
+      return fillBleachingStatuses(state, action.payload.coralAttributeIds)
+    case 'clearBleachingStatuses':
+      return clearBleachingStatuses(state)
 
     default:
       throw new Error(`This action (${action.type}) isn't supported by the observationReducer`)

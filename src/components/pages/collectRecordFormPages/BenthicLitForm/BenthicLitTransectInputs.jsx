@@ -5,6 +5,7 @@ import { useTranslation, Trans } from 'react-i18next'
 import {
   benthicPitValidationPropType,
   choicesPropType,
+  observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formik/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
@@ -14,6 +15,7 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
+import IncludeBleachingInput from '../../../mermaidInputs/IncludeBleachingInput'
 import { HelperTextLink } from '../../../generic/links'
 import { links } from '../../../../link_constants'
 
@@ -32,9 +34,12 @@ const VISIBILITY_VALIDATION_PATH = 'data.benthic_transect.visibility'
 const BenthicLitTransectInputs = ({
   areValidationsShowing,
   choices,
+  coralAttributeIds,
   formik,
   ignoreNonObservationFieldValidations,
+  markBleachingValidationsStale,
   markFieldValidationsStale,
+  observationsReducer,
   unignoreNonObservationFieldValidations,
   validationsApiData,
 }) => {
@@ -250,6 +255,16 @@ const BenthicLitTransectInputs = ({
           unit="m"
           helperText={t('sample_units.transect_length_surveyed_info')}
         />
+        <IncludeBleachingInput
+          areValidationsShowing={areValidationsShowing}
+          coralAttributeIds={coralAttributeIds}
+          formik={formik}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          markBleachingValidationsStale={markBleachingValidationsStale}
+          observationsReducer={observationsReducer}
+          unignoreNonObservationFieldValidations={unignoreNonObservationFieldValidations}
+          validationsApiData={validationsApiData}
+        />
         <InputSelectWithLabelAndValidation
           label={t('reef_slope')}
           required={false}
@@ -371,9 +386,12 @@ const BenthicLitTransectInputs = ({
 BenthicLitTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
+  coralAttributeIds: PropTypes.instanceOf(Set).isRequired,
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
+  markBleachingValidationsStale: PropTypes.func.isRequired,
   markFieldValidationsStale: PropTypes.func.isRequired,
+  observationsReducer: observationsReducerPropType,
   unignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,
 }

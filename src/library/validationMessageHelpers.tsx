@@ -172,6 +172,8 @@ export const toColumnKey = (fieldName: string): string => COLUMN_ALIASES[fieldNa
 // `total` is a bleaching row's total: every count or percentage cell in the row answers to it as
 // well as to its own column.
 const COLUMNS_BY_ROW_CODE: Record<string, string> = {
+  bleaching_status_not_coral: 'bleaching_status',
+  invalid_bleaching_status: 'bleaching_status',
   invalid_fish_count: 'count',
   invalid_fish_size: 'size',
   invalid_invert_count: 'count',
@@ -226,6 +228,9 @@ export const getValidationMessage = (
         category: context?.category ?? '',
       }),
     all_equal: () => i18n.t('validation_messages.all_equal'),
+    bleaching_status_not_assessed: () =>
+      i18n.t('validation_messages.bleaching_status_not_assessed'),
+    bleaching_status_not_coral: () => i18n.t('validation_messages.bleaching_status_not_coral'),
     diff_num_images: () => i18n.t('validation_messages.quadrat_count_differs_from_photos'),
     diff_num_quadrats: () => i18n.t('validation_messages.diff_num_quadrats'),
     different_num_points_per_quadrat_se: () =>
@@ -249,6 +254,7 @@ export const getValidationMessage = (
     invalid_total: () => getInvalidBleachingObsTotalMessage(context),
     exceed_total_colonies: () => i18n.t('validation_messages.exceed_total_colonies'),
     implausibly_old_date: () => i18n.t('validation_messages.date_before_1900'),
+    include_bleaching_required: () => i18n.t('validation_messages.required'),
     future_sample_date: () => i18n.t('validation_messages.date_in_future'),
     high_density: () =>
       i18n.t('validation_messages.high_density', {
@@ -269,6 +275,7 @@ export const getValidationMessage = (
         max: context?.interval_start_range?.[1] ?? '',
       }),
     invalid_benthic_transect: () => i18n.t('validation_messages.invalid_benthic_transect'),
+    invalid_bleaching_status: () => i18n.t('validation_messages.invalid_bleaching_status'),
     invalid_depth: () => getDepthMessage(context),
     excessive_precision: () =>
       i18n.t('validation_messages.decimal_places_exceeded', {
@@ -311,6 +318,8 @@ export const getValidationMessage = (
       i18n.t('validation_messages.minimum_total_fish_count', {
         minimumFishCount: context?.minimum_fish_count ?? '',
       }),
+    missing_bleaching_status: () =>
+      i18n.t('validation_messages.missing_bleaching_status', { count: context?.count ?? 0 }),
     missing_quadrat_numbers: () =>
       i18n.t('validation_messages.missing_quadrats', {
         count: context?.missing_quadrat_numbers?.length ?? 0,
