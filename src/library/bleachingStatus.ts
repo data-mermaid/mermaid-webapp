@@ -1,5 +1,7 @@
 import type { TFunction } from 'i18next'
 
+import { roundToOneDecimal } from './numbers/roundToOneDecimal'
+
 // The ids match BLEACHING_STATUS_CHOICES in mermaid-api. A null or missing bleaching_status is
 // NA: not assessed, not coral, or a coral observation whose bleaching wasn't recorded.
 export const BLEACHING_STATUS_NORMAL = 0
@@ -33,36 +35,51 @@ export const toIncludeBleachingFormValue = (isBleachingIncluded?: boolean) =>
 
 export const isIncludeBleachingOn = (formValue?: string) => formValue === INCLUDE_BLEACHING_YES
 
-// The same rule as the API's BleachingStatusValidator.
-const CORAL_CATEGORY_NAMES = ['Hard coral', 'Soft coral']
-
 interface BenthicAttributeOption {
   value: string
   label: string
   topLevelCategory?: string
 }
 
-/** Ids of the Hard coral and Soft coral categories and every attribute under them. */
-export const getCoralAttributeIds = (benthicAttributeSelectOptions: BenthicAttributeOption[]) => {
-  const coralCategoryIds = new Set(
-    benthicAttributeSelectOptions
-      .filter(({ label }) => CORAL_CATEGORY_NAMES.includes(label))
-      .map(({ value }) => value),
-  )
+export interface CoralAttributeIdsByType {
+  hardCoral: Set<string>
+  softCoral: Set<string>
+}
 
-  return new Set(
-    benthicAttributeSelectOptions
-      .filter(
-        ({ value, topLevelCategory }) =>
-          coralCategoryIds.has(value) || coralCategoryIds.has(topLevelCategory),
-      )
-      .map(({ value }) => value),
-  )
+/**
+ * Ids of the Hard coral and Soft coral categories and every attribute under each: the attributes
+ * that take a bleaching status, by the same rule as the API's BleachingStatusValidator.
+ */
+export const getCoralAttributeIdsByType = (
+  benthicAttributeOptions: BenthicAttributeOption[],
+): CoralAttributeIdsByType => {
+  const getIdsUnderCategory = (categoryName: string) => {
+    const categoryIds = new Set(
+      benthicAttributeOptions
+        .filter(({ label }) => label === categoryName)
+        .map(({ value }) => value),
+    )
+
+    return new Set(
+      benthicAttributeOptions
+        .filter(
+          ({ value, topLevelCategory }) =>
+            categoryIds.has(value) || categoryIds.has(topLevelCategory),
+        )
+        .map(({ value }) => value),
+    )
+  }
+
+  return {
+    hardCoral: getIdsUnderCategory('Hard coral'),
+    softCoral: getIdsUnderCategory('Soft coral'),
+  }
 }
 
 interface ObservationWithBleachingStatus {
   attribute?: string
   bleaching_status?: number | null
+  length?: number | string
 }
 
 /**
@@ -117,3 +134,40 @@ export const clearBleachingStatuses = <T extends ObservationWithBleachingStatus>
       ? observation
       : { ...observation, bleaching_status: null },
   )
+
+const BLEACHED_STATUSES = BLEACHING_STATUSES.filter(({ id }) => id !== BLEACHING_STATUS_NORMAL)
+
+/**
+ * Each bleached status's share of one coral type's observations that have a status, so NA is
+ * left out. PIT counts observations; LIT weights them by length, as % cover does.
+ */
+export const getBleachedStatusPercents = (
+  observations: ObservationWithBleachingStatus[],
+  coralAttributeIds: Set<string>,
+  recordType: 'pit' | 'lit',
+) => {
+  const getWeight = ({ length }: ObservationWithBleachingStatus) =>
+    recordType === 'lit' ? Number(length) : 1
+  const sumWeights = (weighedObservations: ObservationWithBleachingStatus[]) =>
+    weighedObservations.reduce((total, observation) => total + getWeight(observation), 0)
+
+  const observationsWithStatus = observations.filter(
+    ({ attribute, bleaching_status: bleachingStatus }) =>
+      coralAttributeIds.has(attribute) && (bleachingStatus ?? null) !== null,
+  )
+  const totalWeight = sumWeights(observationsWithStatus)
+
+  return BLEACHED_STATUSES.map(({ id, translationKey }) => {
+    const statusWeight = sumWeights(
+      observationsWithStatus.filter(
+        ({ bleaching_status: bleachingStatus }) => bleachingStatus === id,
+      ),
+    )
+
+    return {
+      id,
+      translationKey,
+      percent: roundToOneDecimal(totalWeight ? (statusWeight / totalWeight) * 100 : 0),
+    }
+  })
+}

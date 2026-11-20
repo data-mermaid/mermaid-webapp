@@ -1,7 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useId, useMemo, useState } from 'react'
+import { styled } from 'styled-components'
 import { roundToOneDecimal } from '../library/numbers/roundToOneDecimal'
 import { sortArrayByObjectKey } from '../library/arrays/sortArrayByObjectKey'
 import { ObservationsSummaryStats, Td, Th, Tr } from './generic/Table/table'
+import { ButtonThatLooksLikeLink } from './generic/buttons'
+import { IconDown, IconUp } from './icons'
+import { CoralAttributeIdsByType, getBleachedStatusPercents } from '../library/bleachingStatus'
 import { useTranslation } from 'react-i18next'
 import { InputOption } from '../App/mermaidData/mermaidDataTypes'
 
@@ -11,6 +15,7 @@ interface BenthicAttribute extends InputOption {
 
 interface Observation {
   attribute: string
+  bleaching_status?: number | null
   growth_form: string
   id: string
   length?: number //LIT records
@@ -27,8 +32,64 @@ interface CategoryStat {
 
 interface BenthicPitLitObservationSummaryStatsProps {
   benthicAttributeSelectOptions: BenthicAttribute[]
+  coralAttributeIdsByType?: CoralAttributeIdsByType
+  includeBleaching?: boolean
   observations: Observation[]
   recordType: 'pit' | 'lit'
+}
+
+const CoralTypeToggle = styled(ButtonThatLooksLikeLink)`
+  padding: 0;
+  font-weight: inherit;
+`
+
+interface BleachingCoralTypeRowsProps {
+  coralAttributeIds: Set<string>
+  isOpenOnLoad: boolean
+  label: string
+  observations: Observation[]
+  recordType: 'pit' | 'lit'
+}
+
+const BleachingCoralTypeRows = ({
+  coralAttributeIds,
+  isOpenOnLoad,
+  label,
+  observations,
+  recordType,
+}: BleachingCoralTypeRowsProps) => {
+  const { t } = useTranslation()
+  const [isOpen, setIsOpen] = useState(isOpenOnLoad)
+  const statusRowsId = useId()
+
+  return (
+    <>
+      <tbody>
+        <Tr>
+          <Th colSpan={2}>
+            <CoralTypeToggle
+              type="button"
+              aria-expanded={isOpen}
+              aria-controls={statusRowsId}
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {label} {isOpen ? <IconUp /> : <IconDown />}
+            </CoralTypeToggle>
+          </Th>
+        </Tr>
+      </tbody>
+      <tbody id={statusRowsId} hidden={!isOpen}>
+        {getBleachedStatusPercents(observations, coralAttributeIds, recordType).map(
+          ({ id, translationKey, percent }) => (
+            <Tr key={id}>
+              <Th>{`% ${t(translationKey)}`}</Th>
+              <Td>{percent}</Td>
+            </Tr>
+          ),
+        )}
+      </tbody>
+    </>
+  )
 }
 
 // TopLevelCategory = TLC
@@ -37,6 +98,8 @@ interface BenthicPitLitObservationSummaryStatsProps {
 /** These observation calculations are based on the observations provided in the table for on-the-fly user visualization of the total observations given so far. The total length of all observations is checked against the form recorded survey length in the API on validation**/
 const BenthicPitLitObservationSummaryStats = ({
   benthicAttributeSelectOptions,
+  coralAttributeIdsByType = undefined,
+  includeBleaching = false,
   observations,
   recordType,
 }: BenthicPitLitObservationSummaryStatsProps) => {
@@ -107,6 +170,9 @@ const BenthicPitLitObservationSummaryStats = ({
   return (
     <ObservationsSummaryStats>
       <tbody>
+        <Tr>
+          <Th colSpan={2}>{t('observations.benthic_cover_heading')}</Th>
+        </Tr>
         {observationCategoryStats.map((occurrence: CategoryStat) => {
           return (
             <Tr key={occurrence.topLevelCategory}>
@@ -116,6 +182,29 @@ const BenthicPitLitObservationSummaryStats = ({
           )
         })}
       </tbody>
+      {includeBleaching && coralAttributeIdsByType ? (
+        <>
+          <tbody>
+            <Tr>
+              <Th colSpan={2}>{t('observations.bleaching_summary_heading')}</Th>
+            </Tr>
+          </tbody>
+          <BleachingCoralTypeRows
+            coralAttributeIds={coralAttributeIdsByType.hardCoral}
+            isOpenOnLoad={true}
+            label={t('observations.hard_coral')}
+            observations={observations}
+            recordType={recordType}
+          />
+          <BleachingCoralTypeRows
+            coralAttributeIds={coralAttributeIdsByType.softCoral}
+            isOpenOnLoad={false}
+            label={t('observations.soft_coral')}
+            observations={observations}
+            recordType={recordType}
+          />
+        </>
+      ) : null}
     </ObservationsSummaryStats>
   )
 }

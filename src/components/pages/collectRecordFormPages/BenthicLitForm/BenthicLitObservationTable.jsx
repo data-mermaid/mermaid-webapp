@@ -60,6 +60,7 @@ const BenthicLitObservationsTable = ({
   benthicAttributeSelectOptions,
   choices,
   coralAttributeIds,
+  coralAttributeIdsByType,
   collectRecord = undefined,
   formik,
   ignoreObservationValidations,
@@ -427,6 +428,8 @@ const BenthicLitObservationsTable = ({
             </ButtonPrimary>
             <BenthicPitLitObservationSummaryStats
               benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+              coralAttributeIdsByType={coralAttributeIdsByType}
+              includeBleaching={isBleachingOn}
               observations={observationsState}
               recordType={'lit'}
             />
@@ -442,6 +445,10 @@ BenthicLitObservationsTable.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   coralAttributeIds: PropTypes.instanceOf(Set).isRequired,
+  coralAttributeIdsByType: PropTypes.shape({
+    hardCoral: PropTypes.instanceOf(Set).isRequired,
+    softCoral: PropTypes.instanceOf(Set).isRequired,
+  }).isRequired,
   collectRecord: benthicPitRecordPropType,
   formik: PropTypes.shape({
     values: PropTypes.shape({
