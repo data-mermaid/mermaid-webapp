@@ -6,7 +6,7 @@ import { links } from '../../../link_constants'
 import { formikPropType } from '../../../library/formik/formikPropType'
 import { observationsReducerPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import {
-  countStatusesLostOnTurnOff,
+  countBleachedStatuses,
   INCLUDE_BLEACHING_NO,
   INCLUDE_BLEACHING_YES,
 } from '../../../library/bleachingStatus'
@@ -32,7 +32,7 @@ const IncludeBleachingInput = ({
   const [observationsState, observationsDispatch] = observationsReducer
   const [isTurnOffModalOpen, setIsTurnOffModalOpen] = useState(false)
   const selectRef = useRef(null)
-  const lostStatusCount = countStatusesLostOnTurnOff(observationsState, coralAttributeIds)
+  const bleachedStatusCount = countBleachedStatuses(observationsState)
 
   const validationProperties = getValidationPropertiesForInput(
     validationsApiData?.include_bleaching,
@@ -56,7 +56,7 @@ const IncludeBleachingInput = ({
   const handleChange = (event) => {
     const newValue = event.target.value
 
-    if (newValue === INCLUDE_BLEACHING_NO && lostStatusCount > 0) {
+    if (newValue === INCLUDE_BLEACHING_NO && bleachedStatusCount > 0) {
       setIsTurnOffModalOpen(true)
 
       return
@@ -119,7 +119,7 @@ const IncludeBleachingInput = ({
         }
       />
       <TurnOffBleachingModal
-        lostStatusCount={lostStatusCount}
+        bleachedStatusCount={bleachedStatusCount}
         isOpen={isTurnOffModalOpen}
         onConfirm={confirmTurnOff}
         onDismiss={closeTurnOffModal}

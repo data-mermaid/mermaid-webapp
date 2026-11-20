@@ -242,8 +242,12 @@ describe('getValidationMessage for bleaching on Benthic PIT and LIT', () => {
     const getMessage = (count: number) =>
       getValidationMessage({ code: 'missing_bleaching_status', context: { count } })
 
-    expect(getMessage(1)).toBe('Bleaching not recorded on 1 coral observation')
-    expect(getMessage(3)).toBe('Bleaching not recorded on 3 coral observations')
+    expect(getMessage(1)).toBe(
+      '1 coral observation has no bleaching status. It is left out of the bleaching percentages.',
+    )
+    expect(getMessage(3)).toBe(
+      '3 coral observations have no bleaching status. They are left out of the bleaching percentages.',
+    )
   })
 })
 

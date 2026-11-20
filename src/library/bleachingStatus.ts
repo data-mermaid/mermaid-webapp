@@ -112,17 +112,11 @@ export const getBleachingStatusAfterAttributeChange = (
   return coralAttributeIds.has(attribute) ? (bleachingStatus ?? null) : BLEACHING_STATUS_NORMAL
 }
 
-/**
- * Coral observations that switching bleaching off would change: any status but Normal. NA counts
- * because switching back on fills every coral observation with no status with Normal.
- */
-export const countStatusesLostOnTurnOff = (
-  observations: ObservationWithBleachingStatus[],
-  coralAttributeIds: Set<string>,
-) =>
+/** Observations that switching bleaching off would lose a bleached status from: Pale or beyond. */
+export const countBleachedStatuses = (observations: ObservationWithBleachingStatus[]) =>
   observations.filter(
-    ({ attribute, bleaching_status: bleachingStatus }) =>
-      coralAttributeIds.has(attribute) && bleachingStatus !== BLEACHING_STATUS_NORMAL,
+    ({ bleaching_status: bleachingStatus }) =>
+      (bleachingStatus ?? BLEACHING_STATUS_NORMAL) !== BLEACHING_STATUS_NORMAL,
   ).length
 
 /** Clears every observation's status, for a sample unit that does not include bleaching. */
@@ -139,7 +133,8 @@ const BLEACHED_STATUSES = BLEACHING_STATUSES.filter(({ id }) => id !== BLEACHING
 
 /**
  * Each bleached status's share of one coral type's observations that have a status, so NA is
- * left out. PIT counts observations; LIT weights them by length, as % cover does.
+ * left out. PIT counts observations; LIT weights them by length, as % cover does. Null when no
+ * observation of the type has a status, since there is nothing to take a share of.
  */
 export const getBleachedStatusPercents = (
   observations: ObservationWithBleachingStatus[],
@@ -155,6 +150,10 @@ export const getBleachedStatusPercents = (
     ({ attribute, bleaching_status: bleachingStatus }) =>
       coralAttributeIds.has(attribute) && (bleachingStatus ?? null) !== null,
   )
+  if (!observationsWithStatus.length) {
+    return null
+  }
+
   const totalWeight = sumWeights(observationsWithStatus)
 
   return BLEACHED_STATUSES.map(({ id, translationKey }) => {

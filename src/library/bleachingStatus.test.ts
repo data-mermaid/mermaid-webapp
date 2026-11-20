@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   BLEACHING_STATUS_NORMAL,
   clearBleachingStatuses,
-  countStatusesLostOnTurnOff,
+  countBleachedStatuses,
   fillBleachingStatuses,
   getBleachingStatusAfterAttributeChange,
   getBleachedStatusPercents,
@@ -110,20 +110,17 @@ describe('getBleachingStatusAfterAttributeChange', () => {
   })
 })
 
-describe('countStatusesLostOnTurnOff', () => {
-  it('counts coral statuses other than Normal, NA included', () => {
+describe('countBleachedStatuses', () => {
+  it('counts statuses above Normal, so neither Normal nor NA counts', () => {
     expect(
-      countStatusesLostOnTurnOff(
-        [
-          { attribute: 'acropora', bleaching_status: BLEACHING_STATUS_NORMAL },
-          { attribute: 'acropora', bleaching_status: 1 },
-          { attribute: 'acropora', bleaching_status: 4 },
-          { attribute: 'acropora', bleaching_status: null },
-          { attribute: 'sand' },
-        ],
-        new Set(['acropora']),
-      ),
-    ).toBe(3)
+      countBleachedStatuses([
+        { attribute: 'acropora', bleaching_status: BLEACHING_STATUS_NORMAL },
+        { attribute: 'acropora', bleaching_status: 1 },
+        { attribute: 'acropora', bleaching_status: 4 },
+        { attribute: 'acropora', bleaching_status: null },
+        { attribute: 'sand' },
+      ]),
+    ).toBe(2)
   })
 })
 
@@ -155,13 +152,17 @@ describe('getBleachedStatusPercents', () => {
       ],
       ['0.0', '25.0', '0.0', '0.0'],
     ],
-    [
-      'a coral type with no status recorded reads 0.0',
-      'pit',
-      [{ attribute: 'acropora', bleaching_status: null }],
-      ['0.0', '0.0', '0.0', '0.0'],
-    ],
   ] as const)('%s', (_, recordType, observations, expectedPercents) => {
     expect(getPercents(observations, recordType)).toEqual(expectedPercents)
+  })
+
+  it('gives nothing for a coral type with no status recorded', () => {
+    expect(
+      getBleachedStatusPercents(
+        [{ attribute: 'acropora', bleaching_status: null }],
+        hardCoral,
+        'pit',
+      ),
+    ).toBeNull()
   })
 })

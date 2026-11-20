@@ -97,13 +97,13 @@ describe('Benthic PIT bleaching', () => {
     ).toEqual([null, null, null, 3])
   })
 
-  test('No asks first when a coral row is NA, and Cancel keeps Yes and the statuses', async () => {
+  test('No asks first when a row is bleached, and Cancel keeps Yes and the statuses', async () => {
     const { user } = await renderBenthicPitRecord()
 
     await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
     await user.click(screen.getByTestId('add-observation-row'))
     await chooseBenthicAttribute(user, 3, 'acro', 'Acropora')
-    await user.selectOptions(screen.getAllByTestId('bleaching-status-select')[3], '')
+    await user.selectOptions(screen.getAllByTestId('bleaching-status-select')[3], '1')
 
     await user.selectOptions(screen.getByTestId('include-bleaching-select'), 'false')
 
@@ -118,7 +118,7 @@ describe('Benthic PIT bleaching', () => {
     expect(screen.getByTestId('include-bleaching-select')).toHaveDisplayValue('yes')
     expect(screen.getByTestId('include-bleaching-select')).toHaveFocus()
     expect(screen.getAllByTestId('bleaching-status-select')[3]).toHaveDisplayValue(
-      'bleaching_status.na',
+      'bleaching_status.pale',
     )
   })
 
@@ -150,12 +150,13 @@ describe('Benthic PIT bleaching', () => {
     expect(savedRecord.data.obs_benthic_pits[3].bleaching_status).toBeNull()
   })
 
-  test('No switches off straight away when every coral row is Normal', async () => {
+  test('No switches off straight away when every coral row is Normal or NA', async () => {
     const { user } = await renderBenthicPitRecord()
 
     await user.selectOptions(await screen.findByTestId('include-bleaching-select'), 'true')
     await user.click(screen.getByTestId('add-observation-row'))
     await chooseBenthicAttribute(user, 3, 'acro', 'Acropora')
+    await user.selectOptions(screen.getAllByTestId('bleaching-status-select')[3], '')
 
     await user.selectOptions(screen.getByTestId('include-bleaching-select'), 'false')
 

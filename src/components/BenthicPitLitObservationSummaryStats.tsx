@@ -43,20 +43,22 @@ const CoralTypeToggle = styled(ButtonThatLooksLikeLink)`
   font-weight: inherit;
 `
 
+interface BleachedStatusPercent {
+  id: number
+  translationKey: string
+  percent: string
+}
+
 interface BleachingCoralTypeRowsProps {
-  coralAttributeIds: Set<string>
   isOpenOnLoad: boolean
   label: string
-  observations: Observation[]
-  recordType: 'pit' | 'lit'
+  statusPercents: BleachedStatusPercent[]
 }
 
 const BleachingCoralTypeRows = ({
-  coralAttributeIds,
   isOpenOnLoad,
   label,
-  observations,
-  recordType,
+  statusPercents,
 }: BleachingCoralTypeRowsProps) => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(isOpenOnLoad)
@@ -79,14 +81,12 @@ const BleachingCoralTypeRows = ({
         </Tr>
       </tbody>
       <tbody id={statusRowsId} hidden={!isOpen}>
-        {getBleachedStatusPercents(observations, coralAttributeIds, recordType).map(
-          ({ id, translationKey, percent }) => (
-            <Tr key={id}>
-              <Th>{`% ${t(translationKey)}`}</Th>
-              <Td>{percent}</Td>
-            </Tr>
-          ),
-        )}
+        {statusPercents.map(({ id, translationKey, percent }) => (
+          <Tr key={id}>
+            <Th>{`% ${t(translationKey)}`}</Th>
+            <Td>{percent}</Td>
+          </Tr>
+        ))}
       </tbody>
     </>
   )
@@ -167,6 +167,13 @@ const BenthicPitLitObservationSummaryStats = ({
     return sortArrayByObjectKey(topLevelCategoryStats, 'topLevelCategory')
   }, [observations, benthicAttributeSelectOptions, recordType, missingBenthicAttributeLabel])
 
+  const getCoralTypePercents = (coralAttributeIds: Set<string>) =>
+    includeBleaching && coralAttributeIdsByType
+      ? getBleachedStatusPercents(observations, coralAttributeIds, recordType)
+      : null
+  const hardCoralPercents = getCoralTypePercents(coralAttributeIdsByType?.hardCoral)
+  const softCoralPercents = getCoralTypePercents(coralAttributeIdsByType?.softCoral)
+
   return (
     <ObservationsSummaryStats>
       <tbody>
@@ -182,27 +189,27 @@ const BenthicPitLitObservationSummaryStats = ({
           )
         })}
       </tbody>
-      {includeBleaching && coralAttributeIdsByType ? (
+      {hardCoralPercents || softCoralPercents ? (
         <>
           <tbody>
             <Tr>
               <Th colSpan={2}>{t('observations.bleaching_summary_heading')}</Th>
             </Tr>
           </tbody>
-          <BleachingCoralTypeRows
-            coralAttributeIds={coralAttributeIdsByType.hardCoral}
-            isOpenOnLoad={true}
-            label={t('observations.hard_coral')}
-            observations={observations}
-            recordType={recordType}
-          />
-          <BleachingCoralTypeRows
-            coralAttributeIds={coralAttributeIdsByType.softCoral}
-            isOpenOnLoad={false}
-            label={t('observations.soft_coral')}
-            observations={observations}
-            recordType={recordType}
-          />
+          {hardCoralPercents ? (
+            <BleachingCoralTypeRows
+              isOpenOnLoad={true}
+              label={t('observations.hard_coral')}
+              statusPercents={hardCoralPercents}
+            />
+          ) : null}
+          {softCoralPercents ? (
+            <BleachingCoralTypeRows
+              isOpenOnLoad={false}
+              label={t('observations.soft_coral')}
+              statusPercents={softCoralPercents}
+            />
+          ) : null}
         </>
       ) : null}
     </ObservationsSummaryStats>
