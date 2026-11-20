@@ -52,8 +52,7 @@ const IncludeBleachingInput = ({
     markBleachingValidationsStale()
   }
 
-  // Switching off only asks first when it would remove a status the diver chose. Until they
-  // confirm, formik keeps Yes, so the select does not move.
+  // Formik stays at Yes until the diver confirms, so the select doesn't move behind the modal.
   const handleChange = (event) => {
     const newValue = event.target.value
 

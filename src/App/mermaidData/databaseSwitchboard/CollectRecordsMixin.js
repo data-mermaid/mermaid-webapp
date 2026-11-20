@@ -32,7 +32,6 @@ const toWarning = (validation) => ({ ...validation, status: 'warning' })
 // warning comes back greyed, since the value it judged has changed.
 const toStale = (validation) => ({ ...validation, isStale: true })
 
-// The API validator that judges each Benthic PIT or LIT observation's bleaching status.
 const BLEACHING_STATUS_VALIDATOR_NAME = 'bleaching_status_validator'
 const INCLUDE_BLEACHING_VALIDATION_PATH = 'validations.results.data.include_bleaching'
 
@@ -641,10 +640,11 @@ const CollectRecordsMixin = (Base) =>
       return this._mapObservationValidations(recordId, observationId, toStale)
     }
 
-    // Switching "Include bleaching observations" changes what the field's result and every row's
-    // bleaching result judged. They are marked in one write, because separate writes for the field
-    // and each row would overwrite each other. The record-level count of coral rows with no status
-    // stays as it is, like every record-level result, until the next Validate.
+    /**
+     * Marks the include_bleaching result and every row's bleaching result stale, in one write:
+     * separate writes for the field and each row would overwrite each other. Record-level results
+     * stay until the next Validate, as they do for any edit.
+     */
     markBleachingValidationsStale = async function markBleachingValidationsStale({ recordId }) {
       if (!recordId) {
         throw new Error('markBleachingValidationsStale requires a recordId parameter')

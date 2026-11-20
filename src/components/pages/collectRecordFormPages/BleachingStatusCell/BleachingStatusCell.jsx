@@ -36,7 +36,6 @@ const BleachingStatusCell = ({ bleachingStatus, cellMarkProps, isCoral, onChange
 
 BleachingStatusCell.propTypes = {
   bleachingStatus: PropTypes.number,
-  // From getCellMarkProps: outlines the cell when a validation message is about it.
   cellMarkProps: PropTypes.shape({ 'data-validation-mark': PropTypes.string }).isRequired,
   isCoral: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
