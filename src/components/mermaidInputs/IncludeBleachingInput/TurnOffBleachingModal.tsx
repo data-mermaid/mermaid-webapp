@@ -5,14 +5,14 @@ import { ButtonCaution, ButtonSecondary } from '../../generic/buttons'
 import Modal, { RightFooter } from '../../generic/Modal'
 
 interface TurnOffBleachingModalProps {
-  bleachedStatusCount: number
+  lostStatusCount: number
   isOpen: boolean
   onConfirm: () => void
   onDismiss: () => void
 }
 
 const TurnOffBleachingModal = ({
-  bleachedStatusCount,
+  lostStatusCount,
   isOpen,
   onConfirm,
   onDismiss,
@@ -25,7 +25,7 @@ const TurnOffBleachingModal = ({
       testId="turn-off-bleaching-modal"
       isOpen={isOpen}
       onDismiss={onDismiss}
-      mainContent={t('observations.turn_off_bleaching_body', { count: bleachedStatusCount })}
+      mainContent={t('observations.turn_off_bleaching_body', { count: lostStatusCount })}
       footerContent={
         <RightFooter>
           <ButtonSecondary type="button" onClick={onDismiss}>

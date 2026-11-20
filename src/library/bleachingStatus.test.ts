@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   BLEACHING_STATUS_NORMAL,
   clearBleachingStatuses,
-  countBleachedStatuses,
+  countStatusesLostOnTurnOff,
   fillBleachingStatuses,
   getBleachingStatusAfterAttributeChange,
   getCoralAttributeIds,
@@ -112,16 +112,19 @@ describe('getBleachingStatusAfterAttributeChange', () => {
   })
 })
 
-describe('countBleachedStatuses', () => {
-  it('counts statuses above Normal and nothing else', () => {
+describe('countStatusesLostOnTurnOff', () => {
+  it('counts coral statuses other than Normal, Not recorded included', () => {
     expect(
-      countBleachedStatuses([
-        { attribute: 'acropora', bleaching_status: BLEACHING_STATUS_NORMAL },
-        { attribute: 'acropora', bleaching_status: 1 },
-        { attribute: 'acropora', bleaching_status: 4 },
-        { attribute: 'acropora', bleaching_status: null },
-        { attribute: 'sand' },
-      ]),
-    ).toBe(2)
+      countStatusesLostOnTurnOff(
+        [
+          { attribute: 'acropora', bleaching_status: BLEACHING_STATUS_NORMAL },
+          { attribute: 'acropora', bleaching_status: 1 },
+          { attribute: 'acropora', bleaching_status: 4 },
+          { attribute: 'acropora', bleaching_status: null },
+          { attribute: 'sand' },
+        ],
+        new Set(['acropora']),
+      ),
+    ).toBe(3)
   })
 })
