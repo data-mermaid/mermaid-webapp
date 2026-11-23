@@ -1121,6 +1121,7 @@
     "mermaid_data_save_online_sync_error": "Le {{dataType}} a été enregistré sur votre ordinateur, mais pas en ligne.",
     "mermaid_data_save_success_offline": "Le {{dataType}} a été enregistré sur votre ordinateur.",
     "mermaid_data_save_success_online": "Le {{dataType}} a été enregistré sur votre ordinateur et en ligne.",
+    "new_version_available": "<p>Une nouvelle version de MERMAID est disponible.</p> <button>Recharger</button>",
     "unsaved_work_confirmation": "Êtes-vous sûr de vouloir quitter cette page ? Vous avez des modifications non enregistrées."
   },
   "toggle_label_visibility": "Basculer la visibilité des étiquettes",

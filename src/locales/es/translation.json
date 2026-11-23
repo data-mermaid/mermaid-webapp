@@ -1121,6 +1121,7 @@
     "mermaid_data_save_online_sync_error": "El {{dataType}} se ha guardado en su computadora, pero no en línea.",
     "mermaid_data_save_success_offline": "El {{dataType}} se ha guardado en su computadora.",
     "mermaid_data_save_success_online": "El {{dataType}} Se ha guardado en su computadora y en línea.",
+    "new_version_available": "<p>Hay una nueva versión de MERMAID disponible.</p> <button>Recargar</button>",
     "unsaved_work_confirmation": "¿Seguro que quieres salir de esta página? Tienes cambios sin guardar."
   },
   "toggle_label_visibility": "Activar o desactivar la visibilidad de la etiqueta",
@@ -1268,7 +1269,7 @@
     "edited_revalidate": "Editado. Guarda y valida de nuevo para comprobarlo.",
     "hide": "Esconder",
     "passed": "Validación aprobada",
-    "show": "Espectáculo",
+    "show": "Mostrar",
     "validations": "Validaciones"
   },
   "view_fish_info": "Ver información sobre el nombre del pez",
