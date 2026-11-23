@@ -20,7 +20,7 @@ const IntervalCheckbox: React.FC<IntervalCheckboxProps> = ({ isChecked, handleCh
         onChange={(event) => handleChange(event.target.checked)}
         data-testid="interval-start-sync-checkbox"
       />
-      <label htmlFor="checkbox-sync">{t('use_interval_size_as_start')}</label>
+      {t('use_interval_size_as_start')}
     </CheckBoxContainer>
   )
 }
