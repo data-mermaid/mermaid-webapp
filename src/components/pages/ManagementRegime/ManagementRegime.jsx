@@ -14,7 +14,7 @@ import {
   getIsUserReadOnlyForProject,
   getIsUserAdminForProject,
 } from '../../../App/currentUserProfileHelpers'
-import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
+import { getManagementRegimeInitialValues, NOT_REPORTED_COMPLIANCE_VALUE } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2, ItalicizedInfo } from '../../generic/text'
@@ -208,10 +208,14 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
         <InputSelectWithLabelAndValidation
           label={t('management_regimes.compliance')}
           id="compliance"
-          required={false}
+          required
           testId="compliance"
           options={managementComplianceOptions}
           {...formik.getFieldProps('compliance')}
+          validationType={
+            formik.errors.compliance && formik.touched.compliance ? 'error' : null
+          }
+          validationMessages={formik.errors.compliance}
           helperText={t('management_regimes.rules_effectiveness')}
         />
         <TextareaWithLabelAndValidation
@@ -303,7 +307,8 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
             const sortedManagementComplianceOptions = sortManagementComplianceChoices([
               ...getOptions(choicesResponse.managementcompliances.data),
-              { label: notReportedCompliance, value: '' },
+              // UI-only option - converted to null on save, so it never reaches the database.
+              { label: notReportedCompliance, value: NOT_REPORTED_COMPLIANCE_VALUE },
             ])
 
             setManagementPartyOptions(getOptions(choicesResponse.managementparties.data))
@@ -342,9 +347,9 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const initialFormValues = useMemo(() => {
     return (
       getPersistedUnsavedFormikData() ??
-      getManagementRegimeInitialValues(managementRegimeBeingEdited)
+      getManagementRegimeInitialValues(managementRegimeBeingEdited, isNewManagementRegime)
     )
-  }, [getPersistedUnsavedFormikData, managementRegimeBeingEdited])
+  }, [getPersistedUnsavedFormikData, managementRegimeBeingEdited, isNewManagementRegime])
 
   const formik = useFormik({
     initialValues: initialFormValues,
@@ -381,7 +386,9 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         gear_restriction,
         species_restriction,
         access_restriction,
-        compliance,
+        // Convert the "not reported" placeholder to null here - this is the only point
+        // where it leaves the form, so the placeholder never reaches the database.
+        compliance: compliance && compliance !== NOT_REPORTED_COMPLIANCE_VALUE ? compliance : null,
         notes,
       }
 
@@ -462,6 +469,11 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
       if (!values.name) {
         errors.name = [{ code: t('forms.required_field'), id: 'Required' }]
+      }
+
+      // "Not reported" is truthy and passes - only "Choose..." (empty string) blocks save.
+      if (!values.compliance) {
+        errors.compliance = [{ code: t('forms.required_field'), id: 'Required' }]
       }
 
       if (noPartialRestrictionRulesSelected) {

@@ -155,3 +155,118 @@ test('Management Regime component - form inputs are initialized with the correct
   expect(screen.getByTestId('compliance-select')).toHaveDisplayValue('none')
   expect(screen.getByTestId('notes-textarea')).toHaveValue('Some notes')
 })
+
+test('New Management Regime - compliance defaults to "Choose..."', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  renderAuthenticatedOnline(
+    <Routes>
+      <Route
+        path="/projects/:projectId/management-regimes/new"
+        element={<ManagementRegime isNewManagementRegime={true} />}
+      />
+    </Routes>,
+    {
+      initialEntries: ['/projects/5/management-regimes/new'],
+      dexiePerUserDataInstance,
+      isSyncInProgressOverride: true,
+    },
+  )
+
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
+
+  // empty value = "Choose..." placeholder option
+  expect(await screen.findByTestId('compliance-select')).toHaveValue('')
+})
+
+test('Edit Management Regime - null compliance is shown as "not reported"', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  // Management Regime id "1" has compliance: null in the mock data
+  renderAuthenticatedOnline(
+    <Routes>
+      <Route
+        path="/projects/:projectId/management-regimes/:managementRegimeId"
+        element={<ManagementRegime isNewManagementRegime={false} />}
+      />
+    </Routes>,
+    {
+      initialEntries: ['/projects/5/management-regimes/1'],
+      dexiePerUserDataInstance,
+      isSyncInProgressOverride: true,
+    },
+  )
+
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
+
+  await waitFor(() =>
+    expect(screen.getByTestId('compliance-select')).toHaveValue('not-reported'),
+  )
+})
+
+test('Selecting "not reported" updates the compliance display (bug regression)', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  const { user } = renderAuthenticatedOnline(
+    <Routes>
+      <Route
+        path="/projects/:projectId/management-regimes/new"
+        element={<ManagementRegime isNewManagementRegime={true} />}
+      />
+    </Routes>,
+    {
+      initialEntries: ['/projects/5/management-regimes/new'],
+      dexiePerUserDataInstance,
+      isSyncInProgressOverride: true,
+    },
+  )
+
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
+  const select = await screen.findByTestId('compliance-select')
+  expect(select).toHaveValue('')
+
+  await user.selectOptions(select, 'not-reported')
+
+  expect(select).toHaveValue('not-reported')
+})
+
+test('New Management Regime - "Choose..." blocks save; "not reported" unblocks it', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  const { user } = renderAuthenticatedOnline(
+    <Routes>
+      <Route
+        path="/projects/:projectId/management-regimes/new"
+        element={<ManagementRegime isNewManagementRegime={true} />}
+      />
+    </Routes>,
+    {
+      initialEntries: ['/projects/5/management-regimes/new'],
+      dexiePerUserDataInstance,
+      isSyncInProgressOverride: true,
+    },
+  )
+
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
+
+  // dirty the form by filling name, leaving compliance on "Choose..."
+  await user.type(await screen.findByTestId('name-input'), 'New MR')
+
+  await waitFor(() =>
+    expect(screen.getByTestId('save-button-management-regime-form')).toBeDisabled(),
+  )
+
+  await user.selectOptions(screen.getByTestId('compliance-select'), 'not-reported')
+
+  await waitFor(() =>
+    expect(screen.getByTestId('save-button-management-regime-form')).toBeEnabled(),
+  )
+})
