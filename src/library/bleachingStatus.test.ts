@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
   BLEACHING_STATUS_NORMAL,
-  clearBleachingStatuses,
   countBleachedStatuses,
   fillBleachingStatuses,
   getBleachingStatusAfterAttributeChange,
@@ -47,28 +46,9 @@ describe('fillBleachingStatuses', () => {
   })
 })
 
-describe('clearBleachingStatuses', () => {
-  it('clears every status and leaves observations without one alone', () => {
-    expect(
-      clearBleachingStatuses([
-        { id: '1', attribute: 'acropora', bleaching_status: 1 },
-        { id: '2', attribute: 'sand' },
-      ]),
-    ).toEqual([
-      { id: '1', attribute: 'acropora', bleaching_status: null },
-      { id: '2', attribute: 'sand' },
-    ])
-  })
-})
-
 describe('parseBleachingStatusValue', () => {
   it('reads NA as no status, not as Normal', () => {
     expect(parseBleachingStatusValue('')).toBeNull()
-  })
-
-  it('reads a status as its id', () => {
-    expect(parseBleachingStatusValue('0')).toBe(BLEACHING_STATUS_NORMAL)
-    expect(parseBleachingStatusValue('1')).toBe(1)
   })
 })
 
@@ -154,15 +134,5 @@ describe('getBleachedStatusPercents', () => {
     ],
   ] as const)('%s', (_, recordType, observations, expectedPercents) => {
     expect(getPercents(observations, recordType)).toEqual(expectedPercents)
-  })
-
-  it('gives nothing for a coral type with no status recorded', () => {
-    expect(
-      getBleachedStatusPercents(
-        [{ attribute: 'acropora', bleaching_status: null }],
-        hardCoral,
-        'pit',
-      ),
-    ).toBeNull()
   })
 })

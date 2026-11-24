@@ -103,8 +103,8 @@ const renderRecordWithBleachingResults = () => {
   )
 }
 
-test('Bleaching validation messages show at the field, on the row, and under the observations heading', async () => {
-  renderRecordWithBleachingResults()
+test('Bleaching validation messages show at the field, on the row, and under the observations heading, and confirming No marks the field and row ones as edited since the last Validate', async () => {
+  const { user } = renderRecordWithBleachingResults()
 
   const field = await screen.findByTestId('include-bleaching', {}, { timeout: 10000 })
 
@@ -120,14 +120,7 @@ test('Bleaching validation messages show at the field, on the row, and under the
     ),
   ).toBeInTheDocument()
   expect(screen.queryByText('validations.edited_revalidate')).not.toBeInTheDocument()
-}, 50000)
 
-test('Confirming No marks the bleaching messages on the field and the row as edited since the last Validate', async () => {
-  const { user } = renderRecordWithBleachingResults()
-
-  const field = await screen.findByTestId('include-bleaching', {}, { timeout: 10000 })
-
-  await within(field).findByText('validation_messages.required')
   await user.selectOptions(screen.getByTestId('include-bleaching-select'), 'false')
   await user.click(await screen.findByTestId('turn-off-bleaching-confirm'))
 

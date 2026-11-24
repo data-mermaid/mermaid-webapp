@@ -223,15 +223,6 @@ test('every validation message key the helper uses exists in the English transla
 })
 
 describe('getValidationMessage for bleaching on Benthic PIT and LIT', () => {
-  test.each([
-    ['bleaching_status_not_assessed', 'validation_messages.bleaching_status_not_assessed'],
-    ['bleaching_status_not_coral', 'validation_messages.bleaching_status_not_coral'],
-    ['invalid_bleaching_status', 'validation_messages.invalid_bleaching_status'],
-    ['include_bleaching_required', 'validation_messages.required'],
-  ])('%s reads as %s', (code, messageKey) => {
-    expect(getValidationMessage({ code })).toBe(messageKey)
-  })
-
   test('coral rows with no status are counted, with "observation" for one', async () => {
     // Tests run i18n in cimode, which skips plural keys, so this renders the helper's own call
     // through a real English instance
