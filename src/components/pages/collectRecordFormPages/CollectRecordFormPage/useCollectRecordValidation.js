@@ -316,6 +316,16 @@ const useCollectRecordValidation = ({
     [applyValidationChange, databaseSwitchboardInstance, validationResetText],
   )
 
+  const markBleachingValidationsStale = useCallback(
+    () =>
+      applyValidationChange(
+        (record) =>
+          databaseSwitchboardInstance.markBleachingValidationsStale({ recordId: record.id }),
+        validationResetText,
+      ),
+    [applyValidationChange, databaseSwitchboardInstance, validationResetText],
+  )
+
   const validationSummary = getValidationSummary(
     collectRecordBeingEdited?.validations?.results,
     observationIdsOnPage,
@@ -379,6 +389,7 @@ const useCollectRecordValidation = ({
     ignoreNonObservationFieldValidations,
     ignoreObservationValidations,
     ignoreRecordLevelValidation,
+    markBleachingValidationsStale,
     markFieldValidationsStale,
     markObservationValidationsStale,
     showValidationResult,

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import BenthicPitLitObservationSummaryStats from '../../components/BenthicPitLitObservationSummaryStats'
 
 const benthicAttributeSelectOptions = [
@@ -71,5 +72,80 @@ describe('BenthicPitLitObservationSummaryStats', () => {
       />,
     )
     expect(screen.getByText('100.0')).toBeInTheDocument() // Missing category will be 100.0%
+  })
+
+  it('heads the cover rows Benthic cover and shows no Bleaching section unless bleaching is included', () => {
+    render(
+      <BenthicPitLitObservationSummaryStats
+        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+        coralAttributeIdsByType={{ hardCoral: new Set(['attr1']), softCoral: new Set(['attr2']) }}
+        observations={[{ attribute: 'attr1', growth_form: '', id: '1', bleaching_status: 1 }]}
+        recordType={'pit'}
+      />,
+    )
+
+    expect(screen.getByText('observations.benthic_cover_heading')).toBeInTheDocument()
+    expect(screen.queryByText('observations.bleaching_summary_heading')).not.toBeInTheDocument()
+  })
+
+  it('opens Hard coral to its bleached statuses on load, and opens Soft coral on request', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <BenthicPitLitObservationSummaryStats
+        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+        coralAttributeIdsByType={{ hardCoral: new Set(['attr1']), softCoral: new Set(['attr2']) }}
+        includeBleaching={true}
+        observations={[
+          { attribute: 'attr1', growth_form: '', id: '1', bleaching_status: 1 },
+          { attribute: 'attr2', growth_form: '', id: '2', bleaching_status: 0 },
+        ]}
+        recordType={'pit'}
+      />,
+    )
+
+    expect(screen.getByText('observations.bleaching_summary_heading')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /observations.hard_coral/ })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    )
+    expect(screen.getByRole('row', { name: '% bleaching_status.pale 100.0' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /observations.soft_coral/ }))
+
+    expect(screen.getByRole('row', { name: '% bleaching_status.pale 0.0' })).toBeInTheDocument()
+  })
+
+  it('leaves out a coral type with no status recorded, and the whole section when neither has one', () => {
+    const coralAttributeIdsByType = { hardCoral: new Set(['attr1']), softCoral: new Set(['attr2']) }
+    const { rerender } = render(
+      <BenthicPitLitObservationSummaryStats
+        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+        coralAttributeIdsByType={coralAttributeIdsByType}
+        includeBleaching={true}
+        observations={[
+          { attribute: 'attr1', growth_form: '', id: '1', bleaching_status: 1 },
+          { attribute: 'attr2', growth_form: '', id: '2', bleaching_status: null },
+        ]}
+        recordType={'pit'}
+      />,
+    )
+
+    expect(screen.getByRole('button', { name: /observations.hard_coral/ })).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /observations.soft_coral/ }),
+    ).not.toBeInTheDocument()
+
+    rerender(
+      <BenthicPitLitObservationSummaryStats
+        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+        coralAttributeIdsByType={coralAttributeIdsByType}
+        includeBleaching={true}
+        observations={[{ attribute: 'attr1', growth_form: '', id: '1', bleaching_status: null }]}
+        recordType={'pit'}
+      />,
+    )
+
+    expect(screen.queryByText('observations.bleaching_summary_heading')).not.toBeInTheDocument()
   })
 })

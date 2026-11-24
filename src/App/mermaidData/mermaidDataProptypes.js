@@ -229,10 +229,12 @@ export const benthicPitRecordPropType = PropTypes.shape({
   data: PropTypes.shape({
     interval_size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     inetrval_start: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    include_bleaching: PropTypes.bool,
     benthic_transect: _benthicTransectPropType,
     obs_benthic_pits: PropTypes.arrayOf(
       PropTypes.shape({
         attribute: PropTypes.string,
+        bleaching_status: PropTypes.number,
         growth_form: PropTypes.string,
         id: PropTypes.string,
         interval: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { describe, expect, test, vi } from 'vitest'
-import i18next from 'i18next'
+import i18next, { createInstance } from 'i18next'
 import i18n from '../../i18n'
 import en from '../locales/en/translation.json'
 import { getMessageColumns, getValidationMessage } from './validationMessageHelpers'
@@ -220,6 +220,26 @@ test('every validation message key the helper uses exists in the English transla
 
   expect(usedKeys.length).toBeGreaterThan(50)
   expect(missing).toEqual([])
+})
+
+describe('getValidationMessage for bleaching on Benthic PIT and LIT', () => {
+  test('coral rows with no status are counted, with "observation" for one', async () => {
+    // Tests run i18n in cimode, which skips plural keys, so this renders the helper's own call
+    // through a real English instance
+    const english = createInstance()
+    await english.init({ lng: 'en', resources: { en: { translation: en } } })
+    vi.spyOn(i18n, 't').mockImplementation(english.t.bind(english))
+
+    const getMessage = (count: number) =>
+      getValidationMessage({ code: 'missing_bleaching_status', context: { count } })
+
+    expect(getMessage(1)).toBe(
+      '1 coral observation has no bleaching status. It is left out of the bleaching percentages.',
+    )
+    expect(getMessage(3)).toBe(
+      '3 coral observations have no bleaching status. They are left out of the bleaching percentages.',
+    )
+  })
 })
 
 describe('getMessageColumns', () => {

@@ -33,6 +33,7 @@ const InputNoRowSelectWithLabelAndValidation = ({
   updateValueAndResetValidationForDuplicateWarning = () => {},
   displayViewLink = false,
   showHelperText = false,
+  isEmptyOptionShown = true,
   testId = undefined,
   ...restOfProps
 }) => {
@@ -87,7 +88,7 @@ const InputNoRowSelectWithLabelAndValidation = ({
             value={value}
             {...restOfProps}
           >
-            <option value="">{`${t('choose')}...`}</option>
+            {isEmptyOptionShown ? <option value="">{`${t('choose')}...`}</option> : null}
             {optionList}
           </Select>
 
@@ -121,6 +122,7 @@ InputNoRowSelectWithLabelAndValidation.propTypes = {
   displayViewLink: PropTypes.bool,
   helperText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   id: PropTypes.string.isRequired,
+  isEmptyOptionShown: PropTypes.bool,
   required: PropTypes.bool.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
