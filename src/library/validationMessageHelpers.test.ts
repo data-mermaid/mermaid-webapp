@@ -1,9 +1,17 @@
 import type { ReactElement } from 'react'
 import { describe, expect, test, vi } from 'vitest'
-import i18next from 'i18next'
+import { createInstance } from 'i18next'
 import i18n from '../../i18n'
 import en from '../locales/en/translation.json'
 import { getMessageColumns, getValidationMessage } from './validationMessageHelpers'
+
+// Tests run i18n in cimode, which skips plural keys and formatters, so this renders the
+// helper's own call through a real English instance
+const renderThroughRealEnglish = async () => {
+  const english = createInstance()
+  await english.init({ lng: 'en', resources: { en: { translation: en } } })
+  vi.spyOn(i18n, 't').mockImplementation(english.t.bind(english))
+}
 
 describe('getValidationMessage for required', () => {
   test('names the observation column the API validator name carries', () => {
@@ -128,11 +136,7 @@ describe('getValidationMessage for observation counts and renamed messages', () 
   })
 
   test('missing quadrat numbers read "number" for one quadrat and list several with "and"', async () => {
-    // Tests run i18n in cimode, which skips plural keys and formatters, so this renders the
-    // helper's own call through a real English instance
-    const english = i18next.createInstance()
-    await english.init({ lng: 'en', resources: { en: { translation: en } } })
-    vi.spyOn(i18n, 't').mockImplementation(english.t.bind(english))
+    await renderThroughRealEnglish()
 
     const getMessage = (numbers: number[]) =>
       getValidationMessage({
@@ -143,6 +147,40 @@ describe('getValidationMessage for observation counts and renamed messages', () 
     expect(getMessage([2])).toBe('Missing quadrat number 2')
     expect(getMessage([2, 4])).toBe('Missing quadrat numbers 2 and 4')
     expect(getMessage([2, 4, 6])).toBe('Missing quadrat numbers 2, 4, and 6')
+  })
+
+  test('missing intervals read "interval" for one interval and list several with "and"', async () => {
+    await renderThroughRealEnglish()
+
+    const getMessage = (intervals: number[]) =>
+      getValidationMessage({
+        code: 'missing_intervals',
+        context: { missing_intervals: intervals },
+      })
+
+    expect(getMessage([25])).toBe('Missing interval: 25')
+    expect(getMessage([25, 25.25])).toBe('Missing intervals: 25 and 25.25')
+    expect(getMessage([9, 10, 11])).toBe('Missing intervals: 9, 10, and 11')
+  })
+
+  test('invalid number of points reads "quadrat" for one quadrat and lists several with "and"', async () => {
+    await renderThroughRealEnglish()
+
+    const getMessage = (quadratNumbers: number[]) =>
+      getValidationMessage({
+        code: 'invalid_number_of_points',
+        context: { invalid_quadrat_numbers: quadratNumbers },
+      })
+
+    expect(getMessage([2])).toBe(
+      'Total number of points entered for quadrat: 2 does not match defined number of points per quadrat',
+    )
+    expect(getMessage([2, 3])).toBe(
+      'Total number of points entered for quadrats: 2 and 3 does not match defined number of points per quadrat',
+    )
+    expect(getMessage([2, 3, 5])).toBe(
+      'Total number of points entered for quadrats: 2, 3, and 5 does not match defined number of points per quadrat',
+    )
   })
 
   test('renamed messages point at their new keys', () => {
@@ -179,6 +217,18 @@ describe('getValidationMessage for observation counts and renamed messages', () 
         context: { missing_quadrat_numbers: [2] },
       }),
     ).toBe('validation_messages.missing_quadrats')
+    expect(
+      getValidationMessage({
+        code: 'missing_intervals',
+        context: { missing_intervals: [25] },
+      }),
+    ).toBe('validation_messages.missing_interval_numbers')
+    expect(
+      getValidationMessage({
+        code: 'invalid_number_of_points',
+        context: { invalid_quadrat_numbers: [2] },
+      }),
+    ).toBe('validation_messages.invalid_number_of_points_in_quadrats')
   })
 })
 

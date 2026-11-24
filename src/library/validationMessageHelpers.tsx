@@ -285,8 +285,10 @@ export const getValidationMessage = (
     duplicate_invert_belt_transect: () => getDuplicateSampleUnitLink(context, projectId),
     invalid_invert_belt_transect: () => i18n.t('validation_messages.invalid_invert_belt_transect'),
     invalid_number_of_points: () =>
-      i18n.t('validation_messages.invalid_number_of_points', {
-        invalidQuadratNumbers: context?.invalid_quadrat_numbers ?? '',
+      i18n.t('validation_messages.invalid_number_of_points_in_quadrats', {
+        count: context?.invalid_quadrat_numbers?.length ?? 0,
+        // Intl.ListFormat, behind the list format, only accepts strings
+        invalidQuadratNumbers: (context?.invalid_quadrat_numbers ?? []).map(String),
       }),
     invalid_quadrat_collection: () => i18n.t('validation_messages.invalid_quadrat_collection'),
     invalid_quadrat_size: () => i18n.t('validation_messages.size_not_positive'),
@@ -318,8 +320,10 @@ export const getValidationMessage = (
         numbers: (context?.missing_quadrat_numbers ?? []).map(String),
       }),
     missing_intervals: () =>
-      i18n.t('validation_messages.missing_intervals', {
-        intervals: context?.missing_intervals ?? '',
+      i18n.t('validation_messages.missing_interval_numbers', {
+        count: context?.missing_intervals?.length ?? 0,
+        // Intl.ListFormat, behind the list format, only accepts strings
+        intervals: (context?.missing_intervals ?? []).map(String),
       }),
     no_region_match: () => i18n.t('validation_messages.no_region_match'),
     not_part_of_fish_family_subset: () =>
