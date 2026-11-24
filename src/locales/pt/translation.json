@@ -1121,6 +1121,7 @@
     "mermaid_data_save_online_sync_error": "O « {{dataType}} » foi guardado no seu computador, mas não online.",
     "mermaid_data_save_success_offline": "O ficheiro « {{dataType}} » foi guardado no seu computador.",
     "mermaid_data_save_success_online": "O « {{dataType}} » foi guardado no seu computador e na Internet.",
+    "new_version_available": "<p>Uma nova versão de MERMAID está disponível.</p> <button>Recarregar</button>",
     "unsaved_work_confirmation": "Tem a certeza de que quer sair desta página? Tem algumas alterações por guardar."
   },
   "toggle_label_visibility": "Alternar a visibilidade da etiqueta",

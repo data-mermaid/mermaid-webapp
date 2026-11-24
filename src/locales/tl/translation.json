@@ -1121,6 +1121,7 @@
     "mermaid_data_save_online_sync_error": "Ang {{dataType}} ay naka-save na sa iyong computer, ngunit hindi online.",
     "mermaid_data_save_success_offline": "Ang {{dataType}} ay nai-save na sa iyong computer.",
     "mermaid_data_save_success_online": "Ang {{dataType}} ay na-save na sa iyong computer at online.",
+    "new_version_available": "<p>May bagong bersyon ng MERMAID na available.</p> <button>I-reload</button>",
     "unsaved_work_confirmation": "Sigurado ka bang gusto mong umalis sa pahinang ito? Mayroon kang ilang hindi pa nase-save na mga pagbabago."
   },
   "toggle_label_visibility": "I-toggle ang visibility ng label",
