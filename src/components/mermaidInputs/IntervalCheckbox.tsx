@@ -14,7 +14,6 @@ const IntervalCheckbox: React.FC<IntervalCheckboxProps> = ({ isChecked, handleCh
   return (
     <CheckBoxContainer>
       <input
-        id="checkbox-sync"
         type="checkbox"
         checked={isChecked}
         onChange={(event) => handleChange(event.target.checked)}
