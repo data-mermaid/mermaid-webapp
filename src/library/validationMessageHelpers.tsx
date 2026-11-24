@@ -318,8 +318,10 @@ export const getValidationMessage = (
         numbers: (context?.missing_quadrat_numbers ?? []).map(String),
       }),
     missing_intervals: () =>
-      i18n.t('validation_messages.missing_intervals', {
-        intervals: context?.missing_intervals ?? '',
+      i18n.t('validation_messages.missing_interval_numbers', {
+        count: context?.missing_intervals?.length ?? 0,
+        // Intl.ListFormat, behind the list format, only accepts strings
+        intervals: (context?.missing_intervals ?? []).map(String),
       }),
     no_region_match: () => i18n.t('validation_messages.no_region_match'),
     not_part_of_fish_family_subset: () =>
