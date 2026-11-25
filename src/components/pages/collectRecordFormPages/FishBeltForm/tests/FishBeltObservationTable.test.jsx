@@ -239,6 +239,8 @@ test.each([
 
   await user.clear(sizeInput)
   await user.type(sizeInput, '52.3456')
+  // Rounding to one decimal happens when the field loses focus.
+  await user.tab()
 
   expect(sizeInput).toHaveDisplayValue('52.3')
 })
