@@ -39,7 +39,9 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*'], //  cache all the imports
         globIgnores: ['**/*.map'],
-        maximumFileSizeToCacheInBytes: 4000000,
+        // Any file over this size is left out of the precache, and the build fails. The main
+        // bundle must stay precached or the app can't start offline. See M2278 for shrinking it.
+        maximumFileSizeToCacheInBytes: 5000000,
       },
 
       includeAssets: ['**/*'], //cache all the static assets in the public folder
