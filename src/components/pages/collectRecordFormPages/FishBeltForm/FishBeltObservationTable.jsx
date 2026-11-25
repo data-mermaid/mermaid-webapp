@@ -40,7 +40,8 @@ import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
+import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
+import { parseApiNumber } from '../../../../library/numbers/parseApiNumber'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
@@ -225,7 +226,6 @@ const FishBeltObservationTable = ({
       const rowNumber = index + 1
 
       const sizeOrEmptyStringToAvoidInputValueErrors = size ?? ''
-      const countOrEmptyStringToAvoidInputValueErrors = count ?? ''
 
       const showNumericSizeInput =
         fishBinSelectedLabel?.toString() === '1' || typeof fishBinSelectedLabel === 'undefined'
@@ -241,25 +241,15 @@ const FishBeltObservationTable = ({
         })
       }
 
-      const handleUpdateSizeEvent = (event) => {
-        const regExNumbers = new RegExp(/\D/g)
-        const newValue = event.target.value.replace(regExNumbers, '')
-
-        handleUpdateSize(newValue, observationId)
-      }
-
       const handleObservationKeyDown = (event) => {
         handleKeyDown({ event, index, observation })
       }
 
-      const handleUpdateCount = (event) => {
-        const regExNumbers = new RegExp(/\D/g)
-        const newValue = event.target.value.replace(regExNumbers, '')
-
+      const handleUpdateCount = (newCount) => {
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateCount',
-          payload: { newCount: newValue, observationId },
+          payload: { newCount, observationId },
         })
         markObservationValidationsStale({
           observationId,
@@ -279,13 +269,14 @@ const FishBeltObservationTable = ({
       ) : null
 
       const sizeInput = showNumericSizeInput ? (
-        <InputNumberNumericCharactersOnly
-          value={sizeOrEmptyStringToAvoidInputValueErrors}
-          step="any"
+        <LocaleNumberInput
+          id={`fish-size-${observationId}`}
+          value={parseApiNumber(size)}
+          decimalPlaces={0}
           disabled={!fishBinSelectedLabel}
           aria-labelledby="fish-size-label"
           data-testid="fish-size-input"
-          onChange={handleUpdateSizeEvent}
+          onChange={handleUpdateSize}
           onKeyDown={handleObservationKeyDown}
         />
       ) : (
@@ -396,9 +387,10 @@ const FishBeltObservationTable = ({
             {sizeInput}
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'count')} $align="right">
-            <InputNumberNumericCharactersOnly
-              value={countOrEmptyStringToAvoidInputValueErrors}
-              step="any"
+            <LocaleNumberInput
+              id={`fish-count-${observationId}`}
+              value={parseApiNumber(count)}
+              decimalPlaces={0}
               aria-labelledby="fish-count-label"
               onChange={handleUpdateCount}
               disabled={!fishBinSelectedLabel}

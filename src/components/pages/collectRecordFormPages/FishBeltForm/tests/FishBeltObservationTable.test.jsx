@@ -20,7 +20,7 @@ const fakeCurrentUser = {
   first_name: 'FakeFirstName',
 }
 
-test('FishBelt observations size shows a numeric pattern when fish size bin is 1', async () => {
+test('FishBelt observations size asks for a whole-number keypad when fish size bin is 1', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -53,7 +53,7 @@ test('FishBelt observations size shows a numeric pattern when fish size bin is 1
 
   const sizeInput = await within(observationsTable).findByTestId('fish-size-input')
 
-  expect(sizeInput).toHaveAttribute('pattern', '[0-9]*')
+  expect(sizeInput).toHaveAttribute('inputmode', 'numeric')
 })
 
 test('FishBelt observations size shows a select input when fish size bin is 5', async () => {
