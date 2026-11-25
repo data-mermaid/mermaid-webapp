@@ -25,7 +25,10 @@ jobs:
   cdk-nag:
     if: github.event.pull_request.draft == false
     needs: [deps-cache]
-    environment: dev
+    # No `environment:` here on purpose (card 2277): it makes the OIDC subject
+    # `repo:data-mermaid/mermaid-webapp:environment:dev`, which cannot match the
+    # read-only PR role's `:pull_request` trust. Repo-scoped secrets (CDK_DEFAULT_ACCOUNT)
+    # remain available without it.
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -160,14 +163,16 @@ jobs:
           echo "::error::cdk-nag found unacknowledged findings — see the PR comment or the CDK Nag step log"
           exit 1
 
-      # Dependabot PRs cannot read repo secrets, so CDK_DEPLOY_ROLE is empty and
+      # Dependabot PRs cannot read repo secrets, so CDK_DEFAULT_ACCOUNT is empty and
       # OIDC role assumption fails. cdk-nag above still runs: it synthesizes
       # against a placeholder account and needs no AWS access.
       - name: Configure AWS credentials
         if: github.actor != 'dependabot[bot]'
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
-          role-to-assume: ${{ secrets.CDK_DEPLOY_ROLE }}
+          # PR CI assumes the least-privilege read-only role, not the AdministratorAccess
+          # deploy role (card 2277). Role name is non-secret; account from the repo secret.
+          role-to-assume: arn:aws:iam::${{ secrets.CDK_DEFAULT_ACCOUNT }}:role/github-pr-readonly-role
           aws-region: us-east-1
           role-skip-session-tagging: true
 
