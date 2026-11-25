@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { Select } from '../../generic/form'
 import LocaleNumberInput from '../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
 import { hasNonEmptyValue } from '../../../library/hasNonEmptyValue'
-import { parseApiNumber } from '../../../library/numbers/parseApiNumber'
 
 const ObservationSizeSelect = ({
   onValueEntered,
@@ -23,7 +22,7 @@ const ObservationSizeSelect = ({
 
   const plus50InputId = useId()
   const [show50PlusInput, setShow50PlusInput] = useState(isValue50OrMore)
-  const [plus50Value, setPlus50Value] = useState(isValue50OrMore ? parseApiNumber(value) : 50)
+  const [plus50Value, setPlus50Value] = useState(isValue50OrMore ? numericValue : 50)
 
   // The input rounds on blur and reports the rounded value just before calling onBlur, before
   // React has re-rendered with it. The blur check reads this ref so it sees that rounded value.
@@ -42,14 +41,13 @@ const ObservationSizeSelect = ({
     }
 
     if (isValue50OrMore) {
-      const parsedValue = parseApiNumber(value)
-      latestPlus50Value.current = parsedValue
+      latestPlus50Value.current = numericValue
       setShow50PlusInput(true)
-      setPlus50Value(parsedValue)
+      setPlus50Value(numericValue)
     } else {
       setShow50PlusInput(false)
     }
-  }, [isValue50OrMore, value])
+  }, [isValue50OrMore, numericValue, value])
 
   const handleSelectOnChange = (event) => {
     const selectedValue = event.target.value

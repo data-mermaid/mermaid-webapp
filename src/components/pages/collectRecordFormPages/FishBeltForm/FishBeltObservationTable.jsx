@@ -41,7 +41,6 @@ import getObservationValidationInfo, {
 } from '../CollectRecordFormPage/getObservationValidationInfo'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
-import { parseApiNumber } from '../../../../library/numbers/parseApiNumber'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
@@ -271,7 +270,7 @@ const FishBeltObservationTable = ({
       const sizeInput = showNumericSizeInput ? (
         <LocaleNumberInput
           id={`fish-size-${observationId}`}
-          value={parseApiNumber(size)}
+          value={size ?? null}
           decimalPlaces={0}
           disabled={!fishBinSelectedLabel}
           aria-labelledby="fish-size-label"
@@ -389,7 +388,7 @@ const FishBeltObservationTable = ({
           <Td {...getCellMarkProps(cellMarks, 'count')} $align="right">
             <LocaleNumberInput
               id={`fish-count-${observationId}`}
-              value={parseApiNumber(count)}
+              value={count ?? null}
               decimalPlaces={0}
               aria-labelledby="fish-count-label"
               onChange={handleUpdateCount}
