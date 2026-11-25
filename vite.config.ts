@@ -39,7 +39,8 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*'], //  cache all the imports
         globIgnores: ['**/*.map'],
-        maximumFileSizeToCacheInBytes: 4000000,
+        // The main bundle must fit, or the app can't start offline
+        maximumFileSizeToCacheInBytes: 5000000,
       },
 
       includeAssets: ['**/*'], //cache all the static assets in the public folder
