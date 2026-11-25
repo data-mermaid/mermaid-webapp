@@ -7,7 +7,7 @@ STACK_NAME="${CDK_STACK_NAME:-${CDK_SUBDOMAIN}-webapp}"
 function run_cdk_diff(){
 	echo "Run cdk diff"
 	set +e
-	npx cdk diff "${STACK_NAME}" -c "subdomain=${CDK_SUBDOMAIN}" 2>&1 | tee /tmp/cdk-diff.log
+	npx cdk diff "${STACK_NAME}" --method=template -c "subdomain=${CDK_SUBDOMAIN}" 2>&1 | tee /tmp/cdk-diff.log
 	exitCode=${?}
 	set -e
 
