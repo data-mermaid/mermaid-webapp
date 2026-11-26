@@ -1,4 +1,5 @@
 import { createUuid } from '../../../../library/createUuid'
+import { parseApiNumber } from '../../../../library/numbers/parseApiNumber'
 import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
 const getObservationsWithRecalculatedQuadratNumbers = (observations) => {
@@ -13,6 +14,9 @@ const percentCoverObservationsReducer = (state, action) => {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
         id: record.id || createUuid(),
         ...record,
+        percent_hard: parseApiNumber(record.percent_hard),
+        percent_soft: parseApiNumber(record.percent_soft),
+        percent_algae: parseApiNumber(record.percent_algae),
       }))
 
       return updateObservationsWithIds
@@ -35,9 +39,9 @@ const percentCoverObservationsReducer = (state, action) => {
         ...state,
         {
           id: createUuid(),
-          percent_hard: '',
-          percent_soft: '',
-          percent_algae: '',
+          percent_hard: null,
+          percent_soft: null,
+          percent_algae: null,
           quadrat_number,
         },
       ]
@@ -50,9 +54,9 @@ const percentCoverObservationsReducer = (state, action) => {
 
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
         id: createUuid(),
-        percent_hard: '',
-        percent_soft: '',
-        percent_algae: '',
+        percent_hard: null,
+        percent_soft: null,
+        percent_algae: null,
       })
 
       return getObservationsWithRecalculatedQuadratNumbers(observationsWithInsertedRow)
