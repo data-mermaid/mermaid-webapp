@@ -49,6 +49,42 @@ const renderBeltInvertRecord = async ({
 }
 
 describe('Belt invert observation number inputs', () => {
+  test('count keeps whole numbers', async () => {
+    const { user } = await renderBeltInvertRecord({ sizeBin: ONE_CM_SIZE_BIN_ID })
+
+    const countInput = screen.getAllByTestId('invert-count-input')[0]
+
+    await user.clear(countInput)
+    await user.type(countInput, '12.5')
+    await user.tab()
+
+    expect(countInput).toHaveDisplayValue('12')
+  })
+
+  test('size on the 1 cm bin refuses a second decimal place', async () => {
+    const { user } = await renderBeltInvertRecord({ sizeBin: ONE_CM_SIZE_BIN_ID })
+
+    const sizeInput = screen.getAllByTestId('invert-size-input')[0]
+
+    await user.clear(sizeInput)
+    await user.type(sizeInput, '3.56')
+    await user.tab()
+
+    expect(sizeInput).toHaveDisplayValue('3.5')
+  })
+
+  test('size on the 1 cm bin shows whole numbers with one decimal place', async () => {
+    const { user } = await renderBeltInvertRecord({ sizeBin: ONE_CM_SIZE_BIN_ID })
+
+    const sizeInput = screen.getAllByTestId('invert-size-input')[0]
+
+    await user.clear(sizeInput)
+    await user.type(sizeInput, '4')
+    await user.tab()
+
+    expect(sizeInput).toHaveDisplayValue('4.0')
+  })
+
   test('sizes and counts saved as text by older versions are saved back as numbers', async () => {
     const { user, dexiePerUserDataInstance } = await renderBeltInvertRecord({
       sizeBin: ONE_CM_SIZE_BIN_ID,

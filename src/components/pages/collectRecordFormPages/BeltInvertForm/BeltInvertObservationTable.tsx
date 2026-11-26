@@ -25,12 +25,11 @@ import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
-import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
+import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { useBeltInvertDensityMetrics } from '../../../../library/macroinvertebrates/useBeltInvertDensityMetrics'
-import { hasNonEmptyValue } from '../../../../library/hasNonEmptyValue'
 import ObservationSizeSelect from '../ObservationSizeSelect'
 import { ObservationRecord } from './BeltInvertTypes'
 import MacroinvertebrateSummaryStats from '../../BeltInvert/MacroinvertebrateSummaryStats'
@@ -106,17 +105,6 @@ const buildSizeOptionsFromBinLabel = (sizeBinLabel: string | number | undefined)
   return sizeOptions
 }
 
-const sanitizeOneDecimalInput = (value: string) => {
-  const digitsAndDotOnly = value.replace(/[^\d.]/g, '')
-  const [integerPart = '', ...decimalParts] = digitsAndDotOnly.split('.')
-  const decimalPart = decimalParts.join('').slice(0, 1)
-  return digitsAndDotOnly.includes('.') ? `${integerPart}.${decimalPart}` : integerPart
-}
-
-const getDisplaySizeValue = (value: unknown) => {
-  return hasNonEmptyValue(value) ? roundToOneDecimal(value) : ''
-}
-
 interface BeltInvertObservationTableProps {
   areValidationsShowing: boolean
   choices: ChoicesWithSizeBins
@@ -185,8 +173,6 @@ const BeltInvertObservationRow = ({
   const { t } = useTranslation()
   const { id: observationId, count, size, invert_attribute: invertAttributeId } = observation
   const rowNumber = index + 1
-  const [isSizeInputFocused, setIsSizeInputFocused] = useState(false)
-  const [sizeInputDraft, setSizeInputDraft] = useState('')
   const [focusedObservationId, setFocusedObservationId] = useState<string | null>(null)
 
   const showNumericSizeInput =
@@ -197,7 +183,7 @@ const BeltInvertObservationRow = ({
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
   }
 
-  const handleUpdateSize = (newSize: string) => {
+  const handleUpdateSize = (newSize: number | string | null) => {
     setAreObservationsInputsDirty(true)
     observationsDispatch({
       type: 'updateSize',
@@ -206,30 +192,11 @@ const BeltInvertObservationRow = ({
     markObservationValidationsStale({ observationId })
   }
 
-  const handleUpdateSizeFromInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = sanitizeOneDecimalInput(event.target.value)
-    setSizeInputDraft(newValue)
-    handleUpdateSize(newValue)
-  }
-
-  const handleSizeInputFocus = () => {
-    setIsSizeInputFocused(true)
-    setSizeInputDraft(hasNonEmptyValue(size) ? String(size) : '')
-  }
-
-  const handleSizeInputBlur = () => {
-    setSizeInputDraft(getDisplaySizeValue(size))
-    setIsSizeInputFocused(false)
-  }
-
-  const handleUpdateCount = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const regExNumbers = new RegExp(/\D/g)
-    const newValue = event.target.value.replace(regExNumbers, '')
-
+  const handleUpdateCount = (newCount: number | null) => {
     setAreObservationsInputsDirty(true)
     observationsDispatch({
       type: 'updateCount',
-      payload: { newCount: newValue, observationId },
+      payload: { newCount, observationId },
     })
     markObservationValidationsStale({ observationId })
   }
@@ -262,15 +229,14 @@ const BeltInvertObservationRow = ({
     })
 
   const sizeInput = showNumericSizeInput ? (
-    <InputNumberNumericCharactersOnly
-      $textAlign="right"
-      value={isSizeInputFocused ? sizeInputDraft : getDisplaySizeValue(size)}
-      step="any"
+    <LocaleNumberInput
+      id={`invert-size-${observationId}`}
+      value={size ?? null}
+      decimalPlaces={1}
+      fixedDecimals
       aria-labelledby="invert-size-label"
       data-testid="invert-size-input"
-      onChange={handleUpdateSizeFromInput}
-      onFocus={handleSizeInputFocus}
-      onBlur={handleSizeInputBlur}
+      onChange={handleUpdateSize}
       onKeyDown={(event: React.KeyboardEvent) =>
         onObservationKeyDown({ event, index, observation })
       }
@@ -323,10 +289,10 @@ const BeltInvertObservationRow = ({
         </Td>
       )}
       <Td {...getCellMarkProps(cellMarks, 'count')}>
-        <InputNumberNumericCharactersOnly
-          $textAlign="right"
-          value={count ?? ''}
-          step="any"
+        <LocaleNumberInput
+          id={`invert-count-${observationId}`}
+          value={count ?? null}
+          decimalPlaces={0}
           aria-labelledby="invert-count-label"
           onChange={handleUpdateCount}
           data-testid="invert-count-input"
