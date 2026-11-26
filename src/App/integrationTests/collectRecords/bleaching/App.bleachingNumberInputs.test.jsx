@@ -70,6 +70,18 @@ const changeDepth = async (user) => {
 }
 
 describe('Bleaching observation number inputs', () => {
+  test('colony counts keep whole numbers', async () => {
+    const { user } = await renderBleachingRecord()
+
+    const countInput = screen.getAllByTestId('count-normal-input')[0]
+
+    await user.clear(countInput)
+    await user.type(countInput, '12.5')
+    await user.tab()
+
+    expect(countInput).toHaveDisplayValue('12')
+  })
+
   test('percent cover keeps whole numbers', async () => {
     const { user } = await renderBleachingRecord()
 
@@ -130,6 +142,22 @@ describe('Bleaching observation number inputs', () => {
       percent_soft: null,
       percent_algae: null,
     })
+  })
+
+  test('Tab on the last recently dead count copies a value typed with a leading zero', async () => {
+    const { user } = await renderBleachingRecord()
+
+    const lastCountInput = screen.getAllByTestId('count-recently-dead-input').at(-1)
+
+    await user.clear(lastCountInput)
+    await user.type(lastCountInput, '05')
+    await user.tab()
+
+    const countInputs = await screen.findAllByTestId('count-recently-dead-input')
+
+    expect(countInputs).toHaveLength(4)
+    expect(countInputs[2]).toHaveDisplayValue('5')
+    expect(countInputs[3]).toHaveDisplayValue('5')
   })
 
   test('Tab on the last macroalgae percentage copies a value typed with a leading zero', async () => {

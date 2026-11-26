@@ -29,7 +29,7 @@ import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBle
 import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
-import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
+import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
@@ -184,10 +184,7 @@ const ColoniesBleachedObservationTable = ({
         })
       }
 
-      const handleObservationInputChange = ({ event, dispatchType }) => {
-        const regExNumbers = new RegExp(/\D/g)
-        const newValue = event.target.value.replace(regExNumbers, '')
-
+      const handleObservationInputChange = ({ newValue, dispatchType }) => {
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: dispatchType,
@@ -260,92 +257,92 @@ const ColoniesBleachedObservationTable = ({
             </Select>
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'count_normal', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`count-normal-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="normal-label"
-              value={count_normal}
-              min="0"
-              step="any"
+              value={count_normal ?? null}
               data-testid="count-normal-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'updateNormal' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'updateNormal' })
               }}
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'count_pale', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`count-pale-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="pale-label"
-              value={count_pale}
-              min="0"
-              step="any"
+              value={count_pale ?? null}
               data-testid="count-pale-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'updatePale' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'updatePale' })
               }}
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'count_20', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`count-20-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="20-bleached-label"
-              value={count_20}
-              min="0"
-              step="any"
+              value={count_20 ?? null}
               data-testid="count-20-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'update20Bleached' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'update20Bleached' })
               }}
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'count_50', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`count-50-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="50-bleached-label"
-              value={count_50}
-              min="0"
-              step="any"
+              value={count_50 ?? null}
               data-testid="count-50-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'update50Bleached' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'update50Bleached' })
               }}
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'count_80', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`count-80-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="80-bleached-label"
-              value={count_80}
-              min="0"
-              step="any"
+              value={count_80 ?? null}
               data-testid="count-80-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'update80Bleached' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'update80Bleached' })
               }}
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'count_100', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`count-100-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="100-bleached-label"
-              value={count_100}
-              min="0"
-              step="any"
+              value={count_100 ?? null}
               data-testid="count-100-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'update100Bleached' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'update100Bleached' })
               }}
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'count_dead', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`count-dead-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="recently-dead-label"
-              value={count_dead}
-              min="0"
-              step="any"
+              value={count_dead ?? null}
               data-testid="count-recently-dead-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'updateRecentlyDead' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'updateRecentlyDead' })
               }}
               onKeyDown={(event) => {
                 handleKeyDown({ event, index, observation, isLastCell: true })
