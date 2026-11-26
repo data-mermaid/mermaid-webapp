@@ -70,6 +70,18 @@ const changeDepth = async (user) => {
 }
 
 describe('Bleaching observation number inputs', () => {
+  test('percent cover keeps whole numbers', async () => {
+    const { user } = await renderBleachingRecord()
+
+    const percentInput = screen.getAllByTestId('percent-hard-input')[0]
+
+    await user.clear(percentInput)
+    await user.type(percentInput, '12.5')
+    await user.tab()
+
+    expect(percentInput).toHaveDisplayValue('12')
+  })
+
   test('percent cover saved as text by older versions is saved back as numbers', async () => {
     const { user, dexiePerUserDataInstance } = await renderBleachingRecord()
 
@@ -118,5 +130,21 @@ describe('Bleaching observation number inputs', () => {
       percent_soft: null,
       percent_algae: null,
     })
+  })
+
+  test('Tab on the last macroalgae percentage copies a value typed with a leading zero', async () => {
+    const { user } = await renderBleachingRecord()
+
+    const lastPercentInput = screen.getAllByTestId('percent-algae-input').at(-1)
+
+    await user.clear(lastPercentInput)
+    await user.type(lastPercentInput, '05')
+    await user.tab()
+
+    const percentInputs = await screen.findAllByTestId('percent-algae-input')
+
+    expect(percentInputs).toHaveLength(4)
+    expect(percentInputs[2]).toHaveDisplayValue('5')
+    expect(percentInputs[3]).toHaveDisplayValue('5')
   })
 })

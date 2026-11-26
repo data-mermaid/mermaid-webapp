@@ -22,7 +22,7 @@ import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
-import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
+import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -130,10 +130,7 @@ const PercentCoverObservationTable = ({
         })
       }
 
-      const handleObservationInputChange = ({ event, dispatchType }) => {
-        const regExNumbers = new RegExp(/\D/g)
-        const newValue = event.target.value.replace(regExNumbers, '')
-
+      const handleObservationInputChange = ({ newValue, dispatchType }) => {
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: dispatchType,
@@ -163,14 +160,14 @@ const PercentCoverObservationTable = ({
           </Td>
 
           <Td {...getCellMarkProps(cellMarks, 'percent_hard', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`percent-hard-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="hard-coral-percent-cover-label"
-              value={percent_hard}
-              min="0"
-              step="any"
+              value={percent_hard ?? null}
               data-testid="percent-hard-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'updateHardCoralPercent' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'updateHardCoralPercent' })
               }}
               // eslint-disable-next-line jsx-a11y/no-autofocus
               autoFocus={autoFocusAllowed} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
@@ -178,27 +175,27 @@ const PercentCoverObservationTable = ({
             />
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'percent_soft', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`percent-soft-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="soft-coral-percent-cover-label"
-              value={percent_soft}
-              min="0"
-              step="any"
+              value={percent_soft ?? null}
               data-testid="percent-soft-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'updateSoftCoralPercent' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'updateSoftCoralPercent' })
               }}
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'percent_algae', 'total')} $align="right">
-            <InputNumberNumericCharactersOnly
+            <LocaleNumberInput
+              id={`percent-algae-${observationId}`}
+              decimalPlaces={0}
               aria-labelledby="microalgae-percent-cover-label"
-              value={percent_algae}
-              min="0"
-              step="any"
+              value={percent_algae ?? null}
               data-testid="percent-algae-input"
-              onChange={(event) => {
-                handleObservationInputChange({ event, dispatchType: 'updateAlgaePercent' })
+              onChange={(newValue) => {
+                handleObservationInputChange({ newValue, dispatchType: 'updateAlgaePercent' })
               }}
               onKeyDown={(event) => {
                 handleKeyDown({ event, index, observation, isLastCell: true })
