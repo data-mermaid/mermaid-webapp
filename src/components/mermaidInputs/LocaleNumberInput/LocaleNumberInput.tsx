@@ -269,6 +269,7 @@ const LocaleNumberInput = ({
       // The step controls are already hidden, so switch the keys off too.
       withKeyboardEvents={false}
       allowNegative={allowNegatives}
+      allowLeadingZeros={false}
       disabled={disabled}
       unstyled
     />

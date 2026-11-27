@@ -93,6 +93,47 @@ test('FishBelt observations size keeps whole numbers when fish size bin is 1', a
   expect(sizeInput).toHaveDisplayValue('12')
 })
 
+test('FishBelt observations Tab on the last count copies a count typed with a leading zero', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  const { user } = renderAuthenticatedOnline(
+    <Routes>
+      <Route
+        path="/projects/:projectId/collecting/fishbelt"
+        element={<FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />}
+      />
+    </Routes>,
+    {
+      isSyncInProgressOverride: true,
+      dexiePerUserDataInstance,
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
+  const fishbeltForm = screen.getByRole('form')
+
+  // Fish size bin select on 1
+  await user.selectOptions(
+    within(screen.getByTestId('size-bin')).getByRole('combobox'),
+    '67c1356f-e0a7-4383-8034-77b2f36e1a49',
+  )
+
+  const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
+  const countInput = await within(observationsTable).findByTestId('fish-count-input')
+
+  await user.type(countInput, '05')
+  await user.tab()
+
+  const countInputs = await within(observationsTable).findAllByTestId('fish-count-input')
+
+  expect(countInputs).toHaveLength(2)
+  expect(countInputs[0]).toHaveDisplayValue('5')
+  expect(countInputs[1]).toHaveDisplayValue('5')
+})
+
 test('FishBelt observations size shows a select input when fish size bin is 5', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
