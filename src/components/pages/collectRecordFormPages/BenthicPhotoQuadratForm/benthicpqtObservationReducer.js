@@ -1,4 +1,6 @@
 import { createUuid } from '../../../../library/createUuid'
+import { hasNonEmptyValue } from '../../../../library/hasNonEmptyValue'
+import { parseApiNumber } from '../../../../library/numbers/parseApiNumber'
 
 const benthicpqtObservationReducer = (state, action) => {
   switch (action.type) {
@@ -6,6 +8,8 @@ const benthicpqtObservationReducer = (state, action) => {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
         id: record.id || createUuid(),
         ...record,
+        quadrat_number: parseApiNumber(record.quadrat_number),
+        num_points: parseApiNumber(record.num_points),
       }))
 
       return updateObservationsWithIds
@@ -58,10 +62,9 @@ const benthicpqtObservationReducer = (state, action) => {
 
         const { newQuadratNumber } = action.payload
 
-        const newQuadratNumberToUse =
-          Number.isNaN(newQuadratNumber) || newQuadratNumber === ''
-            ? null
-            : parseFloat(newQuadratNumber)
+        const newQuadratNumberToUse = hasNonEmptyValue(newQuadratNumber)
+          ? parseFloat(newQuadratNumber)
+          : null
 
         return isObservationToUpdate
           ? { ...observation, quadrat_number: newQuadratNumberToUse }
@@ -101,10 +104,9 @@ const benthicpqtObservationReducer = (state, action) => {
 
         const { newNumberOfPoints } = action.payload
 
-        const newNumberOfPointsToUse =
-          Number.isNaN(newNumberOfPoints) || newNumberOfPoints === ''
-            ? null
-            : parseFloat(newNumberOfPoints)
+        const newNumberOfPointsToUse = hasNonEmptyValue(newNumberOfPoints)
+          ? parseFloat(newNumberOfPoints)
+          : null
 
         return isObservationToUpdate
           ? { ...observation, num_points: newNumberOfPointsToUse }

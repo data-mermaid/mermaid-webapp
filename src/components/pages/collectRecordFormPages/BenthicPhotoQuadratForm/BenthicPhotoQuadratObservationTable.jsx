@@ -30,7 +30,7 @@ import { ObservationsSummaryStats, Tr, Td, Th } from '../../../generic/Table/tab
 import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
-import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
+import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
 import { HelperTextLink } from '../../../generic/links'
 
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -168,9 +168,7 @@ const BenthicPhotoQuadratObservationTable = ({
       const rowNumber = index + 1
       const { id: observationId, quadrat_number, attribute, growth_form, num_points } = observation
 
-      const quadratNumberOrEmptyStringToAvoidInputValueErrors = quadrat_number ?? ''
       const growthFormOrEmptyStringToAvoidInputValueErrors = growth_form ?? ''
-      const numberOfPointsOrEmptyStringToAvoidInputValueErrors = num_points ?? ''
 
       const {
         cellMarks,
@@ -189,11 +187,11 @@ const BenthicPhotoQuadratObservationTable = ({
         observationsDispatch({ type: 'deleteObservation', payload: observationId })
       }
 
-      const handleQuadratNumberChange = (event) => {
+      const handleQuadratNumberChange = (newQuadratNumber) => {
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateQuadratNumber',
-          payload: { newQuadratNumber: event.target.value, observationId },
+          payload: { newQuadratNumber, observationId },
         })
         markObservationValidationsStale({
           observationId,
@@ -232,14 +230,11 @@ const BenthicPhotoQuadratObservationTable = ({
         })
       }
 
-      const handleNumberOfPointsChange = (event) => {
-        const regExNumbers = new RegExp(/\D/g)
-        const newValue = event.target.value.replace(regExNumbers, '')
-
+      const handleNumberOfPointsChange = (newNumberOfPoints) => {
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateNumberOfPoints',
-          payload: { newNumberOfPoints: newValue, observationId },
+          payload: { newNumberOfPoints, observationId },
         })
         markObservationValidationsStale({
           observationId,
@@ -263,14 +258,14 @@ const BenthicPhotoQuadratObservationTable = ({
         >
           <Td $align="center">{rowNumber}</Td>
           <Td {...getCellMarkProps(cellMarks, 'quadrat_number')} $align="right">
-            <InputNumberNumericCharactersOnly
-              type="number"
+            <LocaleNumberInput
+              id={`quadrat-number-${observationId}`}
               // eslint-disable-next-line jsx-a11y/no-autofocus
               autoFocus={true} // IMPORTANT we should reconsider autofocus use. See: https://trello.com/c/4pe1zgS9/1331-accessibility-linting-issues-deferred
-              min="0"
-              value={quadratNumberOrEmptyStringToAvoidInputValueErrors}
-              step="any"
+              value={quadrat_number ?? null}
+              decimalPlaces={0}
               aria-labelledby="quadrat-number-label"
+              data-testid="quadrat-number-input"
               onChange={handleQuadratNumberChange}
               onKeyDown={handleObservationKeyDown}
             />
@@ -311,10 +306,12 @@ const BenthicPhotoQuadratObservationTable = ({
             </Select>
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'num_points')} $align="right">
-            <InputNumberNumericCharactersOnly
-              value={numberOfPointsOrEmptyStringToAvoidInputValueErrors}
-              step="any"
+            <LocaleNumberInput
+              id={`number-of-points-${observationId}`}
+              value={num_points ?? null}
+              decimalPlaces={0}
               aria-labelledby="number-of-points-label"
+              data-testid="number-of-points-input"
               onChange={handleNumberOfPointsChange}
               onKeyDown={(event) => {
                 handleKeyDown({ event, index, observation, isNumberOfPoints: true })
