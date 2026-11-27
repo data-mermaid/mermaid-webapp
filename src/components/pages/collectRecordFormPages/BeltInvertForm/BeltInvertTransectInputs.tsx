@@ -202,7 +202,7 @@ const BeltInvertTransectInputs = ({
   const handleSizeBinChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const sizeBinValue = event.target.value
     const hasBeltInvertObservations = observationsState.some(
-      (obs) => obs.size !== null && obs.size !== undefined && obs.size !== '',
+      (obs) => obs.size !== null && obs.size !== undefined,
     )
 
     if (hasBeltInvertObservations) {

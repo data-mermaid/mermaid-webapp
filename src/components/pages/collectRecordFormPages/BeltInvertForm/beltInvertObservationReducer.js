@@ -1,4 +1,5 @@
 import { createUuid } from '../../../../library/createUuid'
+import { parseApiNumber } from '../../../../library/numbers/parseApiNumber'
 
 const beltInvertObservationReducer = (state, action) => {
   switch (action.type) {
@@ -6,6 +7,8 @@ const beltInvertObservationReducer = (state, action) => {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
         id: record.id || createUuid(),
         ...record,
+        size: parseApiNumber(record.size),
+        count: parseApiNumber(record.count),
         notes: record.notes ?? '',
       }))
 
@@ -81,7 +84,7 @@ const beltInvertObservationReducer = (state, action) => {
           : observation
       })
     case 'resetObservationSizes': {
-      return state.map((observation) => ({ ...observation, size: '' }))
+      return state.map((observation) => ({ ...observation, size: null }))
     }
     case 'updateNotes':
       return state.map((observation) => {

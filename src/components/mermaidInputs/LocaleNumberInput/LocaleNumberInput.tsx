@@ -19,6 +19,7 @@ export interface LocaleNumberInputProps {
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
   autoFocus?: boolean
   decimalPlaces?: number
+  fixedDecimals?: boolean
   max?: number
   allowNegatives?: boolean
   disabled?: boolean
@@ -132,6 +133,7 @@ const LocaleNumberInput = ({
   onKeyDown,
   autoFocus = false,
   decimalPlaces,
+  fixedDecimals = false,
   max,
   allowNegatives = false,
   disabled = false,
@@ -257,6 +259,8 @@ const LocaleNumberInput = ({
       // eslint-disable-next-line jsx-a11y/no-autofocus
       autoFocus={autoFocus}
       decimalSeparator={decimalSeparator}
+      decimalScale={fixedDecimals ? decimalPlaces : undefined}
+      fixedDecimalScale={fixedDecimals}
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore — thousandSeparator is a react-number-format prop forwarded via ...others
       thousandSeparator={thousandSeparator}
