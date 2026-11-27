@@ -1,4 +1,5 @@
 import { createUuid } from '../../../../library/createUuid'
+import { parseApiNumber } from '../../../../library/numbers/parseApiNumber'
 import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
 const benthicLitObservationReducer = (state, action) => {
@@ -7,6 +8,7 @@ const benthicLitObservationReducer = (state, action) => {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
         id: record.id || createUuid(),
         ...record,
+        length: parseApiNumber(record.length),
       }))
 
       return updateObservationsWithIds
@@ -23,7 +25,7 @@ const benthicLitObservationReducer = (state, action) => {
     }
 
     case 'addObservation': {
-      return [...state, { id: createUuid(), attribute: '', growth_form: '', length: '' }]
+      return [...state, { id: createUuid(), attribute: '', growth_form: '', length: null }]
     }
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
@@ -34,7 +36,7 @@ const benthicLitObservationReducer = (state, action) => {
         id: createUuid(),
         attribute: '',
         growth_form: '',
-        length: '',
+        length: null,
       })
 
       return observationsWithInsertedRow
