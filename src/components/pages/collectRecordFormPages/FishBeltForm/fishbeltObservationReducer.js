@@ -78,7 +78,7 @@ const fishbeltObservationReducer = (state, action) => {
           : observation
       })
     case 'resetFishSizes': {
-      return state.map((observation) => ({ ...observation, size: '' }))
+      return state.map((observation) => ({ ...observation, size: null }))
     }
     default:
       throw new Error("This action isn't supported by the observationReducer")
