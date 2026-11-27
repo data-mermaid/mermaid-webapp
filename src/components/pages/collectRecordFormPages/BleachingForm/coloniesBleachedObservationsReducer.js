@@ -1,4 +1,5 @@
 import { createUuid } from '../../../../library/createUuid'
+import { parseApiNumber } from '../../../../library/numbers/parseApiNumber'
 import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
 const coloniesBleachedObservationsReducer = (state, action) => {
@@ -7,6 +8,13 @@ const coloniesBleachedObservationsReducer = (state, action) => {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
         id: record.id || createUuid(),
         ...record,
+        count_normal: parseApiNumber(record.count_normal),
+        count_pale: parseApiNumber(record.count_pale),
+        count_20: parseApiNumber(record.count_20),
+        count_50: parseApiNumber(record.count_50),
+        count_80: parseApiNumber(record.count_80),
+        count_100: parseApiNumber(record.count_100),
+        count_dead: parseApiNumber(record.count_dead),
       }))
 
       return updateObservationsWithIds
