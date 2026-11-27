@@ -39,6 +39,18 @@ const saveAndGetRecord = async ({ user, dexiePerUserDataInstance }) => {
 }
 
 describe('Benthic LIT observation number inputs', () => {
+  test('length keeps whole numbers', async () => {
+    const { user } = await renderBenthicLitRecord()
+
+    const lengthInput = screen.getAllByTestId('observation-length-input')[0]
+
+    await user.clear(lengthInput)
+    await user.type(lengthInput, '12.5')
+    await user.tab()
+
+    expect(lengthInput).toHaveDisplayValue('12')
+  })
+
   test('lengths saved as text by older versions are saved back as numbers', async () => {
     const { user, dexiePerUserDataInstance } = await renderBenthicLitRecord()
 
@@ -61,5 +73,21 @@ describe('Benthic LIT observation number inputs', () => {
 
     expect(savedRecord.data.obs_benthic_lits).toHaveLength(4)
     expect(savedRecord.data.obs_benthic_lits[3].length).toBeNull()
+  })
+
+  test('Tab on the last length copies a value typed with a leading zero', async () => {
+    const { user } = await renderBenthicLitRecord()
+
+    const lastLengthInput = screen.getAllByTestId('observation-length-input').at(-1)
+
+    await user.clear(lastLengthInput)
+    await user.type(lastLengthInput, '05')
+    await user.tab()
+
+    const lengthInputs = await screen.findAllByTestId('observation-length-input')
+
+    expect(lengthInputs).toHaveLength(4)
+    expect(lengthInputs[2]).toHaveDisplayValue('5')
+    expect(lengthInputs[3]).toHaveDisplayValue('5')
   })
 })

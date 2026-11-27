@@ -29,7 +29,7 @@ import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservat
 import getObservationValidationInfo, {
   getCellMarkProps,
 } from '../CollectRecordFormPage/getObservationValidationInfo'
-import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
+import LocaleNumberInput from '../../../mermaidInputs/LocaleNumberInput/LocaleNumberInput'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 import LabelWithTooltip from '../../../ColumnHeaderToolTip/LabelWithTooltip'
@@ -113,7 +113,7 @@ const BenthicLitObservationsTable = ({
 
     return observationsState.map((observation, index) => {
       const rowNumber = index + 1
-      const { id: observationId, attribute, growth_form = '', length = '' } = observation
+      const { id: observationId, attribute, growth_form = '', length } = observation
 
       const {
         cellMarks,
@@ -168,10 +168,7 @@ const BenthicLitObservationsTable = ({
         })
       }
 
-      const handleLengthChange = (event) => {
-        const regExNumbers = new RegExp(/\D/g)
-        const newValue = event.target.value.replace(regExNumbers, '')
-
+      const handleLengthChange = (newValue) => {
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateLength',
@@ -247,8 +244,10 @@ const BenthicLitObservationsTable = ({
             </Select>
           </Td>
           <Td {...getCellMarkProps(cellMarks, 'length')} $align="right">
-            <InputNumberNumericCharactersOnly
-              value={length}
+            <LocaleNumberInput
+              id={`length-${observationId}`}
+              value={length ?? null}
+              decimalPlaces={0}
               aria-labelledby="length-label"
               onChange={handleLengthChange}
               onKeyDown={(event) => handleKeyDown({ event, index, observation, isLastCell: true })}

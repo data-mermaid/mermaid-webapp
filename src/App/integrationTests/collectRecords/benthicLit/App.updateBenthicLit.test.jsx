@@ -106,7 +106,7 @@ describe('Offline', () => {
 
     expect(newObservation.attribute).toEqual('fcf25ee3-701b-4d15-9a17-71f40406db4c')
     expect(newObservation.growth_form).toEqual('cbff6080-6387-44e5-b7ad-35f35f3db3a7')
-    expect(newObservation.length).toEqual('43')
+    expect(newObservation.length).toEqual(43)
   })
 
   test('Edit Benthic LIT save failure shows toast message with new edits persisting', async () => {
