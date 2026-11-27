@@ -54,12 +54,18 @@ export const useInitializeBellNotifications = ({
           }
         })
         .catch((error) => {
+          // This poll runs in the background and tries again on its own. A request with no
+          // response is common right after a device wakes, so leave switching Collect offline
+          // to the health check (which retries first) and don't show a toast for it.
           handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
-              toast.error(...getToastArguments(t('notifications_unavailable')))
+              if (error?.response) {
+                toast.error(...getToastArguments(t('notifications_unavailable')))
+              }
             },
             shouldShowServerNonResponseMessage: false,
+            shouldSetServerNotReachable: false,
           })
         })
     }
