@@ -1,4 +1,5 @@
 import { createUuid } from '../../../../library/createUuid'
+import { hasNonEmptyValue } from '../../../../library/hasNonEmptyValue'
 
 const fishbeltObservationReducer = (state, action) => {
   switch (action.type) {
@@ -52,8 +53,7 @@ const fishbeltObservationReducer = (state, action) => {
 
         const { newCount } = action.payload
 
-        const newCountToUse =
-          Number.isNaN(newCount) || newCount === '' ? null : parseFloat(newCount)
+        const newCountToUse = hasNonEmptyValue(newCount) ? parseFloat(newCount) : null
 
         return isObservationToUpdate ? { ...observation, count: newCountToUse } : observation
       })
@@ -62,7 +62,7 @@ const fishbeltObservationReducer = (state, action) => {
         const isObservationToUpdate = observation.id === action.payload.observationId
         const { newSize } = action.payload
 
-        const newSizeToUse = Number.isNaN(newSize) || newSize === '' ? null : parseFloat(newSize)
+        const newSizeToUse = hasNonEmptyValue(newSize) ? parseFloat(newSize) : null
 
         return isObservationToUpdate ? { ...observation, size: newSizeToUse } : observation
       })
@@ -78,7 +78,7 @@ const fishbeltObservationReducer = (state, action) => {
           : observation
       })
     case 'resetFishSizes': {
-      return state.map((observation) => ({ ...observation, size: '' }))
+      return state.map((observation) => ({ ...observation, size: null }))
     }
     default:
       throw new Error("This action isn't supported by the observationReducer")

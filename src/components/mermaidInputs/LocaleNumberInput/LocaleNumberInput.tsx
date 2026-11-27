@@ -16,6 +16,8 @@ export interface LocaleNumberInputProps {
   onChange: (value: number | null) => void
   onBlur?: React.FocusEventHandler<HTMLInputElement>
   onFocus?: React.FocusEventHandler<HTMLInputElement>
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
+  autoFocus?: boolean
   decimalPlaces?: number
   max?: number
   allowNegatives?: boolean
@@ -127,6 +129,8 @@ const LocaleNumberInput = ({
   onChange,
   onBlur,
   onFocus,
+  onKeyDown,
+  autoFocus = false,
   decimalPlaces,
   max,
   allowNegatives = false,
@@ -249,6 +253,9 @@ const LocaleNumberInput = ({
       onChange={handleChange}
       onBlur={handleBlur}
       onFocus={onFocus}
+      onKeyDown={onKeyDown}
+      // eslint-disable-next-line jsx-a11y/no-autofocus
+      autoFocus={autoFocus}
       decimalSeparator={decimalSeparator}
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore — thousandSeparator is a react-number-format prop forwarded via ...others
@@ -262,6 +269,7 @@ const LocaleNumberInput = ({
       // The step controls are already hidden, so switch the keys off too.
       withKeyboardEvents={false}
       allowNegative={allowNegatives}
+      allowLeadingZeros={false}
       disabled={disabled}
       unstyled
     />
