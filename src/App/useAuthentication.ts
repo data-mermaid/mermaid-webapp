@@ -8,6 +8,17 @@ import { getToastArguments } from '../library/getToastArguments'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
+// The messages browsers give the TypeError that fetch throws when a request never gets a
+// response (Chrome and Edge, Firefox, Safari).
+const NETWORK_ERROR_MESSAGES = [
+  'Failed to fetch',
+  'NetworkError when attempting to fetch resource.',
+  'Load failed',
+]
+
+export const isNetworkError = (error: unknown): boolean =>
+  error instanceof TypeError && NETWORK_ERROR_MESSAGES.includes(error.message)
+
 interface DexieCurrentUserInstance {
   currentUser: {
     delete: (key: string) => Promise<void>
@@ -54,6 +65,19 @@ const useAuthentication = ({
       // Offline is a supported state. The app runs from the session already stored, so a
       // refresh that fails without a connection is expected and needs no message.
       if (!isAppOnline) {
+        return
+      }
+
+      // A dropped connection on the refresh-token request. auth0-spa-js has already retried it
+      // three times and the next getAccessTokenSilently call tries again, so this is network
+      // noise rather than an Auth0 fault: keep a breadcrumb for context, but don't report it or
+      // tell the user authentication failed.
+      if (isNetworkError(error)) {
+        Sentry.addBreadcrumb({
+          category: 'auth',
+          level: 'warning',
+          message: `Auth0 token refresh failed with a network error: ${(error as Error).message}`,
+        })
         return
       }
 
